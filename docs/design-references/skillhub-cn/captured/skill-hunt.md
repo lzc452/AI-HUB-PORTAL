@@ -1,0 +1,392 @@
+- banner:
+  - link "SkillHub 首页":
+    - /url: /
+    - img "SkillHub"
+  - navigation "主导航":
+    - button "技能":
+      - text: 技能
+    - link "插件":
+      - /url: /plugins
+      - text: 插件
+      - generic: NEW
+    - link "SkillPay":
+      - /url: /skillpay
+      - generic: SkillPay
+    - link "大赛":
+      - /url: /contest
+      - generic: 大赛
+    - button "探索":
+      - text: 探索
+    - button "帮助":
+      - text: 帮助
+  - button "发布 Skill":
+    - generic: 发布 Skill
+  - button "通知":
+  - button "用户菜单":
+- main:
+  - heading "SkillHunt" [level=1]
+  - paragraph: 由社区共同票选的 Skill 榜单。每一票，都是对好作品的一份认可。
+  - generic: 今日剩余 3 票
+  - heading "今日日榜" [level=2]
+  - generic: 投票数、评论数均为本日新增数据
+  - generic: "01"
+  - button "百炼标书智能写作工具":
+    - img "百炼标书智能写作工具 图标"
+  - button "百炼标书智能写作工具"
+  - img "已认证"
+  - generic: 商业运营
+  - paragraph: 百炼®标书是一个面向投标场景标书写作的skill，可以帮用户完成三件事：解读招标文件、生成投标文件、审查投标文件合规风险。它适合用自然语言直接协作，用户只要提供文件和需求，就能拿到解读结果、成品标书和审查报告。
+  - button "百炼智能"
+  - button "投票，当前 26 票":
+    - generic: "26"
+  - button "1 条评论":
+    - generic: "1"
+  - button "分享（复制链接）":
+  - generic: "02"
+  - button "跨境法律合规·小律同学AI":
+    - img "跨境法律合规·小律同学AI 图标"
+  - button "跨境法律合规·小律同学AI"
+  - img "已认证"
+  - generic: 行业专业
+  - paragraph: 面向中企出海的跨境法律合规 AI 技能：覆盖 168 国家/地区的法规、国际条约、外国法律与合规要求，同时支持国内法规、司法解释、指导性案例的语义检索。典型场景：查美国加州数据隐私合规、德国劳动法解雇程序、越南投资负面清单、合同审查、量刑与赔偿计算。免登录即装即用（内置免费检索额度，无需注册 API Key），检索结果标注来源类别与效力等级。不适用于实时法律新闻与具体案件诉讼策略。
+  - button "小律同学"
+  - button "投票，当前 24 票":
+    - generic: "24"
+  - button "3 条评论":
+    - generic: "3"
+  - button "分享（复制链接）":
+  - generic: "03"
+  - button "IP-Guard售后助手体验版":
+    - img "IP-Guard售后助手体验版 图标"
+  - button "IP-Guard售后助手体验版"
+  - img "已认证"
+  - generic: 商业运营
+  - paragraph: 面向维保期内 IP-Guard 客户及授权技术人员的免费售后支持 Skill。用于查询上海华义匀安售后知识库，处理 IP-Guard 安装部署、升级迁移、策略配置、模块使用、版本兼容、运行异常、错误码和日志分析问题。首次使用时先询问用户是否已有 Support API Key；没有 Key 时提供申请入口，已有 Key 时只请求在 WorkBuddy 聊天中输入一次。服务器校验成功后通过 Windows DPAPI 在当前 Skill 目录本机加密保存，并在同一轮继续原问题。资料不足时明确说明，不编造菜单、配置项或版本结论。
+  - button "上海华义匀安信息科技有限公司"
+  - button "投票，当前 21 票":
+    - generic: "21"
+  - button "3 条评论":
+    - generic: "3"
+  - button "分享（复制链接）":
+  - generic: "04"
+  - button "知了标讯 · 全网招中标数据查询":
+    - img "知了标讯 · 全网招中标数据查询 图标"
+  - button "知了标讯 · 全网招中标数据查询"
+  - img "已认证"
+  - generic: 数据分析
+  - paragraph: 全网招中标数据查询与分析助手。当用户涉及以下任何场景时，必须使用此SKILL：查询招标/中标公告、搜索标讯、查找临期/即将到期项目、商机预测、推荐潜在投标供应商、分析公司主营业务/历史中标、查询公司上下游合作客户与供应商、分析竞争对手/竞对企业、查询Top采购单位/Top中标单位/Top中标品牌、招中标数据统计分析、查询品牌型号历史中标单价/价格趋势、市场分析/行业分析/采购寻源/渠道拓展等采购与投标相关场景。即使用户没有提到「知了标讯」，只要涉及招投标、采购、中标、供应商、竞争对手等关键词，都应使用本SKILL。新设备通常可获赠 100 积分免费额度（每日限量，发完为止），直接提问即可使用；额度用完后通过微信支付购买次数包，余额按设备保存、换对话继续有效，全程无需注册或配置 API Key。
+  - button "知了标讯"
+  - button "投票，当前 21 票":
+    - generic: "21"
+  - button "1 条评论":
+    - generic: "1"
+  - button "分享（复制链接）":
+  - generic: "05"
+  - button "秘书材料星公文写作-妙笔skill":
+    - img "秘书材料星公文写作-妙笔skill 图标"
+  - button "秘书材料星公文写作-妙笔skill"
+  - img "已认证"
+  - generic: 内容创作
+  - paragraph: 体制内资深办公室主任+管理学博士，自学编程开发的智能公文写作Skill，让所有办公室同仁少掉头发、少加无用的班，材料一稿过关，省下的时间留给自己、享受生活！————————我们能给你带来的核心价值：1、颠覆传统写作：逻辑建模38类公文全链条，特有模板化引导问答模式，分分钟省心生成高质量大稿。--------2、替你“向上管理”：独有审稿人画像机制，文稿一键结构性修改，精准匹配审稿人画像，过稿率提升至少10倍！----------3、‌杜绝AI编造：缺失的数字、文号、人名、日期一律用[待补]标注，绝不杜撰，守住公文底线。-----------4、‌算法格式托底：数十万全量智控知识库+6500行前沿核心控制代码，格式精准对齐GB/T 9704，出稿零失误。
+  - button "熵衍信息"
+  - button "投票，当前 15 票":
+    - generic: "15"
+  - button "3 条评论":
+    - generic: "3"
+  - button "分享（复制链接）":
+  - generic: "06"
+  - button "知了标讯官方招投标助手":
+    - img "知了标讯官方招投标助手 图标"
+  - button "知了标讯官方招投标助手"
+  - img "已认证"
+  - generic: 数据分析
+  - paragraph: 知了标讯官方招投标数据助手，覆盖招标公告与中标结果查询、企业工商与招中标画像、竞争对手分析、市场趋势统计、Top采购/中标单位与品牌、历史中标价格、临期项目商机挖掘等。当用户涉及招投标、政府采购、中标查询、供应商/竞对分析、采购市场研究等任何场景时，必须使用此SKILL；即使未出现「招投标」字样，只要涉及中标、采购、供应商、竞对、市场份额等需求均应使用。
+  - button "知了标讯"
+  - button "投票，当前 17 票":
+    - generic: "17"
+  - button "1 条评论":
+    - generic: "1"
+  - button "分享（复制链接）":
+  - generic: "07"
+  - button "福昕PDF 转 Word 转换工具":
+    - img "福昕PDF 转 Word 转换工具 图标"
+  - button "福昕PDF 转 Word 转换工具"
+  - img "已认证"
+  - generic: 办公效率
+  - paragraph: PDF 文档格式转换（PDF转Word、PDF转PPT、压缩PDF）
+  - button "福昕网络"
+  - button "投票，当前 15 票":
+    - generic: "15"
+  - button "0 条评论":
+    - generic: "0"
+  - button "分享（复制链接）":
+  - generic: "08"
+  - button "ima-skills":
+    - img "ima-skills 图标"
+  - button "ima-skills"
+  - img "已认证"
+  - generic: 知识管理
+  - paragraph: ima skills，支持对笔记、知识库的读取、写入和检索等操作，可以帮你随时记录，收入ima智能管理，随时调用，龙虾输出精准懂你，友好的接入了OpenClaw生态，构建你的第二大脑。
+  - button "tencent-ima"
+  - button "投票，当前 3 票":
+    - generic: "3"
+  - button "0 条评论":
+    - generic: "0"
+  - button "分享（复制链接）":
+  - generic: "09"
+  - button "复星财富AI - 港美股专业投研分析":
+    - img "复星财富AI - 港美股专业投研分析 图标"
+  - button "复星财富AI - 港美股专业投研分析"
+  - img "已认证"
+  - generic: 行业专业
+  - paragraph: 别再翻十几份研报了——你只需要说一句「帮我看看英伟达」，复星财富（Fosun Wealth） AI - 港美股专业投研分析Skills 就能拿到带图表的交互式 HTML 深度投资研报。基本面、估值、财报、机构资金、催化剂，一次拉齐，全程客观拆解，不喊单。 快来开通星财富APP 免费API Key，即刻辅助投研。
+  - button "复星国际证券"
+  - button "投票，当前 8 票":
+    - generic: "8"
+  - button "1 条评论":
+    - generic: "1"
+  - button "分享（复制链接）":
+  - generic: "10"
+  - button "MarkItDown":
+    - img "MarkItDown 图标"
+  - button "MarkItDown"
+  - img "已认证"
+  - generic: 知识管理
+  - paragraph: 把 PDF、Word、表格、扫描件、图片、录音等十几种资料一键整理成可搜索的 Markdown，可直接交给 AI 或导入知识库；本地 OCR 和转写保护隐私，支持批量进度、断点续跑与离线预备。
+  - button "AstraClaw"
+  - button "投票，当前 7 票":
+    - generic: "7"
+  - button "0 条评论":
+    - generic: "0"
+  - button "分享（复制链接）":
+  - navigation "分页":
+    - generic: 1-10 / 共 100 个 Skill
+    - button "上一页" [disabled]:
+    - button "第 1 页，当前页": "1"
+    - button "第 2 页": "2"
+    - button "第 3 页": "3"
+    - button "第 4 页": "4"
+    - button "第 5 页": "5"
+    - generic: …
+    - button "第 10 页": "10"
+    - button "下一页":
+  - heading "昨日 Top" [level=2]
+  - generic: "01"
+  - button "跨境法律合规·小律同学AI":
+    - img "跨境法律合规·小律同学AI 图标"
+  - button "跨境法律合规·小律同学AI"
+  - generic: 日冠军
+  - paragraph:
+    - button "小律同学"
+    - img "已认证"
+  - button "分享（复制链接）":
+  - generic: "02"
+  - button "腾讯文档 TENCENT DOCS":
+    - img "腾讯文档 TENCENT DOCS 图标"
+  - button "腾讯文档 TENCENT DOCS"
+  - generic: 日Top10
+  - paragraph:
+    - button "腾讯文档团队"
+    - img "已认证"
+  - button "分享（复制链接）":
+  - generic: "03"
+  - button "文章去AI味工具":
+    - img "文章去AI味工具 图标"
+  - button "文章去AI味工具"
+  - generic: 日Top10
+  - paragraph:
+    - button "Uncle城"
+  - button "分享（复制链接）":
+  - generic: "04"
+  - button "秘书材料星公文写作-妙笔skill":
+    - img "秘书材料星公文写作-妙笔skill 图标"
+  - button "秘书材料星公文写作-妙笔skill"
+  - generic: 日Top10
+  - paragraph:
+    - button "熵衍信息"
+    - img "已认证"
+  - button "分享（复制链接）":
+  - generic: "05"
+  - button "ima-skills":
+    - img "ima-skills 图标"
+  - button "ima-skills"
+  - generic: 日Top10
+  - paragraph:
+    - button "tencent-ima"
+    - img "已认证"
+  - button "分享（复制链接）":
+  - link "查看更多":
+    - /url: /skill-hunt/leaderboard/daily/2026-08-23
+  - heading "上周 Top" [level=2]
+  - generic: "01"
+  - button "跨境法律合规·小律同学AI":
+    - img "跨境法律合规·小律同学AI 图标"
+  - button "跨境法律合规·小律同学AI"
+  - generic: 周冠军
+  - paragraph:
+    - button "小律同学"
+    - img "已认证"
+  - button "分享（复制链接）":
+  - generic: "02"
+  - button "百炼标书智能写作工具":
+    - img "百炼标书智能写作工具 图标"
+  - button "百炼标书智能写作工具"
+  - generic: 周Top10
+  - paragraph:
+    - button "百炼智能"
+    - img "已认证"
+  - button "分享（复制链接）":
+  - generic: "03"
+  - button "秘书材料星公文写作-妙笔skill":
+    - img "秘书材料星公文写作-妙笔skill 图标"
+  - button "秘书材料星公文写作-妙笔skill"
+  - generic: 周Top10
+  - paragraph:
+    - button "熵衍信息"
+    - img "已认证"
+  - button "分享（复制链接）":
+  - generic: "04"
+  - button "福昕PDF 转 Word 转换工具":
+    - img "福昕PDF 转 Word 转换工具 图标"
+  - button "福昕PDF 转 Word 转换工具"
+  - generic: 周Top10
+  - paragraph:
+    - button "福昕网络"
+    - img "已认证"
+  - button "分享（复制链接）":
+  - generic: "05"
+  - button "知了标讯 · 全网招中标数据查询":
+    - img "知了标讯 · 全网招中标数据查询 图标"
+  - button "知了标讯 · 全网招中标数据查询"
+  - generic: 周Top10
+  - paragraph:
+    - button "知了标讯"
+    - img "已认证"
+  - button "分享（复制链接）":
+  - link "查看更多":
+    - /url: /skill-hunt/leaderboard/weekly/2026-W34
+  - heading "上月 Top" [level=2]
+  - generic: "01"
+  - button "self-improving agent":
+    - img "self-improving agent 图标"
+  - button "self-improving agent"
+  - generic: 2026年7月冠军
+  - paragraph:
+    - button "pskoett"
+  - button "分享（复制链接）":
+  - generic: "02"
+  - button "Find Skills":
+    - img "Find Skills 图标"
+  - button "Find Skills"
+  - generic: 2026年7月Top10
+  - paragraph:
+    - button "root"
+  - button "分享（复制链接）":
+  - generic: "03"
+  - button "ima-skills":
+    - img "ima-skills 图标"
+  - button "ima-skills"
+  - generic: 2026年7月Top10
+  - paragraph:
+    - button "tencent-ima"
+    - img "已认证"
+  - button "分享（复制链接）":
+  - generic: "04"
+  - button "Self-Improving + Proactive Agent":
+    - img "Self-Improving + Proactive Agent 图标"
+  - button "Self-Improving + Proactive Agent"
+  - generic: 2026年7月Top10
+  - paragraph:
+    - button "ivangdavila"
+  - button "分享（复制链接）":
+  - generic: "05"
+  - button "腾讯文档 TENCENT DOCS":
+    - img "腾讯文档 TENCENT DOCS 图标"
+  - button "腾讯文档 TENCENT DOCS"
+  - generic: 2026年7月Top10
+  - paragraph:
+    - button "腾讯文档团队"
+    - img "已认证"
+  - button "分享（复制链接）":
+  - link "查看更多":
+    - /url: /skill-hunt/leaderboard/monthly/2026-07
+  - complementary:
+    - heading "今日 Top 创作者" [level=3]
+    - button "百炼智能 已认证":
+      - generic: 百
+      - generic: 百炼智能
+      - img "已认证"
+    - button "02 小律同学 已认证":
+      - generic: "02"
+      - generic: 小
+      - generic: 小律同学
+      - img "已认证"
+    - button "03 上海华义匀安信息科技有限公司 已认证":
+      - generic: "03"
+      - generic: 上
+      - generic: 上海华义匀安信息科技有限公司
+      - img "已认证"
+    - button "04 知了标讯 已认证":
+      - generic: "04"
+      - generic: 知
+      - generic: 知了标讯
+      - img "已认证"
+    - button "05 熵衍信息 已认证":
+      - generic: "05"
+      - generic: 熵
+      - generic: 熵衍信息
+      - img "已认证"
+    - button "06 福昕网络 已认证":
+      - generic: "06"
+      - generic: 福
+      - generic: 福昕网络
+      - img "已认证"
+    - button "07 tencent-ima 已认证":
+      - generic: "07"
+      - generic: t
+      - generic: tencent-ima
+      - img "已认证"
+    - button "08 复星国际证券 已认证":
+      - generic: "08"
+      - generic: 复
+      - generic: 复星国际证券
+      - img "已认证"
+    - button "09 AstraClaw 已认证":
+      - generic: "09"
+      - generic: A
+      - generic: AstraClaw
+      - img "已认证"
+- contentinfo:
+  - link "SkillHub 首页":
+    - /url: /
+    - img "SkillHub"
+  - paragraph: 专为中国用户优化的 AI Skills 社区，让 AI Agent 突破能力边界、持续进化。
+  - heading "快捷入口" [level=3]
+  - link "服务协议":
+    - /url: https://privacy.qq.com/document/preview/5bd4610b10f043d98df5dd69233cc3b3
+    - text: 服务协议
+  - link "隐私协议":
+    - /url: https://privacy.qq.com/document/preview/af7cf7a60e444f93a3fbff81c929cca8
+    - text: 隐私协议
+  - link "建议反馈":
+    - /url: https://wj.qq.com/s2/26026989/0c20
+    - text: 建议反馈
+  - heading "友情链接" [level=3]
+  - link "ClawHub":
+    - /url: https://clawhub.ai
+    - text: ClawHub
+  - paragraph: 来源声明：本站部分 Skill 内容来源于公开渠道、认证企业或由用户自主发布，使用前请注意识别相关风险，内容版权归原作者所有。
+  - paragraph:
+    - text: 侵权处理：如 Skill 涉及版权问题，请发送邮件至
+    - link "skillhub_ipr@tencent.com":
+      - /url: mailto:skillhub_ipr@tencent.com
+    - text: ，我们将在收到通知后及时核实并予以下架处理。
+  - paragraph: Copyright © 2026 SkillHub. 精选 AI Skills 推荐平台
+  - paragraph: 技能数据来源于公开渠道、认证企业及用户自主发布。
+  - paragraph:
+    - link "粤B2-20090059-4038":
+      - /url: https://beian.miit.gov.cn/#/Integrated/index
+- region "Notifications alt+T"
+- link "建议反馈":
+  - /url: https://wj.qq.com/s2/26026989/0c20
+  - generic: 建议反馈

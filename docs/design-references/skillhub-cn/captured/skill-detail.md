@@ -1,0 +1,758 @@
+- banner:
+  - link "SkillHub 首页":
+    - /url: /
+    - img "SkillHub"
+  - navigation "主导航":
+    - button "技能":
+      - text: 技能
+    - link "插件":
+      - /url: /plugins
+      - text: 插件
+      - generic: NEW
+    - link "SkillPay":
+      - /url: /skillpay
+      - generic: SkillPay
+    - link "大赛":
+      - /url: /contest
+      - generic: 大赛
+    - button "探索":
+      - text: 探索
+    - button "帮助":
+      - text: 帮助
+  - button "发布 Skill":
+    - generic: 发布 Skill
+  - button "通知":
+  - button "用户菜单":
+- main:
+  - navigation:
+    - button "返回":
+    - button "技能 /"
+    - generic: mcp-law-search-skill
+  - img "跨境法律合规·小律同学AI 图标"
+  - heading "跨境法律合规·小律同学AI" [level=1]
+  - generic: 上周冠军
+  - generic "@org-tz5v519f/mcp-law-search-skill"
+  - generic: 4.7 优秀
+  - generic: (AI 评分)
+  - generic: 安全
+  - link "已认证 小律同学":
+    - /url: /enterprise/org-tz5v519f?publisher=%E5%B0%8F%E5%BE%8B%E5%90%8C%E5%AD%A6
+    - img "已认证"
+    - generic: 小律同学
+  - paragraph: 面向中企出海的跨境法律合规 AI 技能：覆盖 168 国家/地区的法规、国际条约、外国法律与合规要求，同时支持国内法规、司法解释、指导性案例的语义检索。典型场景：查美国加州数据隐私合规、德国劳动法解雇程序、越南投资负面清单、合同审查、量刑与赔偿计算。免登录即装即用（内置免费检索额度，无需注册 API Key），检索结果标注来源类别与效力等级。不适用于实时法律新闻与具体案件诉讼策略。
+  - generic: 行业专业
+  - generic: 法律合规
+  - generic: 今天更新
+  - generic: v1.0.3
+  - button "为 TA 投票":
+    - text: 为 TA 投票
+  - button "分享":
+    - text: 分享
+  - button "概述":
+    - generic: 概述
+  - button "文件":
+    - generic: 文件
+  - button "评论":
+    - generic: 评论
+  - button "版本历史":
+    - generic: 版本历史
+  - button "评测报告":
+    - generic: 评测报告
+  - heading "跨境法律合规·小律同学AI（中企出海合规 / 168国法规 / 境内外案例检索）" [level=1]
+  - heading "效果示例" [level=2]
+  - table:
+    - rowgroup:
+      - row "用户问题 检索策略 返回法律依据":
+        - columnheader "用户问题"
+        - columnheader "检索策略"
+        - columnheader "返回法律依据"
+    - rowgroup:
+      - 'row "\"美国加州 CCPA 对中国出海 App 适用吗？\" scope: international CCPA 适用范围与豁免条款"':
+        - cell "\"美国加州 CCPA 对中国出海 App 适用吗？\""
+        - 'cell "scope: international"':
+          - code: "scope: international"
+        - cell "CCPA 适用范围与豁免条款"
+      - 'row "\"德国解雇员工需要走什么法律程序？\" scope: international 德国解雇保护法（KSchG）解雇程序与保护条款"':
+        - cell "\"德国解雇员工需要走什么法律程序？\""
+        - 'cell "scope: international"':
+          - code: "scope: international"
+        - cell "德国解雇保护法（KSchG）解雇程序与保护条款"
+      - row "\"在越南设厂，哪些行业属于投资负面清单？\" international + domestic 各检索一次 越南投资法负面清单 + 境外投资管理规定":
+        - cell "\"在越南设厂，哪些行业属于投资负面清单？\""
+        - cell "international + domestic 各检索一次":
+          - code: international
+          - text: +
+          - code: domestic
+          - text: 各检索一次
+        - cell "越南投资法负面清单 + 境外投资管理规定"
+      - 'row "\"试用期最长不超过多久？\" scope: domestic, top_k: 3 《劳动合同法》第十九条 + 相关司法解释"':
+        - cell "\"试用期最长不超过多久？\""
+        - 'cell "scope: domestic, top_k: 3"':
+          - code: "scope: domestic, top_k: 3"
+        - cell "《劳动合同法》第十九条 + 相关司法解释"
+      - row "\"签了购房合同想退房怎么办\" 多轮：民法典 → 商品房买卖司法解释 民法典第563条 + 商品房买卖合同司法解释":
+        - cell "\"签了购房合同想退房怎么办\""
+        - cell "多轮：民法典 → 商品房买卖司法解释"
+        - cell "民法典第563条 + 商品房买卖合同司法解释"
+  - heading "何时使用" [level=2]
+  - paragraph: 本 skill 适用于任何涉及法律内容的场景（跨境合规优先）：
+  - list:
+    - listitem: 中企出海合规：168 国家/地区的外国法规、监管要求、准入与负面清单
+    - listitem: 跨境贸易、跨境投资、涉外合同、国际仲裁的法律问题
+    - listitem: 国际条约、国际公约（如 CISG、纽约公约、伯尔尼公约）
+    - listitem: 国内法律法规条文查询
+    - listitem: 司法解释、行政法规检索
+    - listitem: 指导性案例、典型案例参考
+    - listitem: 量刑标准和赔偿计算
+    - listitem: 合同审查和法律风险评估
+    - listitem: 合规性判断和监管要求
+    - listitem: 用户问"帮我查一下XX法""XX罪怎么判""XX合同合法吗"
+  - heading "何时不使用" [level=2]
+  - paragraph:
+    - text: 以下场景
+    - strong: 不适合
+    - text: 用本 skill，应改用其他方式：
+  - table:
+    - rowgroup:
+      - row "不适用场景 原因 替代方案":
+        - columnheader "不适用场景"
+        - columnheader "原因"
+        - columnheader "替代方案"
+    - rowgroup:
+      - row "实时法律新闻/舆情 知识库不收录实时新闻 用 web_search 搜索最新资讯":
+        - cell "实时法律新闻/舆情":
+          - strong: 实时法律新闻/舆情
+        - cell "知识库不收录实时新闻"
+        - cell "用 web_search 搜索最新资讯":
+          - text: 用
+          - code: web_search
+          - text: 搜索最新资讯
+      - row "具体案件的诉讼策略 需结合证据、当事人、管辖法院等具体事实 建议咨询执业律师":
+        - cell "具体案件的诉讼策略":
+          - strong: 具体案件的诉讼策略
+        - cell "需结合证据、当事人、管辖法院等具体事实"
+        - cell "建议咨询执业律师"
+      - row "已失效/未生效的法律草案 知识库收录的是现行有效文本 查人大常委会官网立法规划":
+        - cell "已失效/未生效的法律草案":
+          - strong: 已失效/未生效的法律草案
+        - cell "知识库收录的是现行有效文本"
+        - cell "查人大常委会官网立法规划"
+      - row "非法律类的事实查询（如\"公司注册流程是什么\"） 属于行政流程而非法律条文 用 web_search 查政务指南":
+        - cell "非法律类的事实查询（如\"公司注册流程是什么\"）":
+          - strong: 非法律类的事实查询
+          - text: （如"公司注册流程是什么"）
+        - cell "属于行政流程而非法律条文"
+        - cell "用 web_search 查政务指南":
+          - text: 用
+          - code: web_search
+          - text: 查政务指南
+      - row "外国法律条文的精确原文翻译 检索结果是中文摘要，非官方译本 查该国外交部/司法部官方译本":
+        - cell "外国法律条文的精确原文翻译":
+          - strong: 外国法律条文的精确原文翻译
+        - cell "检索结果是中文摘要，非官方译本"
+        - cell "查该国外交部/司法部官方译本"
+  - separator
+  - heading "Phase 1：环境就绪" [level=2]
+  - blockquote:
+    - paragraph:
+      - text: 本 skill 依赖 MCP 工具
+      - code: search_law
+      - text: ，由 aixllaw 法律检索 MCP 服务提供。使用前必须确认 MCP 已安装配置，否则检索无法工作。
+  - heading "1.1 检查工具是否可用" [level=3]
+  - paragraph:
+    - text: 收到法律问题后，
+    - strong:
+      - text: 第一步先确认
+      - code: search_law
+      - text: 工具是否在当前运行时可用
+    - text: ：
+  - list:
+    - strong: 工具可用
+    - text: → 直接进入 Phase 2 检索
+    - strong: 工具不可用
+    - text: → 按下方 1.2 引导用户安装 MCP，
+    - strong: 不要
+    - text: 用其他法律检索工具替代，
+    - strong: 不要
+    - text: 凭记忆回答
+  - heading "1.2 MCP 未安装时的引导" [level=3]
+  - heading "⚡ 免登录极速上手（推荐，30 秒）" [level=4]
+  - paragraph: 无需注册、无需 API Key——MCP 服务内置免费检索额度，配置即可用：
+  - list:
+    - strong: 编辑
+    - code: ~/.codebuddy/mcp.json
+    - text: （不存在则新建），粘贴以下内容：
+  - code: "{ \"mcpServers\": { \"law-search\": { \"url\": \"https://mcp.aixllaw.com/mcp\", \"transportType\": \"streamable-http\" } } }"
+  - list:
+    - strong: 完全退出
+    - text: CodeBuddy / WorkBuddy（不是关闭窗口，是退出整个进程）
+    - text: 重新打开后问一个法律问题，看到 AI 调用
+    - code: search_law
+    - text: 检索即表示成功
+  - blockquote:
+    - paragraph: 免登录额度有一定量限制。需要更多额度或更稳定配额时，注册获取 API Key 升级为正式版（见下）。
+  - heading "升级为正式版（注册用户）" [level=4]
+  - paragraph:
+    - text: 已注册并拿到 API Key（格式
+    - code: sk-xxx
+    - text: ）的用户，在配置中添加
+    - code: Authorization
+    - text: 头即可升级：
+  - code: "{ \"mcpServers\": { \"law-search\": { \"url\": \"https://mcp.aixllaw.com/mcp\", \"transportType\": \"streamable-http\", \"headers\": { \"Authorization\": \"Bearer 把你的sk-xxx粘贴到这里\" } } } }"
+  - blockquote:
+    - paragraph:
+      - text: 注册地址：
+      - link "https://portal.aixllaw.com/app/settings":
+        - /url: https://portal.aixllaw.com/app/settings
+      - text: ，
+      - strong: 注册即送 1688 积分，免费畅用 7 周
+      - text: 。 也可在管理后台「API 密钥」页面点「
+      - strong: 复制 MCP 配置
+      - text: 」按钮，一键复制完整 JSON，无需手写。
+  - heading "配置引导话术（当 search_law 工具不存在时展示）" [level=4]:
+    - text: 配置引导话术（当
+    - code: search_law
+    - text: 工具不存在时展示）
+  - code: "## ⚠️ 法律检索服务未配置 只需 30 秒即可启用 aixllaw MCP 服务（免登录、内置免费额度）： ### 步骤 1. **免登录快速启用** 编辑 ~/.codebuddy/mcp.json，添加 law-search 服务（Streamable HTTP，无需 API Key） 详细配置参见 references/mcp-setup-guide.md 2. **完全退出并重启** CodeBuddy / WorkBuddy 3. **验证**：重启后再问一个法律问题，AI 应能调用 search_law 检索法条 > 免费额度用尽或需要更高配额？前往 https://portal.aixllaw.com/app/settings 注册 > （注册即送 1688 积分），获取 API Key 后在配置中添加 Authorization 即可升级正式版。"
+  - heading "首次使用引导（配置验证成功后）" [level=4]
+  - paragraph: 当用户刚完成 MCP 配置、或首次提出法律问题时，主动给出以下 3 个典型示例问题，引导其发起首次检索（优先展示跨境场景，直接体现差异化能力）：
+  - list:
+    - listitem: "\"我司向欧盟出口 SaaS，需要遵守 GDPR 哪些要求？\""
+    - listitem: "\"在越南设厂，哪些行业属于投资负面清单？\""
+    - listitem: "\"美国加州消费者隐私法（CCPA）对中国出海 App 适用吗？\""
+  - heading "1.3 工具可用但返回错误时的自动重试" [level=3]
+  - paragraph:
+    - code: search_law
+    - text: 存在但调用返回
+    - code: "ok: false"
+    - text: （或
+    - code: "ok: true"
+    - text: 但
+    - code: records
+    - text: 为空）时，
+    - strong: 不要立即向用户报错或凭记忆替代
+    - text: ，先按下表自动处理：
+  - table:
+    - rowgroup:
+      - row "失败类型 text 关键词 自动动作 重试上限":
+        - columnheader "失败类型"
+        - columnheader "text 关键词"
+        - columnheader "自动动作"
+        - columnheader "重试上限"
+    - rowgroup:
+      - row "网络超时 \"响应超时\" / \"timeout\" / \"connection\" 等待 2s → 4s → 8s 指数退避后重试同一 query 3 次":
+        - cell "网络超时":
+          - strong: 网络超时
+        - cell "\"响应超时\" / \"timeout\" / \"connection\""
+        - cell "等待 2s → 4s → 8s 指数退避后重试同一 query"
+        - cell "3 次"
+      - row "服务过载 \"503\" / \"服务繁忙\" / \"过载\" 等待 1s → 3s → 5s 后重试 3 次":
+        - cell "服务过载":
+          - strong: 服务过载
+        - cell "\"503\" / \"服务繁忙\" / \"过载\""
+        - cell "等待 1s → 3s → 5s 后重试"
+        - cell "3 次"
+      - row "免登录额度用尽 \"免费额度\" / \"额度已用完\" / \"匿名额度\" 不重试，引导用户注册获取 API Key 升级正式版 0":
+        - cell "免登录额度用尽":
+          - strong: 免登录额度用尽
+        - cell "\"免费额度\" / \"额度已用完\" / \"匿名额度\""
+        - cell "不重试，引导用户注册获取 API Key 升级正式版":
+          - strong: 不重试
+          - text: ，引导用户注册获取 API Key 升级正式版
+        - cell "0"
+      - row "积分临时不足 \"积分余额不足\" 不重试，直接引导用户充值 0":
+        - cell "积分临时不足":
+          - strong: 积分临时不足
+        - cell "\"积分余额不足\""
+        - cell "不重试，直接引导用户充值":
+          - strong: 不重试
+          - text: ，直接引导用户充值
+        - cell "0"
+      - row "用量超限 \"用量已超限\" 不重试，引导用户查看配额 0":
+        - cell "用量超限":
+          - strong: 用量超限
+        - cell "\"用量已超限\""
+        - cell "不重试，引导用户查看配额":
+          - strong: 不重试
+          - text: ，引导用户查看配额
+        - cell "0"
+      - row "Key 无效 \"API Key 无效\" / \"401\" 不重试，引导用户重新生成 Key 0":
+        - cell "Key 无效":
+          - strong: Key 无效
+        - cell "\"API Key 无效\" / \"401\""
+        - cell "不重试，引导用户重新生成 Key":
+          - strong: 不重试
+          - text: ，引导用户重新生成 Key
+        - cell "0"
+      - row "空结果 records 为空 / \"暂未找到\" 进入 1.4 空结果改写流程 —":
+        - cell "空结果":
+          - strong: 空结果
+        - cell "records 为空 / \"暂未找到\""
+        - cell "进入 1.4 空结果改写流程"
+        - cell "—"
+  - paragraph:
+    - strong: 重试流程
+    - text: ：
+  - code: 1. 首次调用 search_law(query) 2. 失败 → 判断是否可重试（网络/过载类） ├─ 可重试：sleep(2^attempt)（即 2s → 4s → 8s）后重试，最多 3 次 └─ 不可重试（Key/积分类）：直接展示错误引导，停止 3. 重试 3 次仍失败 → 按「会话中断恢复」章节处理，引导用户重启 IDE 或检查网络
+  - paragraph:
+    - strong: 重试期间对用户的提示
+    - text: ：用一句话告知「正在重试检索…（第 N 次）」，避免长时间沉默让用户以为卡死。
+  - blockquote:
+    - paragraph:
+      - strong: 与「会话中断恢复」的分工
+      - text: ：
+      - code: "1.3"
+      - text: 负责
+      - strong: 单次会话内
+      - text: 对网络/过载类错误的自动重试（上限 3 次）；重试 3 次仍失败则说明会话可能已失效，转交「会话中断恢复」章节处理（重启 IDE / 检查网络）。两处阈值一致，不重复执行。
+  - heading "1.4 检索为空时的自动改写策略" [level=3]
+  - paragraph:
+    - text: 当
+    - code: search_law
+    - text: 返回
+    - code: "ok: true"
+    - text: 但
+    - code: records
+    - text: 为空数组时，按以下顺序自动降级，
+    - strong: 不要直接告诉用户「没查到」
+    - text: ：
+  - code: "第 1 轮：原始 query + 默认参数 ↓ 空 第 2 轮：改写 query - 去掉口语化连接词（\"的\"、\"怎么\"、\"怎么办\"、\"能不能\"） - 用「法条名称 + 核心名词」重写 - 例：\"上班受伤了公司赔不赔\" → \"工伤认定 工伤保险条例 赔偿\" ↓ 空 第 3 轮：降参数 - score_threshold: 0.5 → 0.3 - top_k: 3 → 5 ↓ 空 第 4 轮：换 scope - domestic ↔ international 双向切换重试（跨境/涉外问题可能在另一侧库有相关条文） ↓ 仍空 告知用户：可能是术语问题，给出 2-3 个改写建议供用户选择"
+  - paragraph:
+    - strong: 禁止行为
+    - text: ：
+  - list:
+    - text: 4 轮降级全部失败后，
+    - strong: 不得
+    - text: 凭记忆编造法条内容
+    - strong: 不得
+    - text: 直接返回「未找到相关法律」就结束，必须给出改写建议
+  - separator
+  - heading "Phase 2：检索法律" [level=2]
+  - heading "工具：search_law" [level=3]
+  - code: "search_law(query: str, scope: str = \"domestic\", top_k: int | None = None, score_threshold: float | None = None) -> dict"
+  - table:
+    - rowgroup:
+      - row "参数 类型 必填 默认值 说明":
+        - columnheader "参数"
+        - columnheader "类型"
+        - columnheader "必填"
+        - columnheader "默认值"
+        - columnheader "说明"
+    - rowgroup:
+      - row "query string 是 — 检索关键词或自然语言问题":
+        - cell "query":
+          - code: query
+        - cell "string"
+        - cell "是"
+        - cell "—"
+        - cell "检索关键词或自然语言问题"
+      - row "scope string 否 \"domestic\" \"domestic\" 国内法律 / \"international\" 国际法律":
+        - cell "scope":
+          - code: scope
+        - cell "string"
+        - cell "否"
+        - cell "\"domestic\"":
+          - code: "\"domestic\""
+        - cell "\"domestic\" 国内法律 / \"international\" 国际法律":
+          - code: "\"domestic\""
+          - text: 国内法律 /
+          - code: "\"international\""
+          - text: 国际法律
+      - row "top_k int 否 3 返回结果条数（1-5）":
+        - cell "top_k":
+          - code: top_k
+        - cell "int"
+        - cell "否"
+        - cell "3":
+          - code: "3"
+        - cell "返回结果条数（1-5）"
+      - row "score_threshold float 否 0.5 相似度阈值（0-1），越高越精确":
+        - cell "score_threshold":
+          - code: score_threshold
+        - cell "float"
+        - cell "否"
+        - cell "0.5":
+          - code: "0.5"
+        - cell "相似度阈值（0-1），越高越精确"
+  - paragraph: 返回结构：
+  - code: "{ \"ok\": true, \"records\": [{\"title\": \"...\", \"content\": \"...\", \"trie\": \"...\"}], \"text\": \"所有结果拼接的纯文本摘要\", \"message\": \"\" }"
+  - list:
+    - code: "ok: true"
+    - text: → 检索成功；
+    - code: "ok: false"
+    - text: → 出错，查看
+    - code: text
+    - text: 和
+    - code: message
+    - code: records
+    - text: → 按相关度降序的结果列表
+    - code: text
+    - text: → 所有结果拼接的纯文本摘要
+  - heading "知识库覆盖范围" [level=3]
+  - table:
+    - rowgroup:
+      - row "scope 知识库 包含内容":
+        - columnheader "scope"
+        - columnheader "知识库"
+        - columnheader "包含内容"
+    - rowgroup:
+      - row "\"domestic\" 国内法律知识库 宪法、法律、行政法规、司法解释、部门规章、地方法规、指导性案例":
+        - cell "\"domestic\"":
+          - code: "\"domestic\""
+        - cell "国内法律知识库"
+        - cell "宪法、法律、行政法规、司法解释、部门规章、地方法规、指导性案例"
+      - row "\"international\" 国际法律知识库 国际条约、国际公约、外国法律、跨境法律文献":
+        - cell "\"international\"":
+          - code: "\"international\""
+        - cell "国际法律知识库"
+        - cell "国际条约、国际公约、外国法律、跨境法律文献"
+  - heading "基本原则" [level=3]
+  - list:
+    - strong: 必须检索，不要凭记忆
+    - text: — 法律频繁修订，模型记忆不可靠
+    - strong: 精确关键词
+    - text: — 用「法条名称 + 核心问题」组合
+    - strong: 多轮渐进
+    - text: — 从宽到窄、从主干到枝叶
+    - strong: 区分来源
+    - text: — 法律/司法解释可直接引用，案例/理论仅供参考
+  - heading "标准检索流程" [level=3]
+  - code: "第一步：定位主要法律 search_law({\"query\": \"【法律名称】+【核心条款/问题】\"}) 例: \"劳动合同法 试用期工资标准\" 第二步：细化司法解释 search_law({\"query\": \"【法律名称】司法解释 【争议焦点】\"}) 例: \"最高法 买卖合同司法解释 违约金上限\" 第三步：参考案例（可选） search_law({\"query\": \"【案由】+【关键问题】+案例\"}) 例: \"商品房买卖 逾期交房 违约金 典型案例\" 第四步：地方规定（按需） search_law({\"query\": \"【省份/城市】+【具体问题】\"}) 例: \"广东省 产假天数 实施办法\" 第五步：国际法律（跨境场景） search_law({\"query\": \"【条约/公约名称】\", \"scope\": \"international\"}) 例: \"联合国国际货物销售合同公约 违约救济\""
+  - heading "scope 自动判断规则" [level=3]
+  - paragraph: 用户未指定 scope 时：
+  - list:
+    - text: 涉及
+    - strong: 中国法律、国内案例、境内法律关系
+    - text: →
+    - code: "scope: \"domestic\""
+    - text: （默认）
+    - text: 涉及
+    - strong: 国际条约、国际公约
+    - text: （如 CISG、伯尔尼公约）→
+    - code: "scope: \"international\""
+    - text: 涉及
+    - strong: 跨境贸易、跨境投资、国际仲裁
+    - text: →
+    - code: "scope: \"international\""
+    - text: 涉及
+    - strong: 外国法律
+    - text: （如美国专利法、欧盟 GDPR）→
+    - code: "scope: \"international\""
+    - strong: 同时涉及国内外
+    - text: → 两个 scope 各检索一次，综合分析
+  - heading "关键词与调参" [level=3]
+  - paragraph:
+    - text: 关键词构造、
+    - code: top_k
+    - text: /
+    - code: score_threshold
+    - text: 调优、按法律领域的 query 模板、多轮检索组合、常见反模式等实战细节，参见
+    - link "references/search-patterns.md":
+      - /url: references/search-patterns.md
+      - code: references/search-patterns.md
+    - text: 。
+  - paragraph: 核心要点：
+  - list:
+    - listitem: query 用「法条名称 + 核心问题」组合，避免口语化或过短
+    - text: 精确查法条：
+    - code: "top_k: 3, score_threshold: 0.7"
+    - text: 一般咨询：
+    - code: "top_k: 5, score_threshold: 0.5"
+    - text: （默认）
+    - text: 广泛研究或无结果时：
+    - code: "top_k: 5, score_threshold: 0.3"
+  - separator
+  - heading "法律材料效力分级（中国大陆法系）" [level=2]
+  - table:
+    - rowgroup:
+      - row "类别 效力 可否作为法律依据 使用方式":
+        - columnheader "类别"
+        - columnheader "效力"
+        - columnheader "可否作为法律依据"
+        - columnheader "使用方式"
+    - rowgroup:
+      - row "【法律】 最高 是 直接引用":
+        - cell "【法律】"
+        - cell "最高"
+        - cell "是"
+        - cell "直接引用"
+      - row "【司法解释】 高 是 直接引用":
+        - cell "【司法解释】"
+        - cell "高"
+        - cell "是"
+        - cell "直接引用"
+      - row "【行政法规】 中 是 直接引用":
+        - cell "【行政法规】"
+        - cell "中"
+        - cell "是"
+        - cell "直接引用"
+      - row "【地方法规】 中低 是（本地适用） 注明地域":
+        - cell "【地方法规】"
+        - cell "中低"
+        - cell "是（本地适用）"
+        - cell "注明地域"
+      - row "【部门规章】 低 是 注明制定部门":
+        - cell "【部门规章】"
+        - cell "低"
+        - cell "是"
+        - cell "注明制定部门"
+      - row "【地方司法文件】 参考级 仅参考 仅作地方实践参考":
+        - cell "【地方司法文件】"
+        - cell "参考级"
+        - cell "仅参考"
+        - cell "仅作地方实践参考"
+      - row "【人民法院案例】 参考级 否 提取其中引用的法律条文":
+        - cell "【人民法院案例】"
+        - cell "参考级"
+        - cell "否"
+        - cell "提取其中引用的法律条文"
+      - row "【理论文献】 参考级 否 学理解释，条文可能过期":
+        - cell "【理论文献】"
+        - cell "参考级"
+        - cell "否"
+        - cell "学理解释，条文可能过期"
+  - separator
+  - heading "输出格式规范" [level=2]
+  - heading "标准法律咨询回复模板" [level=3]
+  - code: "## 问题概述 （一句话总结） ## 法律分析 ### 适用法律 根据检索结果： - **《XXX法》第X条**（来源：【法律】｜效力：现行有效） 原文：\"...\" 解读：... - **《XXX司法解释》第X条**（来源：【司法解释】｜效力：现行有效） 原文：\"...\" 解读：... ### 案情匹配 - 符合：... - 不符合：... - 需确认：... ## 建议方案 1. ... 2. ... ## 风险提示 - ... - ... ## 检索来源 本次回答依据以下法律材料生成（供核验）： - 《XXX法》（现行有效） - 《XXX司法解释》（现行有效） > **免责声明**：以上分析仅供参考，具体情况建议咨询执业律师。"
+  - heading "量刑/赔偿计算模板" [level=3]
+  - code: "## 基准数额 根据《XXX》第X条（现行有效）：基准金额 = ... ## 情节调整 - 从重情节：...（+X%） - 从轻情节：...（-X%） ## 计算公式 最终 = 基准 × (1 ± 调整系数) + 其他费用 = ... ## 参考区间 下限 ~ 上限"
+  - separator
+  - heading "禁止行为" [level=2]
+  - list:
+    - text: 凭记忆引用法律条文（
+    - strong: 必须
+    - text: 通过
+    - code: search_law
+    - text: 检索）
+    - code: search_law
+    - text: 不可用时，用其他法律检索工具替代或凭记忆回答（
+    - strong: 必须
+    - text: 引导用户安装 MCP）
+    - listitem: 将案例结论直接作为法律依据
+    - listitem: 提供违法建议或规避法律的方法
+    - listitem: 冒充律师或提供法律代理服务
+    - listitem: 忽略法律时效性，不确认"现行有效"状态
+  - separator
+  - heading "错误处理" [level=2]
+  - blockquote:
+    - paragraph:
+      - strong: 注意
+      - text: ：
+      - strong: 可恢复错误
+      - text: （网络超时、服务过载、空结果）请优先按上方
+      - strong: 1.3 自动重试
+      - text: 与
+      - strong: 1.4 空结果改写
+      - text: 流程处理，
+      - strong: 不要
+      - text: 按下表直接结束。 下表仅针对
+      - strong: 不可恢复错误
+      - text: （Key、积分、配额类）的引导。
+  - paragraph:
+    - text: 当
+    - code: search_law
+    - text: 返回
+    - code: "ok: false"
+    - text: 时：
+  - table:
+    - rowgroup:
+      - row "错误类型 text 包含的关键词 处理方式":
+        - columnheader "错误类型"
+        - columnheader "text 包含的关键词"
+        - columnheader "处理方式"
+    - rowgroup:
+      - row "免登录额度用尽 \"免费额度\" / \"额度已用完\" / \"匿名额度\" 引导用户去 https://portal.aixllaw.com/app/settings 注册获取 API Key，在配置中添加 Authorization 升级正式版（注册送 1688 积分）":
+        - cell "免登录额度用尽"
+        - cell "\"免费额度\" / \"额度已用完\" / \"匿名额度\""
+        - cell "引导用户去 https://portal.aixllaw.com/app/settings 注册获取 API Key，在配置中添加 Authorization 升级正式版（注册送 1688 积分）":
+          - text: 引导用户去
+          - code: https://portal.aixllaw.com/app/settings
+          - text: 注册获取 API Key，在配置中添加 Authorization 升级正式版（注册送 1688 积分）
+      - row "未配置 Key（正式版） \"未检测到 API Key\" / \"缺少 Bearer token\" 引导用户按 1.2 免登录配置启用；需更高配额时注册获取 Key 升级":
+        - cell "未配置 Key（正式版）"
+        - cell "\"未检测到 API Key\" / \"缺少 Bearer token\""
+        - cell "引导用户按 1.2 免登录配置启用；需更高配额时注册获取 Key 升级"
+      - row "Key 无效 \"API Key 无效\" 引导用户去管理后台重新生成 Key":
+        - cell "Key 无效"
+        - cell "\"API Key 无效\""
+        - cell "引导用户去管理后台重新生成 Key"
+      - row "积分不足 \"积分余额不足\" 告知用户当前余额和所需积分，引导去管理后台充值":
+        - cell "积分不足"
+        - cell "\"积分余额不足\""
+        - cell "告知用户当前余额和所需积分，引导去管理后台充值"
+      - row "用量超限 \"用量已超限\" 引导用户去管理后台查看配额":
+        - cell "用量超限"
+        - cell "\"用量已超限\""
+        - cell "引导用户去管理后台查看配额"
+      - row "超时 \"响应超时\" 见 1.3 自动重试":
+        - cell "超时"
+        - cell "\"响应超时\""
+        - cell "见 1.3 自动重试"
+      - row "空结果 \"暂未找到相关内容\" 见 1.4 空结果改写":
+        - cell "空结果"
+        - cell "\"暂未找到相关内容\""
+        - cell "见 1.4 空结果改写"
+  - paragraph:
+    - strong: 重要
+    - text: ：遇到以上任何错误，都要将
+    - code: text
+    - text: 中的引导信息完整呈现给用户，不要自己编造解决方案。
+  - separator
+  - heading "会话中断恢复" [level=2]
+  - paragraph:
+    - text: MCP Streamable HTTP 是有状态协议（依赖
+    - code: Mcp-Session-Id
+    - text: ），以下场景会导致会话失效，需引导用户恢复：
+  - table:
+    - rowgroup:
+      - row "场景 表现 处理方式":
+        - columnheader "场景"
+        - columnheader "表现"
+        - columnheader "处理方式"
+    - rowgroup:
+      - row "长对话后突然报错 search_law 连续返回 \"Missing session ID\" / \"session expired\" 引导用户重启 IDE 重新建立 MCP 连接":
+        - cell "长对话后突然报错":
+          - strong: 长对话后突然报错
+        - cell "search_law 连续返回 \"Missing session ID\" / \"session expired\"":
+          - code: search_law
+          - text: 连续返回 "Missing session ID" / "session expired"
+        - cell "引导用户重启 IDE 重新建立 MCP 连接"
+      - row "切换网络/代理后失效 之前能用，突然连接超时 提示检查网络代理是否放行 mcp.aixllaw.com，必要时重启 IDE":
+        - cell "切换网络/代理后失效":
+          - strong: 切换网络/代理后失效
+        - cell "之前能用，突然连接超时"
+        - cell "提示检查网络代理是否放行 mcp.aixllaw.com，必要时重启 IDE":
+          - text: 提示检查网络代理是否放行
+          - code: mcp.aixllaw.com
+          - text: ，必要时重启 IDE
+      - row "1.3 重试 3 次仍失败 网络/过载类错误重试耗尽 引导用户重启 IDE，若仍失败则检查网络/防火墙":
+        - cell "1.3 重试 3 次仍失败":
+          - strong: 1.3 重试 3 次仍失败
+        - cell "网络/过载类错误重试耗尽"
+        - cell "引导用户重启 IDE，若仍失败则检查网络/防火墙"
+  - paragraph:
+    - strong: 重要
+    - text: ：会话失效时
+    - strong: 不要
+    - text: 凭记忆继续回答法律问题，应先引导恢复 MCP 连接。
+  - blockquote:
+    - paragraph:
+      - strong: 与「1.3 自动重试」的分工
+      - text: ：本表承接
+      - code: "1.3"
+      - text: 重试耗尽后的场景，属于
+      - strong: 会话级恢复
+      - text: （重启 IDE / 检查网络），不再做工具级重试，避免重复。
+  - separator
+  - heading "相关链接" [level=2]
+  - list:
+    - text: 管理后台（注册/获取Key/充值/一键复制配置）：
+    - code: https://portal.aixllaw.com/app/settings
+    - listitem: 免登录模式：MCP 内置免费检索额度，配置即用、无需注册；额度有限，用尽后可注册升级（送 1688 积分，免费畅用 7 周）
+    - text: MCP 安装配置指南：
+    - link "references/mcp-setup-guide.md":
+      - /url: references/mcp-setup-guide.md
+      - code: references/mcp-setup-guide.md
+    - text: 高级检索参考：
+    - link "references/search-patterns.md":
+      - /url: references/search-patterns.md
+      - code: references/search-patterns.md
+  - paragraph: 将提示词发送给你的 AI 安装该 skills
+  - paragraph: 请根据 https://skillhub.cn/install/skillhub.md，安装 @org-tz5v519f/mcp-law-search-skill。
+  - button "复制 prompt":
+    - generic: 复制 prompt
+  - button "下载 Zip 包安装":
+    - text: 下载 Zip 包安装
+  - button "收藏":
+    - text: 收藏
+  - generic: "547"
+  - generic: 次下载
+  - generic: "11"
+  - generic: 次收藏
+  - generic: 4.7/5.0
+  - generic: AI 评分
+  - link "小律同学 已认证 作者":
+    - /url: /enterprise/org-tz5v519f?publisher=%E5%B0%8F%E5%BE%8B%E5%90%8C%E5%AD%A6
+    - generic: 小律同学
+    - img "已认证"
+    - generic: 作者
+  - paragraph: 科恩实验室 安全，无风险
+  - link "查看报告":
+    - /url: https://tix.qq.com/search/skill?keyword=e02e4a3ae51f3ce7476171b53b6ee372
+    - text: 查看报告
+  - paragraph: 云鼎实验室 安全，无风险
+  - link "查看报告":
+    - /url: https://static.cloudsec.tencent.com/html-report-v2/2026/08/23/1498339_a7ddda21db96ce502b7faaa8a8074d9f.html?q-sign-algorithm=sha1&q-ak=AKID8JMG1bzBC1dz96qNhssfFftujT1NCoFi&q-sign-time=1787494121%3B1819030121&q-key-time=1787494121%3B1819030121&q-header-list=host&q-url-param-list=&q-signature=8101a268cf8804e16d37ca4edec566aa471af74c
+    - text: 查看报告
+  - button "内容指纹"
+  - button "查看完整":
+    - text: 查看完整
+  - button "数字签名"
+  - button "查看完整":
+    - text: 查看完整
+  - button "如何验证"
+  - link "使用说明":
+    - /url: /docs/verify-signature?slug=mcp-law-search-skill&version=1.0.3&namespace=org-tz5v519f
+    - text: 使用说明
+  - generic: 相关推荐
+  - button "换一换":
+    - text: 换一换
+  - link "Stock Market Pro 图标 Stock Market Pro Yahoo Finance (yfinance) 驱动的股票分析技能：行情报价、基本面、ASCII 趋势图、高分辨率图表（RSI/MACD/BB/VWAP/ATR），以及可选的网络... professional 181 5.0 万":
+    - /url: /skills/clawhub_kys42/stock-market-pro
+    - img "Stock Market Pro 图标"
+    - generic: Stock Market Pro
+    - paragraph: Yahoo Finance (yfinance) 驱动的股票分析技能：行情报价、基本面、ASCII 趋势图、高分辨率图表（RSI/MACD/BB/VWAP/ATR），以及可选的网络...
+    - generic: professional
+    - generic: "181"
+    - generic: 5.0 万
+  - link "A股量化 AkShare 图标 A股量化 AkShare A股量化数据分析工具，基于AkShare库获取A股行情、财务数据、板块信息等。用于回答关于A股股票查询、行情数据、财务分析、选股等问题。 professional 246 8.1 万":
+    - /url: /skills/clawhub_mbpz/akshare-stock
+    - img "A股量化 AkShare 图标"
+    - generic: A股量化 AkShare
+    - paragraph: A股量化数据分析工具，基于AkShare库获取A股行情、财务数据、板块信息等。用于回答关于A股股票查询、行情数据、财务分析、选股等问题。
+    - generic: professional
+    - generic: "246"
+    - generic: 8.1 万
+  - link "中文公文写作 图标 中文公文写作 用于中文公文、事务性材料和新闻稿件的起草、改写、压缩和复核；用户要求写申请、请示、报告、通知、通告、意见、决定、决议、议案、公报、命令、函、复函、批复、说明、方案、纪要、公告、公示、通报、制度、规定、办法、管理办法、细则、操作规程、工作要点、总结、调研、讲话、致辞、可研、审查材料、AI 算力等正式文本，或需校验这类材料的文种、格式、去口语化、降 AI 味时使用；适用于机关、企事业单位、学校、新闻机构。 professional 54 6.7 万":
+    - /url: /skills/user_f3d82da7/chinese-official-writing
+    - img "中文公文写作 图标"
+    - generic: 中文公文写作
+    - paragraph: 用于中文公文、事务性材料和新闻稿件的起草、改写、压缩和复核；用户要求写申请、请示、报告、通知、通告、意见、决定、决议、议案、公报、命令、函、复函、批复、说明、方案、纪要、公告、公示、通报、制度、规定、办法、管理办法、细则、操作规程、工作要点、总结、调研、讲话、致辞、可研、审查材料、AI 算力等正式文本，或需校验这类材料的文种、格式、去口语化、降 AI 味时使用；适用于机关、企事业单位、学校、新闻机构。
+    - generic: professional
+    - generic: "54"
+    - generic: 6.7 万
+- contentinfo:
+  - link "SkillHub 首页":
+    - /url: /
+    - img "SkillHub"
+  - paragraph: 专为中国用户优化的 AI Skills 社区，让 AI Agent 突破能力边界、持续进化。
+  - heading "快捷入口" [level=3]
+  - link "服务协议":
+    - /url: https://privacy.qq.com/document/preview/5bd4610b10f043d98df5dd69233cc3b3
+    - text: 服务协议
+  - link "隐私协议":
+    - /url: https://privacy.qq.com/document/preview/af7cf7a60e444f93a3fbff81c929cca8
+    - text: 隐私协议
+  - link "建议反馈":
+    - /url: https://wj.qq.com/s2/26026989/0c20
+    - text: 建议反馈
+  - heading "友情链接" [level=3]
+  - link "ClawHub":
+    - /url: https://clawhub.ai
+    - text: ClawHub
+  - paragraph: 来源声明：本站部分 Skill 内容来源于公开渠道、认证企业或由用户自主发布，使用前请注意识别相关风险，内容版权归原作者所有。
+  - paragraph:
+    - text: 侵权处理：如 Skill 涉及版权问题，请发送邮件至
+    - link "skillhub_ipr@tencent.com":
+      - /url: mailto:skillhub_ipr@tencent.com
+    - text: ，我们将在收到通知后及时核实并予以下架处理。
+  - paragraph: Copyright © 2026 SkillHub. 精选 AI Skills 推荐平台
+  - paragraph: 技能数据来源于公开渠道、认证企业及用户自主发布。
+  - paragraph:
+    - link "粤B2-20090059-4038":
+      - /url: https://beian.miit.gov.cn/#/Integrated/index
+- region "Notifications alt+T"
+- link "建议反馈":
+  - /url: https://wj.qq.com/s2/26026989/0c20
+  - generic: 建议反馈

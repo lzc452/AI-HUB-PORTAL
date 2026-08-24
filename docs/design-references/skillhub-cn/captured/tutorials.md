@@ -1,0 +1,136 @@
+- banner:
+  - link "SkillHub 首页":
+    - /url: /
+    - img "SkillHub"
+  - navigation "主导航":
+    - button "技能":
+      - text: 技能
+    - link "插件":
+      - /url: /plugins
+      - text: 插件
+      - generic: NEW
+    - link "SkillPay":
+      - /url: /skillpay
+      - generic: SkillPay
+    - link "大赛":
+      - /url: /contest
+      - generic: 大赛
+    - button "探索":
+      - text: 探索
+    - button "帮助":
+      - text: 帮助
+  - button "发布 Skill":
+    - generic: 发布 Skill
+  - button "通知":
+  - button "用户菜单":
+- main:
+  - main:
+    - progressbar "阅读进度"
+    - heading "使用指南" [level=1]
+    - navigation "文档导航":
+      - paragraph: 文档导航
+      - list:
+        - button "认识 SkillHub" [expanded]:
+          - generic: 认识 SkillHub
+        - list:
+          - link "SkillHub 是什么":
+            - /url: "#what-is-skillhub"
+          - link "TRACE 评测体系":
+            - /url: "#trace-evaluation"
+        - button "发布与管理 Skill":
+          - generic: 发布与管理 Skill
+        - button "企业版能力":
+          - generic: 企业版能力
+        - button "SkillPay":
+          - generic: SkillPay
+        - button "探索 Skill":
+          - generic: 探索 Skill
+    - article:
+      - heading "SkillHub 是什么" [level=2]
+      - paragraph: SkillHub 是一个专为中国用户优化的 AI Skills 社区平台，帮助个人和企业发现、安装、发布和商业化 AI 能力。个人开发者可以把经验沉淀为可复用的 Skill 分享给社区；企业可以在专属团队空间中沉淀内部能力，或将付费服务封装为 Pay Skill 面向 Agent 生态售卖。
+      - heading "精选 Skill，多场景覆盖" [level=3]
+      - paragraph: 精选大量安全好用的 Skill，多场景覆盖，你想要的 Skill 这都有。支持搜索、分类浏览和榜单推荐，帮助你快速找到适合当前任务的能力。
+      - heading "全自动安全审核" [level=3]
+      - paragraph: 每个 Skill 上架前都必须通过三线并行的安全审核流水线——内容合规过滤、科恩实验室深度漏洞扫描、云鼎实验室 AI 模型安全评估——全部通过才能自动上架，任一不通即刻拒绝。你安装的每个 Skill 都有完整的安全评估报告可查。
+      - heading "企业与团队能力" [level=3]
+      - paragraph: 面向企业与团队场景，SkillHub 提供完整的注册、认证、协作与对外发布能力。企业完成认证后可获得独立的团队空间，统一管理成员、Skill 资产与审核流程；支持私有 Skill 仅团队内可见、公开 Skill 面向社区发布，还可在企业专区中拥有专属的企业详情页，集中展示品牌信息与团队 Skill。
+      - paragraph: 根据认证方式的不同，企业可选择两种版本：
+      - table:
+        - rowgroup:
+          - row "团队版 专业版":
+            - columnheader
+            - columnheader "团队版"
+            - columnheader "专业版"
+        - rowgroup:
+          - row "认证方式 管理员实名认证 企业认证（营业执照）":
+            - cell "认证方式"
+            - cell "管理员实名认证"
+            - cell "企业认证（营业执照）"
+          - row "技能上传 ≤ 500 个 不限":
+            - cell "技能上传"
+            - cell "≤ 500 个"
+            - cell "不限"
+          - row "存储空间 2 GB 不限":
+            - cell "存储空间"
+            - cell "2 GB"
+            - cell "不限"
+          - row "对外发布 仅用团队名称 自定义展示名称 + 蓝V 认证标签":
+            - cell "对外发布"
+            - cell "仅用团队名称"
+            - cell "自定义展示名称 + 蓝V 认证标签"
+          - row "安全审核 ✅ ✅":
+            - cell "安全审核"
+            - cell "✅"
+            - cell "✅"
+      - heading "SkillPay 付费能力" [level=3]
+      - paragraph: SkillPay 让企业把已有付费服务封装为可被 Agent 直接调用的付费 Skill，按次计费、微信支付结算。基于微信支付 Agent Pay X402 协议，Agent 调用付费 Skill 时会触发用户支付授权，用户完成支付后再获取付费能力或结果。企业侧只需在原服务上叠加开发者签名、X402 预下单和支付触发返回，即可完成付费改造，无需重构业务逻辑。
+      - paragraph: 完整链路已被 SkillHub 收敛：企业认证 → 商户入驻 → 微信商户号绑定 → Pay Skill 发布上架 → 定价与效果案例补充 → 上架后的调用来源认证与结算。使企业可以专注在自身服务价值上，把可信调用入口和支付履约交给平台。
+      - heading "首发 TRACE 评测体系" [level=3]
+      - paragraph: 首发 TRACE 评测体系，每个好 Skill 都值得被追踪。从信任、可靠性、适用性、规范性、有效性五个维度全面评估 Skill 质量，帮助你快速识别高质量 Skill。
+    - complementary "本篇目录":
+      - paragraph: 本篇内容
+      - list:
+        - link "精选 Skill，多场景覆盖":
+          - /url: "#what-skills-hub"
+        - link "全自动安全审核":
+          - /url: "#what-security"
+        - link "企业与团队能力":
+          - /url: "#what-enterprise"
+        - link "SkillPay 付费能力":
+          - /url: "#what-skill-pay"
+        - link "首发 TRACE 评测体系":
+          - /url: "#what-trace"
+- contentinfo:
+  - link "SkillHub 首页":
+    - /url: /
+    - img "SkillHub"
+  - paragraph: 专为中国用户优化的 AI Skills 社区，让 AI Agent 突破能力边界、持续进化。
+  - heading "快捷入口" [level=3]
+  - link "服务协议":
+    - /url: https://privacy.qq.com/document/preview/5bd4610b10f043d98df5dd69233cc3b3
+    - text: 服务协议
+  - link "隐私协议":
+    - /url: https://privacy.qq.com/document/preview/af7cf7a60e444f93a3fbff81c929cca8
+    - text: 隐私协议
+  - link "建议反馈":
+    - /url: https://wj.qq.com/s2/26026989/0c20
+    - text: 建议反馈
+  - heading "友情链接" [level=3]
+  - link "ClawHub":
+    - /url: https://clawhub.ai
+    - text: ClawHub
+  - paragraph: 来源声明：本站部分 Skill 内容来源于公开渠道、认证企业或由用户自主发布，使用前请注意识别相关风险，内容版权归原作者所有。
+  - paragraph:
+    - text: 侵权处理：如 Skill 涉及版权问题，请发送邮件至
+    - link "skillhub_ipr@tencent.com":
+      - /url: mailto:skillhub_ipr@tencent.com
+    - text: ，我们将在收到通知后及时核实并予以下架处理。
+  - paragraph: Copyright © 2026 SkillHub. 精选 AI Skills 推荐平台
+  - paragraph: 技能数据来源于公开渠道、认证企业及用户自主发布。
+  - paragraph:
+    - link "粤B2-20090059-4038":
+      - /url: https://beian.miit.gov.cn/#/Integrated/index
+- region "Notifications alt+T"
+- link "建议反馈":
+  - /url: https://wj.qq.com/s2/26026989/0c20
+  - generic: 建议反馈

@@ -1,0 +1,246 @@
+- banner:
+  - link "SkillHub 首页":
+    - /url: /
+    - img "SkillHub"
+  - navigation "主导航":
+    - button "技能":
+      - text: 技能
+    - link "插件":
+      - /url: /plugins
+      - text: 插件
+      - generic: NEW
+    - link "SkillPay":
+      - /url: /skillpay
+      - generic: SkillPay
+    - link "大赛":
+      - /url: /contest
+      - generic: 大赛
+    - button "探索":
+      - text: 探索
+    - button "帮助":
+      - text: 帮助
+  - button "发布 Skill":
+    - generic: 发布 Skill
+  - button "通知":
+  - button "用户菜单":
+- main:
+  - heading "Plugin 广场" [level=1]
+  - paragraph:
+    - text: 精选优质的 DeepSeek Harness Plugins ·
+    - generic: 共 6.6 千 个 Plugins
+  - region "在 DeepSeek Harness 中使用 SkillHub":
+    - heading "在 DeepSeek Harness 中使用 SkillHub" [level=2]
+    - paragraph: 安装后即可使用插件广场和技能广场，入口位于「设置」上方。
+    - button "复制安装提示词":
+      - text: 复制安装提示词
+  - button "全部分类"
+  - button "趣味换装"
+  - button "联网工具"
+  - button "记忆"
+  - button "工作流"
+  - button "模型推理"
+  - button "客户端"
+  - button "安全管理"
+  - generic: 搜索 Plugin
+  - textbox "搜索 Plugin":
+    - /placeholder: 搜索 Plugin 名称、描述...
+  - button "排序方式：Stars":
+    - generic: Stars 排序
+  - button "列表":
+    - text: 列表
+  - button "卡片":
+    - text: 卡片
+  - link "modlens 图标 liustack/modlens 模型推理 可安装 The first vision plugin for DeepSeek Harness, and the vision bridge for every text-only coding agent. Paste an image, get structured JSON evidence (OCR, layout, semantics). | 全网最强 DeepSeek Harness 外挂视觉插件，为 DeepSeek、GLM 等纯文本模型外挂视觉能力，粘贴图片即得结构化 JSON 证据（OCR、版面、语义）。 3.6 千 100 GitHub":
+    - /url: /plugins/liustack/modlens
+    - img "modlens 图标"
+    - generic: liustack/modlens
+    - generic: 模型推理
+    - generic: 可安装
+    - paragraph: The first vision plugin for DeepSeek Harness, and the vision bridge for every text-only coding agent. Paste an image, get structured JSON evidence (OCR, layout, semantics). | 全网最强 DeepSeek Harness 外挂视觉插件，为 DeepSeek、GLM 等纯文本模型外挂视觉能力，粘贴图片即得结构化 JSON 证据（OCR、版面、语义）。
+    - generic: 3.6 千
+    - generic: "100"
+    - text: GitHub
+  - link "DSH-better-sidebar 图标 omdsh-dev/dsh-better-sidebar 客户端 可安装 开放的侧边栏底座，支持三方拓展注册新侧边栏页面。内置文件渲染编辑/终端/侧边对话/Git/子代理页面 ｜ Open sidebar foundation, supports third-party extensions to register new sidebar pages. Built-in file rendering/editing, terminal, side chat, Git, and sub-agent pages. 2.8 千 225 GitHub":
+    - /url: /plugins/omdsh-dev/DSH-better-sidebar
+    - img "DSH-better-sidebar 图标"
+    - generic: omdsh-dev/dsh-better-sidebar
+    - generic: 客户端
+    - generic: 可安装
+    - paragraph: 开放的侧边栏底座，支持三方拓展注册新侧边栏页面。内置文件渲染编辑/终端/侧边对话/Git/子代理页面 ｜ Open sidebar foundation, supports third-party extensions to register new sidebar pages. Built-in file rendering/editing, terminal, side chat, Git, and sub-agent pages.
+    - generic: 2.8 千
+    - generic: "225"
+    - text: GitHub
+  - 'link "dsh-TUI 图标 ccch1mneyyy/dsh-tui 客户端 可安装 DSH 官方公众号收录的 TUI 补位插件：Claude Code 风，鲸鱼顶栏/实时状态/流式思考/双击 Esc 回滚/上下文进度+TPS。npm 一键装。 DSH official WeChat featured TUI plugin — Claude Code style: whale bar, live status, streaming thoughts, double-Esc rollback, context bar + TPS. npm one-click. 2.4 千 112 GitHub"':
+    - /url: /plugins/ccch1mneyyy/dsh-TUI
+    - img "dsh-TUI 图标"
+    - generic: ccch1mneyyy/dsh-tui
+    - generic: 客户端
+    - generic: 可安装
+    - paragraph: "DSH 官方公众号收录的 TUI 补位插件：Claude Code 风，鲸鱼顶栏/实时状态/流式思考/双击 Esc 回滚/上下文进度+TPS。npm 一键装。 DSH official WeChat featured TUI plugin — Claude Code style: whale bar, live status, streaming thoughts, double-Esc rollback, context bar + TPS. npm one-click."
+    - generic: 2.4 千
+    - generic: "112"
+    - text: GitHub
+  - link "dsh-market 图标 dsh-market/dsh-market 客户端 可安装 The plugin market inside DeepSeek Harness — browse, search, one-click install · DSH 可视化插件市场 2.1 千 114 GitHub":
+    - /url: /plugins/dsh-market/dsh-market
+    - img "dsh-market 图标"
+    - generic: dsh-market/dsh-market
+    - generic: 客户端
+    - generic: 可安装
+    - paragraph: The plugin market inside DeepSeek Harness — browse, search, one-click install · DSH 可视化插件市场
+    - generic: 2.1 千
+    - generic: "114"
+    - text: GitHub
+  - 'link "Aegis 图标 ganyuanran/aegis 工作流 可安装 Make AI coding agents architecture-aware: baseline-first, evidence-verified, drift-checked, and safe across long tasks. 1.1 千 51 GitHub"':
+    - /url: /plugins/GanyuanRan/Aegis
+    - img "Aegis 图标"
+    - generic: ganyuanran/aegis
+    - generic: 工作流
+    - generic: 可安装
+    - paragraph: "Make AI coding agents architecture-aware: baseline-first, evidence-verified, drift-checked, and safe across long tasks."
+    - generic: 1.1 千
+    - generic: "51"
+    - text: GitHub
+  - 'link "dsh-vision-router 图标 ysr666/dsh-vision-router 模型推理 可安装 Eyes for text-only DeepSeek Harness agents: built-in free vision chain (no key) + pixel-level vision tools (Q&A, grounding, crop, pixel diff, colors, OCR, SVG trace, cutout, screenshots). One-command install, no Python, image turns work like ordinary tool-calling turns. 955 40 GitHub"':
+    - /url: /plugins/ysr666/dsh-vision-router
+    - img "dsh-vision-router 图标"
+    - generic: ysr666/dsh-vision-router
+    - generic: 模型推理
+    - generic: 可安装
+    - paragraph: "Eyes for text-only DeepSeek Harness agents: built-in free vision chain (no key) + pixel-level vision tools (Q&A, grounding, crop, pixel diff, colors, OCR, SVG trace, cutout, screenshots). One-command install, no Python, image turns work like ordinary tool-calling turns."
+    - generic: "955"
+    - generic: "40"
+    - text: GitHub
+  - link "dsh-agent-teams 图标 nanmicoder/dsh-agent-teams 工作流 可安装 AgentTeams plugin for DeepSeek Harness 938 82 GitHub":
+    - /url: /plugins/NanmiCoder/dsh-agent-teams
+    - img "dsh-agent-teams 图标"
+    - generic: nanmicoder/dsh-agent-teams
+    - generic: 工作流
+    - generic: 可安装
+    - paragraph: AgentTeams plugin for DeepSeek Harness
+    - generic: "938"
+    - generic: "82"
+    - text: GitHub
+  - 'link "dsh-vision-toolkit 图标 anionex/dsh-vision-toolkit 模型推理 可安装 [dsh]为纯文本模型设计更强大的视觉工具箱：一行安装使用、粘贴图片直接识别、多张图片问答、截图到前端UI 还原等｜DeepSeek Harness-native integration for agent-vision-toolkit: image Q&A, long-screenshot OCR, UI restoration, grounding, pixel diff, Artifacts, and Web UI. 818 34 GitHub"':
+    - /url: /plugins/Anionex/dsh-vision-toolkit
+    - img "dsh-vision-toolkit 图标"
+    - generic: anionex/dsh-vision-toolkit
+    - generic: 模型推理
+    - generic: 可安装
+    - paragraph: "[dsh]为纯文本模型设计更强大的视觉工具箱：一行安装使用、粘贴图片直接识别、多张图片问答、截图到前端UI 还原等｜DeepSeek Harness-native integration for agent-vision-toolkit: image Q&A, long-screenshot OCR, UI restoration, grounding, pixel diff, Artifacts, and Web UI."
+    - generic: "818"
+    - generic: "34"
+    - text: GitHub
+  - link "DeepSeek-Balance-Whale-Widget 图标 meteornox/deepseek-balance-whale-widget 客户端 可安装 DeepSeek Harness（DSH）一只住在 DSH 界面右下角的小鲸鱼娘，帮你盯着DeepSeek账户余额。QQ弹弹，支持拖拽吸附、左吸附翻转、数字滚动动画，随界面自动启用，建议直接喊来你的dsh安装 705 28 GitHub":
+    - /url: /plugins/MeteorNOX/DeepSeek-Balance-Whale-Widget
+    - img "DeepSeek-Balance-Whale-Widget 图标"
+    - generic: meteornox/deepseek-balance-whale-widget
+    - generic: 客户端
+    - generic: 可安装
+    - paragraph: DeepSeek Harness（DSH）一只住在 DSH 界面右下角的小鲸鱼娘，帮你盯着DeepSeek账户余额。QQ弹弹，支持拖拽吸附、左吸附翻转、数字滚动动画，随界面自动启用，建议直接喊来你的dsh安装
+    - generic: "705"
+    - generic: "28"
+    - text: GitHub
+  - link "dsh-im 图标 xmanrui/dsh-im 客户端 可安装 通过扫码或机器人凭据把IM机器人接入DeepSeek Harness（支持飞书、微信、钉钉、企业微信、QQ、Slack、Telegram、Discord和WhatsApp）。 Connect IM bots to DeepSeek Harness via QR code or credentials (9 channels). 649 70 GitHub":
+    - /url: /plugins/xmanrui/dsh-im
+    - img "dsh-im 图标"
+    - generic: xmanrui/dsh-im
+    - generic: 客户端
+    - generic: 可安装
+    - paragraph: 通过扫码或机器人凭据把IM机器人接入DeepSeek Harness（支持飞书、微信、钉钉、企业微信、QQ、Slack、Telegram、Discord和WhatsApp）。 Connect IM bots to DeepSeek Harness via QR code or credentials (9 channels).
+    - generic: "649"
+    - generic: "70"
+    - text: GitHub
+  - link "graph-memory 图标 adoresever/graph-memory 记忆 可安装 Deepseek Harness、Openclaw知识图谱记忆插件。2026年4月受邀发布在清华大学讨论会。Knowledge Graph + Memory；Knowledge Graph Context Engine for OpenClaw — extracts structured triples from conversations, compresses context 75%, enables cross-session experience reuse 569 80 GitHub":
+    - /url: /plugins/adoresever/graph-memory
+    - img "graph-memory 图标"
+    - generic: adoresever/graph-memory
+    - generic: 记忆
+    - generic: 可安装
+    - paragraph: Deepseek Harness、Openclaw知识图谱记忆插件。2026年4月受邀发布在清华大学讨论会。Knowledge Graph + Memory；Knowledge Graph Context Engine for OpenClaw — extracts structured triples from conversations, compresses context 75%, enables cross-session experience reuse
+    - generic: "569"
+    - generic: "80"
+    - text: GitHub
+  - 'link "dsh-at-file 图标 fsmargoo/dsh-at-file 模型推理 可安装 Codex-style @file mentions for DeepSeek Harness: search workspace files in the composer and attach their path to prompts. 465 19 GitHub"':
+    - /url: /plugins/FSMargoo/dsh-at-file
+    - img "dsh-at-file 图标"
+    - generic: fsmargoo/dsh-at-file
+    - generic: 模型推理
+    - generic: 可安装
+    - paragraph: "Codex-style @file mentions for DeepSeek Harness: search workspace files in the composer and attach their path to prompts."
+    - generic: "465"
+    - generic: "19"
+    - text: GitHub
+  - 'link "superdesign-skill 图标 superdesigndev/superdesign-skill 工作流 可安装 The design skill for Claude Code, Cursor and any coding agent. Stop shipping AI-slop UI: turn it into shippable, tasteful frontend. Install: npx skills add superdesigndev/superdesign-skill. Powered by superdesign.dev 442 31 GitHub"':
+    - /url: /plugins/superdesigndev/superdesign-skill
+    - img "superdesign-skill 图标"
+    - generic: superdesigndev/superdesign-skill
+    - generic: 工作流
+    - generic: 可安装
+    - paragraph: "The design skill for Claude Code, Cursor and any coding agent. Stop shipping AI-slop UI: turn it into shippable, tasteful frontend. Install: npx skills add superdesigndev/superdesign-skill. Powered by superdesign.dev"
+    - generic: "442"
+    - generic: "31"
+    - text: GitHub
+  - 'link "dsh-genui 图标 omdsh-dev/dsh-genui 客户端 可安装 GenUI for DeepSeek Harness: interactive UI components rendered inline in assistant replies via the dsh-ui fence — layout, charts, plots, forms, quizzes, mermaid, 3D scenes, and an action event loop back to the model. Ships the fence-teaching host plugin, the browser renderer (client half), and the genui skill. 321 28 GitHub"':
+    - /url: /plugins/omdsh-dev/dsh-genui
+    - img "dsh-genui 图标"
+    - generic: omdsh-dev/dsh-genui
+    - generic: 客户端
+    - generic: 可安装
+    - paragraph: "GenUI for DeepSeek Harness: interactive UI components rendered inline in assistant replies via the dsh-ui fence — layout, charts, plots, forms, quizzes, mermaid, 3D scenes, and an action event loop back to the model. Ships the fence-teaching host plugin, the browser renderer (client half), and the genui skill."
+    - generic: "321"
+    - generic: "28"
+    - text: GitHub
+  - link "whale-girl 图标 vlln/whale-girl 趣味换装 可安装 DSH Web GUI 桌面宠物插件（QQ 宠物形态）：右下角悬浮、可拖拽/投喂/玩耍的积累型伙伴。 279 16 GitHub":
+    - /url: /plugins/vlln/whale-girl
+    - img "whale-girl 图标"
+    - generic: vlln/whale-girl
+    - generic: 趣味换装
+    - generic: 可安装
+    - paragraph: DSH Web GUI 桌面宠物插件（QQ 宠物形态）：右下角悬浮、可拖拽/投喂/玩耍的积累型伙伴。
+    - generic: "279"
+    - generic: "16"
+    - text: GitHub
+  - link "oh-dsh 图标 hust-open-atom-club/oh-dsh 客户端 可安装 一套 DSH runtime，Desktop、Web 与 TUI 三种开发体验。 260 21 GitHub":
+    - /url: /plugins/hust-open-atom-club/oh-dsh
+    - img "oh-dsh 图标"
+    - generic: hust-open-atom-club/oh-dsh
+    - generic: 客户端
+    - generic: 可安装
+    - paragraph: 一套 DSH runtime，Desktop、Web 与 TUI 三种开发体验。
+    - generic: "260"
+    - generic: "21"
+    - text: GitHub
+- contentinfo:
+  - link "SkillHub 首页":
+    - /url: /
+    - img "SkillHub"
+  - paragraph: 专为中国用户优化的 AI Skills 社区，让 AI Agent 突破能力边界、持续进化。
+  - heading "快捷入口" [level=3]
+  - link "服务协议":
+    - /url: https://privacy.qq.com/document/preview/5bd4610b10f043d98df5dd69233cc3b3
+    - text: 服务协议
+  - link "隐私协议":
+    - /url: https://privacy.qq.com/document/preview/af7cf7a60e444f93a3fbff81c929cca8
+    - text: 隐私协议
+  - link "建议反馈":
+    - /url: https://wj.qq.com/s2/26026989/0c20
+    - text: 建议反馈
+  - heading "友情链接" [level=3]
+  - link "ClawHub":
+    - /url: https://clawhub.ai
+    - text: ClawHub
+  - paragraph: 来源声明：本站部分 Skill 内容来源于公开渠道、认证企业或由用户自主发布，使用前请注意识别相关风险，内容版权归原作者所有。
+  - paragraph:
+    - text: 侵权处理：如 Skill 涉及版权问题，请发送邮件至
+    - link "skillhub_ipr@tencent.com":
+      - /url: mailto:skillhub_ipr@tencent.com
+    - text: ，我们将在收到通知后及时核实并予以下架处理。
+  - paragraph: Copyright © 2026 SkillHub. 精选 AI Skills 推荐平台
+  - paragraph: 技能数据来源于公开渠道、认证企业及用户自主发布。
+  - paragraph:
+    - link "粤B2-20090059-4038":
+      - /url: https://beian.miit.gov.cn/#/Integrated/index
+- region "Notifications alt+T"
+- link "建议反馈":
+  - /url: https://wj.qq.com/s2/26026989/0c20
+  - generic: 建议反馈

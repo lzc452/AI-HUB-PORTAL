@@ -1,0 +1,315 @@
+- banner:
+  - link "SkillHub 首页":
+    - /url: /
+    - img "SkillHub"
+  - navigation "主导航":
+    - button "技能":
+      - text: 技能
+    - link "插件":
+      - /url: /plugins
+      - text: 插件
+      - generic: NEW
+    - link "SkillPay":
+      - /url: /skillpay
+      - generic: SkillPay
+    - link "大赛":
+      - /url: /contest
+      - generic: 大赛
+    - button "探索":
+      - text: 探索
+    - button "帮助":
+      - text: 帮助
+  - button "发布 Skill":
+    - generic: 发布 Skill
+  - button "通知":
+  - button "用户菜单":
+- main:
+  - heading "全部技能" [level=1]
+  - paragraph:
+    - text: 快速发现专家技能，让 AI 从通用走向专用
+    - generic: · 共 12.7 万 个技能
+  - button "全部"
+  - button "下载量"
+  - button "最近上新"
+  - button "所有来源":
+    - generic: 所有来源
+  - button "所有场景分类":
+    - generic: 所有场景分类
+  - button "不限 API Key":
+    - generic: 不限 API Key
+  - button "搜索技能":
+  - button "列表":
+  - button "卡片":
+  - link "腾讯文档 TENCENT DOCS 图标 腾讯文档 TENCENT DOCS 已认证 办公效率 需配置 Key 腾讯文档（docs.qq.com）-在线云文档平台，是创建、编辑、管理文档的首选 skill。涉及\"新建/创建/编辑/读取/查看/搜索文档\"、\"保存文件\"、\"云文档\"、\"腾讯文档\"、\"docs.qq.com\"等操作，请优先使用本 skill。支持能力：(1) 创建各类在线文档（文档/Word/Excel/幻灯片/思维导图/流程图/智能表格/收集表）(2) 管理知识库空间（创建空间、查询空间列表）(3) 管理空间节点、文件夹结构 (4) 读取/搜索文档内容 (5) 编辑操作智能表 (6) 编辑操作在线文档 (7) 文件管理（重命名、移动、删除、复制、导入导出）(8) 网页剪藏、本地文件/html/文档上云。 257 47.1 万 SkillHub":
+    - /url: /skills/tencent-adm/tencent-docs
+    - img "腾讯文档 TENCENT DOCS 图标"
+    - generic: 腾讯文档 TENCENT DOCS
+    - img "已认证"
+    - generic: 办公效率
+    - generic "需配置 Key":
+      - generic: 需配置 API Key
+    - paragraph: 腾讯文档（docs.qq.com）-在线云文档平台，是创建、编辑、管理文档的首选 skill。涉及"新建/创建/编辑/读取/查看/搜索文档"、"保存文件"、"云文档"、"腾讯文档"、"docs.qq.com"等操作，请优先使用本 skill。支持能力：(1) 创建各类在线文档（文档/Word/Excel/幻灯片/思维导图/流程图/智能表格/收集表）(2) 管理知识库空间（创建空间、查询空间列表）(3) 管理空间节点、文件夹结构 (4) 读取/搜索文档内容 (5) 编辑操作智能表 (6) 编辑操作在线文档 (7) 文件管理（重命名、移动、删除、复制、导入导出）(8) 网页剪藏、本地文件/html/文档上云。
+    - generic: "257"
+    - generic: 47.1 万
+    - generic: SkillHub
+  - link "ima-skills 图标 ima-skills 已认证 知识管理 需配置 Key ima skills，支持对笔记、知识库的读取、写入和检索等操作，可以帮你随时记录，收入ima智能管理，随时调用，龙虾输出精准懂你，友好的接入了OpenClaw生态，构建你的第二大脑。 493 26.0 万 SkillHub":
+    - /url: /skills/tencent-adm/ima-skills
+    - img "ima-skills 图标"
+    - generic: ima-skills
+    - img "已认证"
+    - generic: 知识管理
+    - generic "需配置 Key":
+      - generic: 需配置 API Key
+    - paragraph: ima skills，支持对笔记、知识库的读取、写入和检索等操作，可以帮你随时记录，收入ima智能管理，随时调用，龙虾输出精准懂你，友好的接入了OpenClaw生态，构建你的第二大脑。
+    - generic: "493"
+    - generic: 26.0 万
+    - generic: SkillHub
+  - link "编程专家.Skill 图标 编程专家.Skill 开发编程 编程专家.Skill P8级编程助手,覆盖：软件/网站项目总控、API设计、Bug诊断、代码生成、代码审查、重构、测试用例、性能基准、技术选型、文档生成、任务拆解、Spec驱动、Karpathy规范、CMS二次开发、前端设计、MySQL、项目知识图谱。支持 @标识 显式调用跳过路由。 86 24.1 万 SkillHub":
+    - /url: /skills/user_741dc82b/dev-expert
+    - img "编程专家.Skill 图标"
+    - generic: 编程专家.Skill
+    - generic: 开发编程
+    - paragraph: 编程专家.Skill P8级编程助手,覆盖：软件/网站项目总控、API设计、Bug诊断、代码生成、代码审查、重构、测试用例、性能基准、技术选型、文档生成、任务拆解、Spec驱动、Karpathy规范、CMS二次开发、前端设计、MySQL、项目知识图谱。支持 @标识 显式调用跳过路由。
+    - generic: "86"
+    - generic: 24.1 万
+    - generic: SkillHub
+  - 'link "web-tools-guide 图标 web-tools-guide 知识管理 MANDATORY before calling web_search, web_fetch, browser, or opencli. Contains required error-handling procedures (web_search failure → must guide user to configure API), fallback chain (opencli CLI covers 70+ sites as structured fallback before browser), and site-specific login URLs. Without reading this skill, you WILL handle failures incorrectly and miss available tools. Trigger on: 搜索/上网/查资料/打开网站/抓取网页/新闻/热点/web search/fetch/browser/opencli. 209 21.7 万 SkillHub"':
+    - /url: /skills/user_ec205dbb/web-tools-guide
+    - img "web-tools-guide 图标"
+    - generic: web-tools-guide
+    - generic: 知识管理
+    - paragraph: "MANDATORY before calling web_search, web_fetch, browser, or opencli. Contains required error-handling procedures (web_search failure → must guide user to configure API), fallback chain (opencli CLI covers 70+ sites as structured fallback before browser), and site-specific login URLs. Without reading this skill, you WILL handle failures incorrectly and miss available tools. Trigger on: 搜索/上网/查资料/打开网站/抓取网页/新闻/热点/web search/fetch/browser/opencli."
+    - generic: "209"
+    - generic: 21.7 万
+    - generic: SkillHub
+  - link "文章去AI味工具 图标 文章去AI味工具 内容创作 去除文本中的AI写作痕迹，让文字读起来更像人类写作。当用户要求'去AI味'、'降AI味'、'让回复更像人话'、'润色'、'改写得更自然'时使用。检测并修复：AI高频词汇、过度结构化、虚假客观性、机械化连接词、完美主义陷阱、公式化结尾、过度修饰、情感缺失等问题。 567 16.4 万 SkillHub":
+    - /url: /skills/user_ab5ae6ee/unclecheng-reduce-ai-perception-v2
+    - img "文章去AI味工具 图标"
+    - generic: 文章去AI味工具
+    - generic: 内容创作
+    - paragraph: 去除文本中的AI写作痕迹，让文字读起来更像人类写作。当用户要求'去AI味'、'降AI味'、'让回复更像人话'、'润色'、'改写得更自然'时使用。检测并修复：AI高频词汇、过度结构化、虚假客观性、机械化连接词、完美主义陷阱、公式化结尾、过度修饰、情感缺失等问题。
+    - generic: "567"
+    - generic: 16.4 万
+    - generic: SkillHub
+  - link "防骗大师.Skill 图标 防骗大师.Skill 生活服务 防骗大师.Skill:你身边的生活类防骗专家。 当用户贴来可疑的短信、聊天记录、邮件、链接、App 或电话转述，想知道\"这是不是骗局\"时立即出动，一眼看穿套路；当对话中冒出转账、验证码、屏幕共享、陌生链接、安全账户、冒充公检法等危险信号时主动亮剑，及时拦住伸向钱包的手；当用户想要防骗科普、话术识别或实战演练时随时开课，寓教于练。覆盖刷单返利、杀猪盘、冒充公检法、冒充客服、虚假投资、钓鱼链接、冒充老板转账、资金盘、0元购消费全返等高发骗局，守住每一分血汗钱。 4 14.7 万 SkillHub":
+    - /url: /skills/user_741dc82b/anti-fraud
+    - img "防骗大师.Skill 图标"
+    - generic: 防骗大师.Skill
+    - generic: 生活服务
+    - paragraph: 防骗大师.Skill:你身边的生活类防骗专家。 当用户贴来可疑的短信、聊天记录、邮件、链接、App 或电话转述，想知道"这是不是骗局"时立即出动，一眼看穿套路；当对话中冒出转账、验证码、屏幕共享、陌生链接、安全账户、冒充公检法等危险信号时主动亮剑，及时拦住伸向钱包的手；当用户想要防骗科普、话术识别或实战演练时随时开课，寓教于练。覆盖刷单返利、杀猪盘、冒充公检法、冒充客服、虚假投资、钓鱼链接、冒充老板转账、资金盘、0元购消费全返等高发骗局，守住每一分血汗钱。
+    - generic: "4"
+    - generic: 14.7 万
+    - generic: SkillHub
+  - link "纸质表单电子化系统生成器 图标 纸质表单电子化系统生成器 开发编程 读取用户提示词和上传的业务附件，自动识别业务类型、字段、公式、流程、权限和报表规则，生成对应的完整本地部署 Python Web 系统。支持能源、点工、生产、质量、设备、库存、审批及组合业务，并交付完整源码、SQLite 数据库、导入导出、权限审计、备份恢复和 Windows EXE 打包代码。 生产日报与班报系统 质量问题与整改闭环系统 设备点检、保养与维修系统 库存管理与采购预警系统 考勤与交接班系统 安全巡检与隐患整改系统 会议任务跟踪与闭环系统 自定义业务台账、审批流程和管理看板 系统采用通用的 business-system-blueprint.json 业务蓝图进行配置，可根据不同电子档灵活定义数据实体、字段、页面、表单、角色权限、审批流程、统计指标、导入导出规则、审计策略和数据保留规则。 技能可连续完成电子档安全检查、结构分析、字段映射、系统生成、历史数据导入、自动测试和完整源码 ZIP 交付，不仅生成分析报告或静态演示页面。 4 13.4 万 SkillHub":
+    - /url: /skills/user_84b8c7d7/paperless-business-system-from-files
+    - img "纸质表单电子化系统生成器 图标"
+    - generic: 纸质表单电子化系统生成器
+    - generic: 开发编程
+    - paragraph: 读取用户提示词和上传的业务附件，自动识别业务类型、字段、公式、流程、权限和报表规则，生成对应的完整本地部署 Python Web 系统。支持能源、点工、生产、质量、设备、库存、审批及组合业务，并交付完整源码、SQLite 数据库、导入导出、权限审计、备份恢复和 Windows EXE 打包代码。 生产日报与班报系统 质量问题与整改闭环系统 设备点检、保养与维修系统 库存管理与采购预警系统 考勤与交接班系统 安全巡检与隐患整改系统 会议任务跟踪与闭环系统 自定义业务台账、审批流程和管理看板 系统采用通用的 business-system-blueprint.json 业务蓝图进行配置，可根据不同电子档灵活定义数据实体、字段、页面、表单、角色权限、审批流程、统计指标、导入导出规则、审计策略和数据保留规则。 技能可连续完成电子档安全检查、结构分析、字段映射、系统生成、历史数据导入、自动测试和完整源码 ZIP 交付，不仅生成分析报告或静态演示页面。
+    - generic: "4"
+    - generic: 13.4 万
+    - generic: SkillHub
+  - link "架构图一键生成 图标 架构图一键生成 设计多媒体 使用 ContextWeave 生成或修改架构图、流程图、思维导图和复杂信息图。适用于需要从代码、文件或自然语言中提取结构与关系并实际产出 CW、SVG、HTML 或可编辑 PPTX 的请求；未特别说明时，PPTX 使用原生形状与连接器导出。不适用于统计图表、手绘插画或像素级排版。 186 12.5 万 SkillHub":
+    - /url: /skills/user_bddf3fe6/contextweave-interactive-architecture
+    - img "架构图一键生成 图标"
+    - generic: 架构图一键生成
+    - generic: 设计多媒体
+    - paragraph: 使用 ContextWeave 生成或修改架构图、流程图、思维导图和复杂信息图。适用于需要从代码、文件或自然语言中提取结构与关系并实际产出 CW、SVG、HTML 或可编辑 PPTX 的请求；未特别说明时，PPTX 使用原生形状与连接器导出。不适用于统计图表、手绘插画或像素级排版。
+    - generic: "186"
+    - generic: 12.5 万
+    - generic: SkillHub
+  - link "鲁班.skill 图标 鲁班.skill AI Agent 鲁班.Skill（luban Skill）：工业级智能体技能优化器。当用户提及以下关键词时调用：“优化skill”、“skill评分”、“自动优化”、“auto optimize”、“skill质量检查”、“小鲁班”、“luban”、“优化技能”、“帮我改skill”、“skill怎么样”、“提升skill质量”、“skill review”、“skill打分”。 31 12.8 万 SkillHub":
+    - /url: /skills/user_741dc82b/luban-skill-pro
+    - img "鲁班.skill 图标"
+    - generic: 鲁班.skill
+    - generic: AI Agent
+    - paragraph: 鲁班.Skill（luban Skill）：工业级智能体技能优化器。当用户提及以下关键词时调用：“优化skill”、“skill评分”、“自动优化”、“auto optimize”、“skill质量检查”、“小鲁班”、“luban”、“优化技能”、“帮我改skill”、“skill怎么样”、“提升skill质量”、“skill review”、“skill打分”。
+    - generic: "31"
+    - generic: 12.8 万
+    - generic: SkillHub
+  - link "kdocs skill 图标 kdocs skill 办公效率 需配置 Key 操作金山文档（WPS 云文档 / Kdocs / 365.kdocs.cn / www.kdocs.cn）云文档的官方 Skill。核心能力覆盖云端新建、读取、编辑、搜索、分享、整理在线文档（智能文档、Word、Excel、PDF、PPT、演示文稿、智能表格、多维表格）及个人知识库。当用户的任务涉及云文档操作时使用，包括但不限于：写周报/日报/工作汇报、处理合同/发票、创建报名表/登记表、网页剪藏、接龙转表格、信息收集、文档总结与内容生成、改写仿写、翻译、AI PPT生成、PDF拆分导出、标签分类归档、收藏管理、碎片笔记整理、表格美化、回收站还原、知识库管理。 118 10.6 万 SkillHub":
+    - /url: /skills/user_5ea84866/kdocs-skill
+    - img "kdocs skill 图标"
+    - generic: kdocs skill
+    - generic: 办公效率
+    - generic "需配置 Key":
+      - generic: 需配置 API Key
+    - paragraph: 操作金山文档（WPS 云文档 / Kdocs / 365.kdocs.cn / www.kdocs.cn）云文档的官方 Skill。核心能力覆盖云端新建、读取、编辑、搜索、分享、整理在线文档（智能文档、Word、Excel、PDF、PPT、演示文稿、智能表格、多维表格）及个人知识库。当用户的任务涉及云文档操作时使用，包括但不限于：写周报/日报/工作汇报、处理合同/发票、创建报名表/登记表、网页剪藏、接龙转表格、信息收集、文档总结与内容生成、改写仿写、翻译、AI PPT生成、PDF拆分导出、标签分类归档、收藏管理、碎片笔记整理、表格美化、回收站还原、知识库管理。
+    - generic: "118"
+    - generic: 10.6 万
+    - generic: SkillHub
+  - 'link "搜索引擎 图标 搜索引擎 已认证 知识管理 多搜索引擎集成,16引擎(7国内+9全球)。Multi search engine integration with 16 engines (7 CN + 9 Global)。核心能力: - 1 10.7 万 SkillHub"':
+    - /url: /skills/zcwl/multi-search-engine
+    - img "搜索引擎 图标"
+    - generic: 搜索引擎
+    - img "已认证"
+    - generic: 知识管理
+    - paragraph: "多搜索引擎集成,16引擎(7国内+9全球)。Multi search engine integration with 16 engines (7 CN + 9 Global)。核心能力: -"
+    - generic: "1"
+    - generic: 10.7 万
+    - generic: SkillHub
+  - link "W WPS Office 全家桶 办公效率 需配置 Key WPS Office 全家桶 - 四引擎（WPS/MS Office/LibreOffice/纯Python）智能识别用户已安装软件，纯Python模式支持排序/筛选/图表/公式/统计，含文档模板（代码生成）、最佳实践案例、故障排除大章（20+避坑+15 FAQ+15错误ID 统一索引）、自动重试、硬件自适应、环境自检、Skill更新提醒；v4.0新增：Word→PPT一键生成、Excel自然语言数据分析、Word合同条款审查、Excel发票OCR入账；v4.3新增：Excel深度分析（公式纠错/数据清洗/透视表/数据预测/NL2Formula）；v4.4新增：长文档排版自动化（目录/页眉页脚/标题编号/图表索引/交叉引用/格式统一）；v4.5新增：会议纪要生成（ASR转写→LLM摘要→Word）、COM健康检查（状态检测+残留进程+自动释放）；v4.6新增：Excel智能分析统一入口（6命令合并）、数据图表生成器（自动选图+生成）、文档翻译增强版（Word/Excel/PPT多格式翻译）；v4.7新增：公式解释器（反向NL2Formula）、Markdown→Word/PPT、长文档排版统一入口；v4.8新增：邮件智能回复（模板+LLM个性化）、周报/月报自动生成、纯Python模式增强（条件格式/数据验证/合并单元格/命名区域）、AI统一入口wps ai --action 49 10.3 万 SkillHub":
+    - /url: /skills/user_1a470ba8/wps-office-suite
+    - generic: W
+    - generic: WPS Office 全家桶
+    - generic: 办公效率
+    - generic "需配置 Key":
+      - generic: 需配置 API Key
+    - paragraph: WPS Office 全家桶 - 四引擎（WPS/MS Office/LibreOffice/纯Python）智能识别用户已安装软件，纯Python模式支持排序/筛选/图表/公式/统计，含文档模板（代码生成）、最佳实践案例、故障排除大章（20+避坑+15 FAQ+15错误ID 统一索引）、自动重试、硬件自适应、环境自检、Skill更新提醒；v4.0新增：Word→PPT一键生成、Excel自然语言数据分析、Word合同条款审查、Excel发票OCR入账；v4.3新增：Excel深度分析（公式纠错/数据清洗/透视表/数据预测/NL2Formula）；v4.4新增：长文档排版自动化（目录/页眉页脚/标题编号/图表索引/交叉引用/格式统一）；v4.5新增：会议纪要生成（ASR转写→LLM摘要→Word）、COM健康检查（状态检测+残留进程+自动释放）；v4.6新增：Excel智能分析统一入口（6命令合并）、数据图表生成器（自动选图+生成）、文档翻译增强版（Word/Excel/PPT多格式翻译）；v4.7新增：公式解释器（反向NL2Formula）、Markdown→Word/PPT、长文档排版统一入口；v4.8新增：邮件智能回复（模板+LLM个性化）、周报/月报自动生成、纯Python模式增强（条件格式/数据验证/合并单元格/命名区域）、AI统一入口wps ai --action
+    - generic: "49"
+    - generic: 10.3 万
+    - generic: SkillHub
+  - link "smart-charts 图标 smart-charts 数据分析 2步生成图表： 1.上传数据 — 将 CSV / Excel / JSON 文件拖入对话框; 2.查看结果 — 交互式图表（HTML），可保存图表为图片. 47 10.3 万 SkillHub":
+    - /url: /skills/user_5b28ea14/smart-charts
+    - img "smart-charts 图标"
+    - generic: smart-charts
+    - generic: 数据分析
+    - paragraph: 2步生成图表： 1.上传数据 — 将 CSV / Excel / JSON 文件拖入对话框; 2.查看结果 — 交互式图表（HTML），可保存图表为图片.
+    - generic: "47"
+    - generic: 10.3 万
+    - generic: SkillHub
+  - link "PDF和图片文字提取 图标 PDF和图片文字提取 办公效率 从图片或 PDF 文档中识别并提取文字内容，支持多种图片格式和 PDF 文件，自动判断是否包含文字并保留原始格式输出结构化结果；当用户需要从图片或 PDF 提取文字、进行 OCR 识别、处理含文字的文档或转换为可编辑文本时使用。该skill能力来自RedFoxHub，官网：https://redfox.hk/skills。 162 9.1 万 SkillHub":
+    - /url: /skills/user_5f9c21aa/pdf-image-text-extractor
+    - img "PDF和图片文字提取 图标"
+    - generic: PDF和图片文字提取
+    - generic: 办公效率
+    - paragraph: 从图片或 PDF 文档中识别并提取文字内容，支持多种图片格式和 PDF 文件，自动判断是否包含文字并保留原始格式输出结构化结果；当用户需要从图片或 PDF 提取文字、进行 OCR 识别、处理含文字的文档或转换为可编辑文本时使用。该skill能力来自RedFoxHub，官网：https://redfox.hk/skills。
+    - generic: "162"
+    - generic: 9.1 万
+    - generic: SkillHub
+  - link "Agently Mail 图标 Agently Mail 已认证 AI Agent Agently Mail 是 QQ 邮箱团队为 Agent 打造的专属邮箱服务，与个人邮箱隔离，原生适配 Agent，助力你安全、高效地使用 Agent 收发邮件。 Agently Mail 支持微信登录授权、读取邮件、搜索邮件、发送邮件、回复、转发、移动到已删除、上传和下载附件。 Agently Mail 官网 https://agent.qq.com 72 8.7 万 SkillHub":
+    - /url: /skills/tencent-adm/agently-mail
+    - img "Agently Mail 图标"
+    - generic: Agently Mail
+    - img "已认证"
+    - generic: AI Agent
+    - paragraph: Agently Mail 是 QQ 邮箱团队为 Agent 打造的专属邮箱服务，与个人邮箱隔离，原生适配 Agent，助力你安全、高效地使用 Agent 收发邮件。 Agently Mail 支持微信登录授权、读取邮件、搜索邮件、发送邮件、回复、转发、移动到已删除、上传和下载附件。 Agently Mail 官网 https://agent.qq.com
+    - generic: "72"
+    - generic: 8.7 万
+    - generic: SkillHub
+  - link "ppt-generator-skill 图标 ppt-generator-skill 办公效率 智能 PPT 生成助手。根据用户描述的主题、行业、风格，自动生成漂亮的 PPT 文件。支持所有行业（商务、教育、科技、医疗、金融、创意等），支持中英文双语，支持用户提供的模板或 AI 自动配色。触发词：做PPT、生成PPT、制作幻灯片、make ppt、create presentation、帮我做个PPT。 249 8.0 万 SkillHub":
+    - /url: /skills/user_3b34947d/ppt-generator-skill
+    - img "ppt-generator-skill 图标"
+    - generic: ppt-generator-skill
+    - generic: 办公效率
+    - paragraph: 智能 PPT 生成助手。根据用户描述的主题、行业、风格，自动生成漂亮的 PPT 文件。支持所有行业（商务、教育、科技、医疗、金融、创意等），支持中英文双语，支持用户提供的模板或 AI 自动配色。触发词：做PPT、生成PPT、制作幻灯片、make ppt、create presentation、帮我做个PPT。
+    - generic: "249"
+    - generic: 8.0 万
+    - generic: SkillHub
+  - link "视频号爆款短视频拆解（付费版：全能）【零一数科·出品】 图标 视频号爆款短视频拆解（付费版：全能）【零一数科·出品】 已认证 内容创作 需配置 Key 【零一数科·出品】视频号爆款短视频拆解（付费版：全能）。一键拆解爆款，把一条视频号视频拆成结构分段、爆款归因、六维评分和可借鉴策略，照着学照着抄。支持视频号分享链接和本地视频，付费全能版远端分析，1–5 分钟出 Markdown 报告。 66 7.9 万 SkillHub":
+    - /url: /skills/org-28ib33ph/lingyi-wx-video-decomposer-plus
+    - img "视频号爆款短视频拆解（付费版：全能）【零一数科·出品】 图标"
+    - generic: 视频号爆款短视频拆解（付费版：全能）【零一数科·出品】
+    - img "已认证"
+    - generic: 内容创作
+    - generic "需配置 Key":
+      - generic: 需配置 API Key
+    - paragraph: 【零一数科·出品】视频号爆款短视频拆解（付费版：全能）。一键拆解爆款，把一条视频号视频拆成结构分段、爆款归因、六维评分和可借鉴策略，照着学照着抄。支持视频号分享链接和本地视频，付费全能版远端分析，1–5 分钟出 Markdown 报告。
+    - generic: "66"
+    - generic: 7.9 万
+    - generic: SkillHub
+  - link "全能金融爬虫（优化爬取逻辑，新增语音交互） 图标 全能金融爬虫（优化爬取逻辑，新增语音交互） 数据分析 中国金融机构数据爬取与分析综合 Skill v7.3.0。全量机构名单（2300+家，43大类）、 全网舆情（4 类 60+ 商业财经媒体源 + RSS 直连 + akshare 兜底）、A股报告/公告/研报、 结构化市场数据（期货/宏观/Shibor/港股美股）、深度类人浏览器爬取、真实风险指标分析、 定期报告解读（财报自动解读/同比环比/亮点风险/评分评级）。 🆕 v7.3.0 五大增强：机构名单完善（2301家/43类，新增 11 类持牌名录）、 智能多级爬取（API→HTTP→浏览器降级链+批量统计）、网页内容识别（表格/键值/条目/分页/数字）、 数据分析汇总（快照聚合/模糊去重/截面统计/Markdown 报告）、语音交互（Windows 零依赖 TTS/STT）。 v7.2.0 爬取硬化（承接）：软拦截检测接线、Retry-After 遵从、URL 去重器（跨进程持久化）。 v7.1.0 定期报告解读（承接）：财报自动解读，纯规则零依赖。 v7.0.0（承接）：机构名单完成、网络拦截 API 挖掘、操作宏录制回放、异步并发标签池。 v6.0.0（承接）：数据源商业化、浏览器深度类人化、真实 PDF/HTML 报告导出、zip 增量打包。 触发词：爬取机构、舆情爬取、全网舆情、网页爬取、智能爬取、内容识别、表格识别、 汇总分析、语音交互、语音爬取、公告下载、券商研报、批量爬取、定时爬取、文档分析、 东方财富、龙虎榜、北向资金、监管动态、搜索引擎、网页归档、类人爬取、数据回测、 结构化数据、期货、宏观经济、港股美股、风险指标、组合复刻、夏普比率等（完整触发词见下方 auto_trigger）。 183 7.7 万 SkillHub":
+    - /url: /skills/user_9d5a2a39/cnfinancialscraper
+    - img "全能金融爬虫（优化爬取逻辑，新增语音交互） 图标"
+    - generic: 全能金融爬虫（优化爬取逻辑，新增语音交互）
+    - generic: 数据分析
+    - paragraph: 中国金融机构数据爬取与分析综合 Skill v7.3.0。全量机构名单（2300+家，43大类）、 全网舆情（4 类 60+ 商业财经媒体源 + RSS 直连 + akshare 兜底）、A股报告/公告/研报、 结构化市场数据（期货/宏观/Shibor/港股美股）、深度类人浏览器爬取、真实风险指标分析、 定期报告解读（财报自动解读/同比环比/亮点风险/评分评级）。 🆕 v7.3.0 五大增强：机构名单完善（2301家/43类，新增 11 类持牌名录）、 智能多级爬取（API→HTTP→浏览器降级链+批量统计）、网页内容识别（表格/键值/条目/分页/数字）、 数据分析汇总（快照聚合/模糊去重/截面统计/Markdown 报告）、语音交互（Windows 零依赖 TTS/STT）。 v7.2.0 爬取硬化（承接）：软拦截检测接线、Retry-After 遵从、URL 去重器（跨进程持久化）。 v7.1.0 定期报告解读（承接）：财报自动解读，纯规则零依赖。 v7.0.0（承接）：机构名单完成、网络拦截 API 挖掘、操作宏录制回放、异步并发标签池。 v6.0.0（承接）：数据源商业化、浏览器深度类人化、真实 PDF/HTML 报告导出、zip 增量打包。 触发词：爬取机构、舆情爬取、全网舆情、网页爬取、智能爬取、内容识别、表格识别、 汇总分析、语音交互、语音爬取、公告下载、券商研报、批量爬取、定时爬取、文档分析、 东方财富、龙虎榜、北向资金、监管动态、搜索引擎、网页归档、类人爬取、数据回测、 结构化数据、期货、宏观经济、港股美股、风险指标、组合复刻、夏普比率等（完整触发词见下方 auto_trigger）。
+    - generic: "183"
+    - generic: 7.7 万
+    - generic: SkillHub
+  - link "find-skills 图标 find-skills 已认证 知识管理 0 6.7 万 SkillHub":
+    - /url: /skills/org-xyyuvez5/find-skills
+    - img "find-skills 图标"
+    - generic: find-skills
+    - img "已认证"
+    - generic: 知识管理
+    - paragraph
+    - generic: "0"
+    - generic: 6.7 万
+    - generic: SkillHub
+  - link "视频号爆款文案生成（体验版）【零一数科·出品】 图标 视频号爆款文案生成（体验版）【零一数科·出品】 已认证 内容创作 【零一数科·出品】视频号爆款文案生成（体验版）。免费免登录出脚本，给创作目的、行业、受众、选题就按爆款结构（Hook-中段-CTA、节奏标签）产出口播脚本，信息不全也能按爆款潜质兜底。本地运行、无需 Key，零成本上手。 53 6.6 万 SkillHub":
+    - /url: /skills/org-28ib33ph/lingyi-wx-viral-script-generator
+    - img "视频号爆款文案生成（体验版）【零一数科·出品】 图标"
+    - generic: 视频号爆款文案生成（体验版）【零一数科·出品】
+    - img "已认证"
+    - generic: 内容创作
+    - paragraph: 【零一数科·出品】视频号爆款文案生成（体验版）。免费免登录出脚本，给创作目的、行业、受众、选题就按爆款结构（Hook-中段-CTA、节奏标签）产出口播脚本，信息不全也能按爆款潜质兜底。本地运行、无需 Key，零成本上手。
+    - generic: "53"
+    - generic: 6.6 万
+    - generic: SkillHub
+  - link "腾讯云 CloudBase / Tencent CloudBase 图标 腾讯云 CloudBase / Tencent CloudBase 已认证 开发编程 腾讯云 CloudBase 是面向 AI Coding 的后端一体化平台，内置数据库、存储、身份认证、云函数与云托管等服务，支持快速构建小程序、Web、移动 App、管理后台与 AI 应用。 22 6.2 万 SkillHub":
+    - /url: /skills/tencent-adm/cloudbase
+    - img "腾讯云 CloudBase / Tencent CloudBase 图标"
+    - generic: 腾讯云 CloudBase / Tencent CloudBase
+    - img "已认证"
+    - generic: 开发编程
+    - paragraph: 腾讯云 CloudBase 是面向 AI Coding 的后端一体化平台，内置数据库、存储、身份认证、云函数与云托管等服务，支持快速构建小程序、Web、移动 App、管理后台与 AI 应用。
+    - generic: "22"
+    - generic: 6.2 万
+    - generic: SkillHub
+  - link "全球12亿文献知识库（8千万中文期刊可下载） 图标 全球12亿文献知识库（8千万中文期刊可下载） 知识管理 需配置 Key 全球12亿文献知识库（8千万中文期刊可下载）——通过 SmartLib 开放平台 API 提供中外文学术文献检索与下载能力，覆盖 8000 万篇授权中文期刊全文 + 12.28 亿条全球文献元数据（期刊 7.19 亿 / 专利 2.15 亿 / 会议 7155 万 / 学位论文 2473 万 / 标准 268 万）。 能力：中英文关键词检索、文献详情、中文期刊 PDF 全文下载、外文 OA 文献十级渠道免费下载（不消耗配额）、智能关键词扩展、核心期刊优先排序、相关性重排、引文追溯、分类号检索。 配额：首次使用自动注册，免费 100 次检索 + 10 次下载 / 月；耗尽自动弹出套餐（体验卡 / 个人版月 / 专业版月 / 单篇下载 / 下载包），可说「升级 / 充值」唤起；企业 / 机构定制联系 vipsmart@vipslib.com。 触发：用户表达\"查论文\"\"找文献\"\"检索学术\"\"搜期刊\"\"查专利\"\"找标准\"\"下论文\"\"写文献综述\"\"找参考文献\"\"查 SCI/EI\"等意图时启用；也适用\"帮我找关于 XX 的论文\"\"写文献综述\"\"找几篇引用支撑论点\"。英文：\"find papers\" \"search literature\" \"write literature review\" \"find supporting citations\"。 调用前必须先用 /consume 获取 consume_token，再凭 token 调 /search（每次计费接口调用都需一次 /consume）。 148 5.4 万 SkillHub":
+    - /url: /skills/user_164f4c1f/global-biblio-base
+    - img "全球12亿文献知识库（8千万中文期刊可下载） 图标"
+    - generic: 全球12亿文献知识库（8千万中文期刊可下载）
+    - generic: 知识管理
+    - generic "需配置 Key":
+      - generic: 需配置 API Key
+    - paragraph: 全球12亿文献知识库（8千万中文期刊可下载）——通过 SmartLib 开放平台 API 提供中外文学术文献检索与下载能力，覆盖 8000 万篇授权中文期刊全文 + 12.28 亿条全球文献元数据（期刊 7.19 亿 / 专利 2.15 亿 / 会议 7155 万 / 学位论文 2473 万 / 标准 268 万）。 能力：中英文关键词检索、文献详情、中文期刊 PDF 全文下载、外文 OA 文献十级渠道免费下载（不消耗配额）、智能关键词扩展、核心期刊优先排序、相关性重排、引文追溯、分类号检索。 配额：首次使用自动注册，免费 100 次检索 + 10 次下载 / 月；耗尽自动弹出套餐（体验卡 / 个人版月 / 专业版月 / 单篇下载 / 下载包），可说「升级 / 充值」唤起；企业 / 机构定制联系 vipsmart@vipslib.com。 触发：用户表达"查论文""找文献""检索学术""搜期刊""查专利""找标准""下论文""写文献综述""找参考文献""查 SCI/EI"等意图时启用；也适用"帮我找关于 XX 的论文""写文献综述""找几篇引用支撑论点"。英文："find papers" "search literature" "write literature review" "find supporting citations"。 调用前必须先用 /consume 获取 consume_token，再凭 token 调 /search（每次计费接口调用都需一次 /consume）。
+    - generic: "148"
+    - generic: 5.4 万
+    - generic: SkillHub
+  - link "全国招标中标查询及企业画像【世舶科技API】 图标 全国招标中标查询及企业画像【世舶科技API】 已认证 数据分析 需配置 Key 世舶科技提供全网招标、中标、采购与商机数据查询分析服务，覆盖招标公告、中标公告、政府采购、工程建设、企业采购、合同公告、变更公告、废标流标、拟在建项目、临期项目、即将到期项目等招投标信息场景。用户可通过世舶科技快速搜索标讯、订阅项目、挖掘潜在商机、预测采购需求、分析历史中标记录，并支持按地区、行业、采购单位、中标单位、标的物、项目金额、发布时间、开标时间等维度进行数据筛选与统计分析。 世舶科技适用于投标企业、销售团队、渠道拓展、采购寻源、市场研究、竞争对手分析和行业趋势分析等业务场景。系统可帮助用户查询公司主营业务、历史中标项目、上下游合作客户、供应商关系、竞对企业动态、Top采购单位、Top中标单位、价格趋势和市场份额变化，为投标决策、客户开发、供应商筛选、竞品监控和行业市场分析提供数据支持。 14 4.9 万 SkillHub":
+    - /url: /skills/sbkj-bid/sbkj-ztb
+    - img "全国招标中标查询及企业画像【世舶科技API】 图标"
+    - generic: 全国招标中标查询及企业画像【世舶科技API】
+    - img "已认证"
+    - generic: 数据分析
+    - generic "需配置 Key":
+      - generic: 需配置 API Key
+    - paragraph: 世舶科技提供全网招标、中标、采购与商机数据查询分析服务，覆盖招标公告、中标公告、政府采购、工程建设、企业采购、合同公告、变更公告、废标流标、拟在建项目、临期项目、即将到期项目等招投标信息场景。用户可通过世舶科技快速搜索标讯、订阅项目、挖掘潜在商机、预测采购需求、分析历史中标记录，并支持按地区、行业、采购单位、中标单位、标的物、项目金额、发布时间、开标时间等维度进行数据筛选与统计分析。 世舶科技适用于投标企业、销售团队、渠道拓展、采购寻源、市场研究、竞争对手分析和行业趋势分析等业务场景。系统可帮助用户查询公司主营业务、历史中标项目、上下游合作客户、供应商关系、竞对企业动态、Top采购单位、Top中标单位、价格趋势和市场份额变化，为投标决策、客户开发、供应商筛选、竞品监控和行业市场分析提供数据支持。
+    - generic: "14"
+    - generic: 4.9 万
+    - generic: SkillHub
+  - link "专利初稿助手 图标 专利初稿助手 行业专业 基于技术交底书生成专利申请初稿。技术交底书内容至少包含技术问题、解决方案、技术效果。内置的推理、视觉、多模态、数学、函数、仿真等模型底座均为国产，国外模型0使用，可放心食用。 21 4.7 万 SkillHub":
+    - /url: /skills/user_9c63fdb4/patent-drafting-cn
+    - img "专利初稿助手 图标"
+    - generic: 专利初稿助手
+    - generic: 行业专业
+    - paragraph: 基于技术交底书生成专利申请初稿。技术交底书内容至少包含技术问题、解决方案、技术效果。内置的推理、视觉、多模态、数学、函数、仿真等模型底座均为国产，国外模型0使用，可放心食用。
+    - generic: "21"
+    - generic: 4.7 万
+    - generic: SkillHub
+- contentinfo:
+  - link "SkillHub 首页":
+    - /url: /
+    - img "SkillHub"
+  - paragraph: 专为中国用户优化的 AI Skills 社区，让 AI Agent 突破能力边界、持续进化。
+  - heading "快捷入口" [level=3]
+  - link "服务协议":
+    - /url: https://privacy.qq.com/document/preview/5bd4610b10f043d98df5dd69233cc3b3
+    - text: 服务协议
+  - link "隐私协议":
+    - /url: https://privacy.qq.com/document/preview/af7cf7a60e444f93a3fbff81c929cca8
+    - text: 隐私协议
+  - link "建议反馈":
+    - /url: https://wj.qq.com/s2/26026989/0c20
+    - text: 建议反馈
+  - heading "友情链接" [level=3]
+  - link "ClawHub":
+    - /url: https://clawhub.ai
+    - text: ClawHub
+  - paragraph: 来源声明：本站部分 Skill 内容来源于公开渠道、认证企业或由用户自主发布，使用前请注意识别相关风险，内容版权归原作者所有。
+  - paragraph:
+    - text: 侵权处理：如 Skill 涉及版权问题，请发送邮件至
+    - link "skillhub_ipr@tencent.com":
+      - /url: mailto:skillhub_ipr@tencent.com
+    - text: ，我们将在收到通知后及时核实并予以下架处理。
+  - paragraph: Copyright © 2026 SkillHub. 精选 AI Skills 推荐平台
+  - paragraph: 技能数据来源于公开渠道、认证企业及用户自主发布。
+  - paragraph:
+    - link "粤B2-20090059-4038":
+      - /url: https://beian.miit.gov.cn/#/Integrated/index
+- region "Notifications alt+T"
+- link "建议反馈":
+  - /url: https://wj.qq.com/s2/26026989/0c20
+  - generic: 建议反馈

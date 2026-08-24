@@ -1,0 +1,485 @@
+- banner:
+  - link "SkillHub 首页":
+    - /url: /
+    - img "SkillHub"
+  - navigation "主导航":
+    - button "技能":
+      - text: 技能
+    - link "插件":
+      - /url: /plugins
+      - text: 插件
+      - generic: NEW
+    - link "SkillPay":
+      - /url: /skillpay
+      - generic: SkillPay
+    - link "大赛":
+      - /url: /contest
+      - generic: 大赛
+    - button "探索":
+      - text: 探索
+    - button "帮助":
+      - text: 帮助
+  - button "发布 Skill":
+    - generic: 发布 Skill
+  - button "通知":
+  - button "用户菜单":
+- main:
+  - navigation:
+    - button "返回":
+    - button "Plugin 广场 /"
+    - generic: modlens
+  - img "modlens 图标"
+  - heading "modlens" [level=1]
+  - paragraph: liustack/modlens
+  - link "来源 GitHub":
+    - /url: https://github.com/liustack/modlens
+  - generic: ·
+  - link "作者 liustack":
+    - /url: https://github.com/liustack
+  - paragraph: The first vision plugin for DeepSeek Harness, and the vision bridge for every text-only coding agent. Paste an image, get structured JSON evidence (OCR, layout, semantics). | 全网最强 DeepSeek Harness 外挂视觉插件，为 DeepSeek、GLM 等纯文本模型外挂视觉能力，粘贴图片即得结构化 JSON 证据（OCR、版面、语义）。
+  - generic: 可安装
+  - generic: 模型推理
+  - generic: 今天更新
+  - generic: v3.24.1
+  - generic: 概述
+  - paragraph:
+    - img "ModLens"
+  - heading "ModLens" [level=1]
+  - paragraph: Give a text-only model sight, and just paste the image.
+  - paragraph: 🥇 The most capable vision plugin for DeepSeek Harness (dsh) 🥇
+  - paragraph:
+    - link "简体中文":
+      - /url: https://github.com/liustack/modlens/blob/main/README.zh-CN.md
+    - text: ·
+    - link "Configuration":
+      - /url: https://github.com/liustack/modlens/blob/main/skills/modlens/references/configure.md
+    - text: ·
+    - link "Troubleshooting":
+      - /url: https://github.com/liustack/modlens/blob/main/docs/troubleshooting.md
+    - text: ·
+    - link "Security":
+      - /url: https://github.com/liustack/modlens/blob/main/docs/security.md
+    - text: ·
+    - link "🔍 ModSearch (the best free web search plugin for DSH)":
+      - /url: https://github.com/liustack/modsearch
+  - paragraph:
+    - link "Follow @liustack on X":
+      - /url: https://x.com/liustack
+      - img "Follow @liustack on X"
+    - link "npm":
+      - /url: https://www.npmjs.com/package/@liustack/modlens
+      - img "npm"
+    - link "Node.js":
+      - /url: https://nodejs.org
+      - img "Node.js"
+    - link "License":
+      - /url: https://github.com/liustack/modlens/blob/main/LICENSE
+      - img "License"
+    - img "Not backed by Y Combinator"
+    - img "Users unknown"
+  - paragraph:
+    - text: The flagship DeepSeek and GLM chat models are text-only and cannot read images. ModLens is a plug-in vision engine that gives a text-only model sight.
+    - strong: ModLens reads images pasted straight into the chat
+    - text: ", no saving to a file and passing a path first."
+  - heading "Talk to us" [level=2]
+  - paragraph:
+    - text: "Issues are welcome any time:"
+    - link "open one":
+      - /url: https://github.com/liustack/modlens/issues/new/choose
+    - text: ". Follow the liustack WeChat official account, and come find me on X:"
+    - strong:
+      - link "@liustack":
+        - /url: https://x.com/liustack
+    - text: . What you built with it, which harness you are on, and what should come next are all shared on WeChat and X. A proper community space is on the way.
+  - heading "Highlights" [level=2]
+  - paragraph:
+    - strong: "🥇 The most capable vision plugin for DeepSeek Harness (dsh):"
+    - text: "install it instantly with one command:"
+    - code: npx -y @deepseek-ai/dsh plugin --profile web add @liustack/modlens@3.24.0
+    - text: . See the
+    - link "setup guide":
+      - /url: https://github.com/liustack/modlens/blob/main/docs/harness-setup.md
+    - text: for installation and update details. If the command line is not your thing but you still want to try DSH, check out
+    - link "AIManager":
+      - /url: https://github.com/liustack/aimanager
+    - text: ", the lightest desktop wrapper for DeepSeek Harness. It gets you started with zero code or configuration and installs every dependency for you with one click."
+  - paragraph:
+    - text: Pasting an image works two ways.
+    - strong: ① Just paste.
+    - text: On a text-only model the pasted image lands as a private temp file and its path enters the composer — the same interaction OpenCode and Pi ship — and the
+    - code: modlens_read_image
+    - text: tool takes it from there.
+    - strong:
+      - text: ② Pick a
+      - code: (modlens vision)
+      - text: entry
+    - text: "in the model selector (it remembers your choice, so once is enough), then paste: the thumbnail stays visible in your message, closer to the Codex app feel, and the image is converted to structured evidence at request time, answered by the same underlying route. The plugin auto-discovers every provider route carrying text-only DeepSeek or GLM models and adds a wrapped entry per route (a stock install gets"
+    - strong:
+      - code: DeepSeek-V4-Flash (modlens vision)
+    - text: and
+    - strong:
+      - code: DeepSeek-V4-Pro (modlens vision)
+    - text: "; extra routes like opencode-go or zai get their own); the two families' own vision models are excluded automatically. Which paste route applies is the host's per-model call: only a model its metadata positively confirms text-only is taken over, anything unconfirmed is left alone, so vision models keep their native paste ("
+    - link "details":
+      - /url: https://github.com/liustack/modlens/blob/main/docs/harness-setup.md
+    - text: ).
+  - paragraph:
+    - strong: Paste images directly in every harness.
+    - text: No saving to a file and passing a path first.
+  - paragraph:
+    - text: "A hotkey that captures the screen into DeepSeek Harness is a separate plugin:"
+    - link "dsh-screenshot":
+      - /url: https://github.com/paicat1/dsh-screenshot
+    - text: .
+  - list:
+    - strong: The lightest touch on the market.
+    - text: "No hooks, no wrappers, no local proxy daemon, not a single line changed in any harness config: on the skill harnesses it is exactly one skill folder, on dsh exactly one plugin. Uninstalling is deleting a folder, and your agents are back to stock."
+    - strong: Zero-config start.
+    - text: Reuses existing setup in Claude Code, Codex, OpenCode, and Pi, plus other multimodal models already on your machine. Nothing installed locally? Antigravity CLI is a free no-key channel, and a free Gemini key brings a read down to 5-10 seconds. API keys from every major OpenAI-compatible provider work too.
+    - strong: Comma-separated keys rotate on auth, rate-limit, or quota failures.
+    - text: Other failures skip remaining keys and keep the existing provider failover.
+    - strong: Evidence, not imagination.
+    - text: Full transcription, reading-order layout regions, entity and relation lists. The model quotes specifics.
+    - strong: Install once, use everywhere.
+    - text: Verified on real machines in Claude Code, Codex, Pi, and OpenCode.
+  - heading "Install in other harnesses" [level=2]
+  - paragraph:
+    - strong: Step 1, hand it to your AI.
+    - text: "Send it this line:"
+  - blockquote:
+    - paragraph:
+      - text: Install and configure the modlens skill following
+      - link "https://github.com/liustack/modlens/blob/main/INSTALL.md":
+        - /url: https://github.com/liustack/modlens/blob/main/INSTALL.md
+      - text: ", then run the health check and tell me the result."
+  - paragraph: "The install starts by checking what your machine already has. An existing login in Claude Code, Codex, OpenCode, or Pi can be enough: modlens asks before reusing any of them, and the health check tells you where things stand."
+  - paragraph:
+    - strong: Step 2, only if the health check comes back empty, set up a free engine.
+    - text: The recommended choice is a free Gemini API key (about three minutes at
+    - link "Google AI Studio":
+      - /url: https://aistudio.google.com
+    - text: ", no credit card), which also makes every read 5-10 seconds. A free OpenAI-compatible key from another platform works too. To avoid any sign-up, install Antigravity CLI instead, then sign in:"
+  - code: "curl -fsSL https://antigravity.google/cli/install.sh | bash agy # sign in, then exit"
+  - paragraph: The install also inventories vision reachable through your other local harness CLIs (Codex, OpenCode, Pi) and asks, per harness, whether modlens may reuse it. Granted logins join the engine pool as equals, and every reused read is labeled with whose quota it spent.
+  - paragraph:
+    - text: "On DeepSeek Harness the command line is not the only way in. Settings → Plugins → Plugin config carries a ModLens card: switch the engine, tick which local CLIs"
+    - code: auto
+    - text: mode may reuse, hit save and it takes effect.
+  - paragraph:
+    - 'img "The ModLens vision-engine card in the dsh settings page, shown in Chinese: switch the engine, tick which local CLIs auto mode reuses"'
+  - heading "Usage" [level=2]
+  - paragraph: "Once installed, just chat. Paste an image or drop a path, ask anything, and the skill triggers on its own: the image goes to a vision engine and the answer comes back grounded in what it read. Paste once, and later questions about the same image do not need another paste."
+  - 'heading "Vision engines: six built-in providers, four reusable CLIs, one failover chain" [level=2]'
+  - paragraph: "ModLens does not depend on any single vision service. Ten sources of vision in total: six built-in providers, any one of which is enough, plus four local agent CLIs whose logins can be reused. The built-ins:"
+  - table:
+    - rowgroup:
+      - row "Provider What it needs Speed per read Good for":
+        - columnheader "Provider"
+        - columnheader "What it needs"
+        - columnheader "Speed per read"
+        - columnheader "Good for"
+    - rowgroup:
+      - row "gemini-api a free Gemini API key (3 minutes, no card) 5-10s the recommended default":
+        - cell "gemini-api":
+          - code: gemini-api
+        - cell "a free Gemini API key (3 minutes, no card)":
+          - text: a free Gemini API key (
+          - link "3 minutes, no card":
+            - /url: https://aistudio.google.com
+          - text: )
+        - cell "5-10s"
+        - cell "the recommended default"
+      - row "openai any OpenAI-compatible endpoint (key + baseUrl + model) 5-10s qwen-vl, GLM, self-hosted gateways":
+        - cell "openai":
+          - code: openai
+        - cell "any OpenAI-compatible endpoint (key + baseUrl + model)"
+        - cell "5-10s"
+        - cell "qwen-vl, GLM, self-hosted gateways"
+      - row "anthropic an Anthropic API key 5-10s machines already holding one":
+        - cell "anthropic":
+          - code: anthropic
+        - cell "an Anthropic API key"
+        - cell "5-10s"
+        - cell "machines already holding one"
+      - row "antigravity-cli the free agy CLI, one browser sign-in, no key 15-45s zero-signup starts":
+        - cell "antigravity-cli":
+          - code: antigravity-cli
+        - cell "the free agy CLI, one browser sign-in, no key":
+          - text: the free
+          - code: agy
+          - text: CLI, one browser sign-in, no key
+        - cell "15-45s"
+        - cell "zero-signup starts"
+      - row "claude-cli a signed-in Claude Code 20-45s riding your existing Claude subscription":
+        - cell "claude-cli":
+          - code: claude-cli
+        - cell "a signed-in Claude Code"
+        - cell "20-45s"
+        - cell "riding your existing Claude subscription"
+      - row "kimi-cli a signed-in Kimi Code 20-45s riding your existing Kimi subscription, named explicitly":
+        - cell "kimi-cli":
+          - code: kimi-cli
+        - cell "a signed-in Kimi Code"
+        - cell "20-45s"
+        - cell "riding your existing Kimi subscription, named explicitly"
+  - paragraph:
+    - text: "Without a pinned provider, every configured engine forms one failover chain: the fast API providers try first, the agent CLIs back them up, the first good result wins, and"
+    - code: meta.attempts
+    - text: records every attempt so a fallback is never silent.
+  - heading "openai is a universal socket, not just OpenAI" [level=3]:
+    - code: openai
+    - text: is a universal socket, not just OpenAI
+  - paragraph: "Any endpoint speaking the OpenAI chat-completions protocol with image input plugs straight in — that covers most of the vision-model world:"
+  - code: "modlens config set openai.baseUrl https://dashscope.aliyuncs.com/compatible-mode/v1 # qwen-vl modlens config set openai.apiKey <key> modlens config set openai.model qwen3-vl-plus"
+  - paragraph:
+    - code: apiKey
+    - text: (and the matching env var) also accepts a comma-separated list. ModLens rotates to the next key after authentication, rate-limit, or quota failures. Network, 5xx, and parse failures skip remaining keys and keep provider failover.
+  - paragraph: The same three keys work for GLM's open platform, SiliconFlow, OpenRouter, a self-hosted vLLM/Ollama, or any gateway of your own. If your favorite vision model has an OpenAI-compatible API, ModLens can drive it.
+  - heading "Reusing what your machine already has" [level=3]
+  - paragraph: "Two more sources of vision need zero new keys, each behind one explicit consent recorded in config:"
+  - list:
+    - strong: The harness you are talking in right now.
+    - text: Running inside Claude Code with a subscription signed in?
+    - code: claude-cli
+    - text: reads images through it out of the box. The install flow asks the same question for whichever harness you install into.
+    - strong: Every other agent CLI on the machine.
+    - code: modlens doctor
+    - text: discovers them, you grant per harness, and they join the same failover chain with no priority over your own keys. Every reused read is labeled in
+    - code: meta.warnings
+    - text: "with whose quota it spent, so nothing is ever silently billed:"
+  - table:
+    - rowgroup:
+      - row "Reused CLI What it needs Grant with Rides as":
+        - columnheader "Reused CLI"
+        - columnheader "What it needs"
+        - columnheader "Grant with"
+        - columnheader "Rides as"
+    - rowgroup:
+      - row "Codex a signed-in Codex CLI with a vision model config set reuse.codex true agent lane, 15-45s":
+        - cell "Codex"
+        - cell "a signed-in Codex CLI with a vision model"
+        - cell "config set reuse.codex true":
+          - code: config set reuse.codex true
+        - cell "agent lane, 15-45s"
+      - row "OpenCode a vision model configured in OpenCode config set reuse.opencode true agent lane, 15-45s":
+        - cell "OpenCode"
+        - cell "a vision model configured in OpenCode"
+        - cell "config set reuse.opencode true":
+          - code: config set reuse.opencode true
+        - cell "agent lane, 15-45s"
+      - row "Pi model credentials held by Pi config set reuse.pi true an API key upgrades to the 5-10s inline lane, OAuth drives Pi itself":
+        - cell "Pi"
+        - cell "model credentials held by Pi"
+        - cell "config set reuse.pi true":
+          - code: config set reuse.pi true
+        - cell "an API key upgrades to the 5-10s inline lane, OAuth drives Pi itself"
+      - row "Grok a signed-in Grok CLI (SuperGrok) config set reuse.grok true agent lane, 15-45s":
+        - cell "Grok"
+        - cell "a signed-in Grok CLI (SuperGrok)"
+        - cell "config set reuse.grok true":
+          - code: config set reuse.grok true
+        - cell "agent lane, 15-45s"
+  - heading "Picking and routing" [level=3]
+  - paragraph:
+    - text: "Two knobs:"
+    - code: modlens config set provider <name>
+    - text: states a preference (the chain still backs it up),
+    - code: "-p <name>"
+    - text: pins exactly one with no fallback. Machines behind a proxy set
+    - code: HTTPS_PROXY
+    - text: or
+    - code: modlens config set proxy <url>
+    - text: "and the API providers route through it. Details: the"
+    - link "CLI manual":
+      - /url: https://github.com/liustack/modlens/blob/main/docs/cli.md
+    - text: for defaults and flags,
+    - link "Configuration":
+      - /url: https://github.com/liustack/modlens/blob/main/skills/modlens/references/configure.md
+    - text: for every key, and
+    - link "Security":
+      - /url: https://github.com/liustack/modlens/blob/main/docs/security.md
+    - text: for who fetches what on remote URLs.
+  - heading "See it work" [level=2]
+  - paragraph: Unedited runs, all driving a text-only DeepSeek-V4-Flash.
+  - paragraph:
+    - text: "The newest one first: pasting a screenshot straight into DeepSeek Harness on the"
+    - code: DeepSeek-V4-Flash (modlens vision)
+    - text: variant. The paste keeps its native thumbnail, the trajectory shows the image arriving "already transcribed by the modlens vision bridge", and the answer walks the UI element by element.
+  - paragraph:
+    - img "Pasting an image straight into DeepSeek Harness, read through the modlens vision plugin"
+  - paragraph: "A tweet screenshot in the Codex desktop app. It reads the author, the caption, the photo itself (down to what both people are wearing), the timestamp, and every engagement number: 5.4M views, 1.6K replies, 5.7K reposts, 116K likes."
+  - paragraph:
+    - img "Text-only DeepSeek reading a tweet screenshot in full detail via ModLens"
+  - paragraph: Three images pasted at once. The model reads them one by one, spots that they belong to one visual family, and describes each illustration's content and style.
+  - paragraph:
+    - img "Three images dropped together, read one by one"
+  - paragraph: "The stress test: a scatter plot comparing 128 AI models. It reads both axes, the log scale, the per-provider color coding, the highlighted region, and every DeepSeek model called out with dashed markers. Dense charts are where vision bridges most often fail."
+  - paragraph:
+    - 'img "The 128-model scatter plot read in full: axes, log scale, and highlighted region"'
+  - paragraph: "And the paste path, end to end, in a Claude Code terminal on DeepSeek. The pasted image arrives as a path rather than pixels, the skill triggers on its own, the guard confirms the model truly has no vision, and the slide's full content comes back: titles, layout, background, plus an honestly stated uncertainty about the truncated filename."
+  - paragraph:
+    - img "The skill triggering on its own in a DeepSeek Claude Code session and reading a pasted slide"
+  - heading "Documentation" [level=2]
+  - table:
+    - rowgroup:
+      - row "Doc Read it when":
+        - columnheader "Doc"
+        - columnheader "Read it when"
+    - rowgroup:
+      - row "Install guide Installing the skill step by step (written for an agent)":
+        - cell "Install guide":
+          - link "Install guide":
+            - /url: https://github.com/liustack/modlens/blob/main/INSTALL.md
+        - cell "Installing the skill step by step (written for an agent)"
+      - 'row "CLI manual The CLI the skill drives: flags, config, doctor"':
+        - cell "CLI manual":
+          - link "CLI manual":
+            - /url: https://github.com/liustack/modlens/blob/main/docs/cli.md
+        - 'cell "The CLI the skill drives: flags, config, doctor"'
+      - row "Troubleshooting A command failed and the message needs decoding":
+        - cell "Troubleshooting":
+          - link "Troubleshooting":
+            - /url: https://github.com/liustack/modlens/blob/main/docs/troubleshooting.md
+        - cell "A command failed and the message needs decoding"
+      - row "Configuration Setting a key, switching providers, fixing config":
+        - cell "Configuration":
+          - link "Configuration":
+            - /url: https://github.com/liustack/modlens/blob/main/skills/modlens/references/configure.md
+        - cell "Setting a key, switching providers, fixing config"
+      - row "Output contract Parsing the JSON or building on it":
+        - cell "Output contract":
+          - link "Output contract":
+            - /url: https://github.com/liustack/modlens/blob/main/docs/output-schema.md
+        - cell "Parsing the JSON or building on it"
+      - row "Harness setup Wiring it into Codex, Claude Code, Pi, or OpenCode":
+        - cell "Harness setup":
+          - link "Harness setup":
+            - /url: https://github.com/liustack/modlens/blob/main/docs/harness-setup.md
+        - cell "Wiring it into Codex, Claude Code, Pi, or OpenCode"
+      - row "Security File permissions, image content as untrusted input":
+        - cell "Security":
+          - link "Security":
+            - /url: https://github.com/liustack/modlens/blob/main/docs/security.md
+        - cell "File permissions, image content as untrusted input"
+      - row "CHANGELOG Finding what changed in a version":
+        - cell "CHANGELOG":
+          - link "CHANGELOG":
+            - /url: https://github.com/liustack/modlens/blob/main/CHANGELOG.md
+        - cell "Finding what changed in a version"
+  - heading "Contributing" [level=2]
+  - paragraph: "ModLens does not accept pull requests. The project is maintained by a single author who reviews every line, which is a deliberate choice for reliability. Two effective ways to contribute:"
+  - list:
+    - strong:
+      - link "Open an issue":
+        - /url: https://github.com/liustack/modlens/issues
+      - text: .
+    - text: Bugs, suggestions, confusing errors, unclear docs. Issues are read and shape what gets built next.
+    - strong: Fork it.
+    - text: Under MIT your copy is fully yours to modify and publish.
+  - heading "Shameless plug" [level=2]
+  - paragraph:
+    - strong:
+      - link "ModSearch":
+        - /url: https://github.com/liustack/modsearch
+    - text: "is ModLens's sibling project, the same craft applied to another missing sense: it gives models with no web access web search, X search, and single-page fetch. Free, no signup, no API key. A model that needs ModLens for its eyes usually needs ModSearch for the web:"
+  - code: npx -y @deepseek-ai/dsh plugin --profile web add @liustack/modsearch@latest
+  - paragraph:
+    - text: Follow the
+    - strong: liustack
+    - text: "WeChat official account: AI startup opportunities, indie-dev insights, and hands-on AI tooling, delivered as they happen. Scan the QR code in WeChat, or search for \"liustack\":"
+  - paragraph:
+    - img "liustack WeChat official account"
+  - paragraph:
+    - text: ⭐ If it helps, star
+    - link "ModLens":
+      - /url: https://github.com/liustack/modlens
+    - text: and
+    - link "ModSearch":
+      - /url: https://github.com/liustack/modsearch
+    - text: . Stars are how the next developer finds them.
+  - heading "Key ecosystem partners" [level=2]
+  - paragraph: The projects worth recommending in the DeepSeek Harness ecosystem.
+  - list:
+    - text: 🛒
+    - strong:
+      - link "dsh-market":
+        - /url: https://github.com/dsh-market/dsh-market
+    - text: — The plugin market inside DeepSeek Harness. Browse 800+ community plugins with category filters and screenshot previews, one-click install and update, and live theme switching. Most need no restart. DeepSeek Harness 的可视化插件市场。设置页里直接逛社区全部 800+ 插件：分类筛选、截图预览、一键安装与更新、主题即点即换，装完多数免重启。
+    - text: 🖥️
+    - strong:
+      - link "DeepSeek Harness Desktop":
+        - /url: https://github.com/anywhere-labs/deepseek-harness-desktop
+    - text: — A desktop front end for DeepSeek Harness. Start and manage the Harness service on your own machine without installing Node.js or running a command. A plugin market, remote control from a phone, and IM channels are on its roadmap.
+    - link "Site":
+      - /url: https://www.dshdesktop.cn
+    - text: 为 DeepSeek Harness 生态打造的现代化桌面端。不用配置 Node.js，也不用敲命令，就能启动和管理本机的 Harness 服务。后续还会支持插件市场、移动端远程控制和 IM Channels。
+    - link "官网":
+      - /url: https://www.dshdesktop.cn
+  - heading "Star History" [level=2]
+  - link "Star History Chart":
+    - /url: https://www.star-history.com/?repos=liustack%2Fmodlens&type=date&legend=top-left
+    - img "Star History Chart"
+  - heading "Disclaimer" [level=2]
+  - paragraph: Provided as-is under the MIT License below. The author makes no warranty and gives no endorsement for any particular use, commercial use included. Your use of upstream engines (Antigravity CLI, the Gemini, OpenAI, and Anthropic APIs, and any OpenAI-compatible endpoint) is governed by their own terms and quotas, which you are responsible for.
+  - heading "License" [level=2]
+  - paragraph: MIT
+  - complementary:
+    - heading "发送给 DeepSeek Harness 安装" [level=2]
+    - paragraph: 请安装 DSH 插件 liustack/modlens。先读取..
+    - status: DeepSeek Harness 将读取后端安装计划后执行安装
+    - button "复制安装提示词":
+      - generic: 复制安装提示词
+    - link "下载仓库源码 Zip":
+      - /url: https://github.com/liustack/modlens/archive/refs/heads/main.zip
+      - text: 下载仓库源码 Zip
+    - link "去 GitHub Star":
+      - /url: https://github.com/liustack/modlens
+      - text: 去 GitHub Star
+    - generic: 3.6 千
+    - generic: Stars
+    - generic: "100"
+    - generic: Forks
+    - generic: "3"
+    - generic: Issues
+    - link "liustack":
+      - /url: https://github.com/liustack
+      - text: liustack
+    - generic: 作者
+    - text: License MIT
+    - link "查看仓库":
+      - /url: https://github.com/liustack/modlens
+      - text: 查看仓库
+- contentinfo:
+  - link "SkillHub 首页":
+    - /url: /
+    - img "SkillHub"
+  - paragraph: 专为中国用户优化的 AI Skills 社区，让 AI Agent 突破能力边界、持续进化。
+  - heading "快捷入口" [level=3]
+  - link "服务协议":
+    - /url: https://privacy.qq.com/document/preview/5bd4610b10f043d98df5dd69233cc3b3
+    - text: 服务协议
+  - link "隐私协议":
+    - /url: https://privacy.qq.com/document/preview/af7cf7a60e444f93a3fbff81c929cca8
+    - text: 隐私协议
+  - link "建议反馈":
+    - /url: https://wj.qq.com/s2/26026989/0c20
+    - text: 建议反馈
+  - heading "友情链接" [level=3]
+  - link "ClawHub":
+    - /url: https://clawhub.ai
+    - text: ClawHub
+  - paragraph: 来源声明：本站部分 Skill 内容来源于公开渠道、认证企业或由用户自主发布，使用前请注意识别相关风险，内容版权归原作者所有。
+  - paragraph:
+    - text: 侵权处理：如 Skill 涉及版权问题，请发送邮件至
+    - link "skillhub_ipr@tencent.com":
+      - /url: mailto:skillhub_ipr@tencent.com
+    - text: ，我们将在收到通知后及时核实并予以下架处理。
+  - paragraph: Copyright © 2026 SkillHub. 精选 AI Skills 推荐平台
+  - paragraph: 技能数据来源于公开渠道、认证企业及用户自主发布。
+  - paragraph:
+    - link "粤B2-20090059-4038":
+      - /url: https://beian.miit.gov.cn/#/Integrated/index
+- region "Notifications alt+T"
+- link "建议反馈":
+  - /url: https://wj.qq.com/s2/26026989/0c20
+  - generic: 建议反馈

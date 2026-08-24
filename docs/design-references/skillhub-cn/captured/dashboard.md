@@ -1,0 +1,103 @@
+- banner:
+  - link "SkillHub 首页":
+    - /url: /
+    - img "SkillHub"
+  - navigation "主导航":
+    - button "技能":
+      - text: 技能
+    - link "插件":
+      - /url: /plugins
+      - text: 插件
+      - generic: NEW
+    - link "SkillPay":
+      - /url: /skillpay
+      - generic: SkillPay
+    - link "大赛":
+      - /url: /contest
+      - generic: 大赛
+    - button "探索":
+      - text: 探索
+    - button "帮助":
+      - text: 帮助
+  - textbox "搜索 skill 名称、描述"
+  - button "通知":
+  - button "用户菜单":
+- main:
+  - complementary:
+    - generic: US
+    - paragraph: user_e6857b8c
+    - paragraph: "@user_e6857b8c"
+    - paragraph: 这个人很懒，什么也没留下～
+    - img "lzc452"
+    - generic: lzc452
+    - generic: 已绑定
+    - button "解绑 GitHub 账号":
+    - navigation:
+      - link "我的 Skills":
+        - /url: /dashboard
+        - generic: 我的 Skills
+      - button "发布 Skill":
+        - generic: 发布 Skill
+      - link "我的收藏":
+        - /url: /dashboard/stars
+        - generic: 我的收藏
+      - link "我的关注":
+        - /url: /dashboard/following
+        - generic: 我的关注
+      - link "实名认证":
+        - /url: /dashboard/verify
+        - generic: 实名认证
+      - link "API 密钥":
+        - /url: /dashboard/keys
+        - generic: API 密钥
+      - link "账号设置":
+        - /url: /dashboard/settings
+        - generic: 账号设置
+    - button "退出登录":
+      - text: 退出登录
+  - heading "我的 Skills" [level=1]
+  - paragraph: 管理你发布的所有团队 Skills
+  - generic: 暂无可认领的 Skill
+  - generic: · @lzc452
+  - textbox "搜索 skill 名称、描述、标签"
+  - button "最近更新":
+    - generic: 最近更新
+  - button "所有场景分类":
+    - generic: 所有场景分类
+  - button "发布 Skill":
+    - text: 发布 Skill
+  - heading "还没有发布任何 Skill" [level=3]
+  - paragraph: 发布你的第一个 Skill，与社区分享你的创意
+  - button "发布 Skill":
+    - text: 发布 Skill
+- contentinfo:
+  - link "SkillHub 首页":
+    - /url: /
+    - img "SkillHub"
+  - paragraph: 专为中国用户优化的 AI Skills 社区，让 AI Agent 突破能力边界、持续进化。
+  - heading "快捷入口" [level=3]
+  - link "服务协议":
+    - /url: https://privacy.qq.com/document/preview/5bd4610b10f043d98df5dd69233cc3b3
+    - text: 服务协议
+  - link "隐私协议":
+    - /url: https://privacy.qq.com/document/preview/af7cf7a60e444f93a3fbff81c929cca8
+    - text: 隐私协议
+  - link "建议反馈":
+    - /url: https://wj.qq.com/s2/26026989/0c20
+    - text: 建议反馈
+  - heading "友情链接" [level=3]
+  - link "ClawHub":
+    - /url: https://clawhub.ai
+    - text: ClawHub
+  - paragraph: 来源声明：本站部分 Skill 内容来源于公开渠道、认证企业或由用户自主发布，使用前请注意识别相关风险，内容版权归原作者所有。
+  - paragraph:
+    - text: 侵权处理：如 Skill 涉及版权问题，请发送邮件至
+    - link "skillhub_ipr@tencent.com":
+      - /url: mailto:skillhub_ipr@tencent.com
+    - text: ，我们将在收到通知后及时核实并予以下架处理。
+  - paragraph: Copyright © 2026 SkillHub. 精选 AI Skills 推荐平台
+  - paragraph: 技能数据来源于公开渠道、认证企业及用户自主发布。
+  - paragraph:
+    - link "粤B2-20090059-4038":
+      - /url: https://beian.miit.gov.cn/#/Integrated/index
+- region "Notifications alt+T"

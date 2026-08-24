@@ -1,0 +1,371 @@
+- banner:
+  - link "SkillHub 首页":
+    - /url: /
+    - img "SkillHub"
+  - navigation "主导航":
+    - button "技能":
+      - text: 技能
+    - link "插件":
+      - /url: /plugins
+      - text: 插件
+      - generic: NEW
+    - link "SkillPay":
+      - /url: /skillpay
+      - generic: SkillPay
+    - link "大赛":
+      - /url: /contest
+      - generic: 大赛
+    - button "探索":
+      - text: 探索
+    - button "帮助":
+      - text: 帮助
+  - button "发布 Skill":
+    - generic: 发布 Skill
+  - button "通知":
+  - button "用户菜单":
+- main:
+  - heading "精选企业" [level=3]
+  - button "1 腾讯 147技能 · 125.2 万下载":
+    - generic: "1"
+    - generic: 腾讯
+    - generic: 147技能 · 125.2 万下载
+  - button "2 国泰海通 6技能 · 6.6 千下载":
+    - generic: "2"
+    - generic: 国泰海通
+    - generic: 6技能 · 6.6 千下载
+  - button "3 美团 2技能 · 770下载":
+    - generic: "3"
+    - generic: 美团
+    - generic: 2技能 · 770下载
+  - button "4 携程旅行 2技能 · 1.4 千下载":
+    - generic: "4"
+    - generic: 携程旅行
+    - generic: 2技能 · 1.4 千下载
+  - button "5 36氪 3技能 · 793下载":
+    - generic: "5"
+    - generic: 36氪
+    - generic: 3技能 · 793下载
+  - img "国泰海通证券股份有限公司"
+  - heading "最新入驻" [level=3]
+  - link "1 北京知依科技有限公司 北京知依科技有限公司 1技能 · 12下载":
+    - /url: /enterprise/org-9x3n524l
+    - generic: "1"
+    - img "北京知依科技有限公司"
+    - generic: 北京知依科技有限公司
+    - generic: 1技能 · 12下载
+  - link "2 江苏微盛网络科技有限公司 微盛 1技能 · 2下载":
+    - /url: /enterprise/org-4bjin73d
+    - generic: "2"
+    - img "江苏微盛网络科技有限公司"
+    - generic: 微盛
+    - generic: 1技能 · 2下载
+  - link "3 杭州心念绘见科技有限公司 奎可智能 1技能 · 18下载":
+    - /url: /enterprise/org-5at8ibit
+    - generic: "3"
+    - img "杭州心念绘见科技有限公司"
+    - generic: 奎可智能
+    - generic: 1技能 · 18下载
+  - link "4 深圳市企讯通科技有限公司 深圳企讯通 1技能 · 7下载":
+    - /url: /enterprise/org-65keh52w
+    - generic: "4"
+    - img "深圳市企讯通科技有限公司"
+    - generic: 深圳企讯通
+    - generic: 1技能 · 7下载
+  - link "5 惠州市小氏科技中心（有限合伙） 惠州市小氏科技中 2技能 · 10下载":
+    - /url: /enterprise/org-dh1hrc5s
+    - generic: "5"
+    - img "惠州市小氏科技中心（有限合伙）"
+    - generic: 惠州市小氏科技中
+    - generic: 2技能 · 10下载
+  - link "6 广州蜘蛛信息科技有限公司 广州蜘蛛信息科技有限公司 1技能 · 15下载":
+    - /url: /enterprise/org-uxwu1l5h
+    - generic: "6"
+    - img "广州蜘蛛信息科技有限公司"
+    - generic: 广州蜘蛛信息科技有限公司
+    - generic: 1技能 · 15下载
+  - heading "热门技能 HOT" [level=3]:
+    - text: 热门技能
+    - generic: HOT
+  - link "1 腾讯文档 TENCENT DOCS 腾讯文档 TENCENT DOCS 腾讯 · 47.1 万下载":
+    - /url: /skills/tencent-adm/tencent-docs
+    - generic: "1"
+    - img "腾讯文档 TENCENT DOCS"
+    - generic: 腾讯文档 TENCENT DOCS
+    - generic: 腾讯 · 47.1 万下载
+  - link "2 ima-skills ima-skills 腾讯 · 26.1 万下载":
+    - /url: /skills/tencent-adm/ima-skills
+    - generic: "2"
+    - img "ima-skills"
+    - generic: ima-skills
+    - generic: 腾讯 · 26.1 万下载
+  - link "3 搜索引擎 搜索引擎 智创未来 · 10.7 万下载":
+    - /url: /skills/zcwl/multi-search-engine
+    - generic: "3"
+    - img "搜索引擎"
+    - generic: 搜索引擎
+    - generic: 智创未来 · 10.7 万下载
+  - link "4 Agently Mail Agently Mail 腾讯 · 8.7 万下载":
+    - /url: /skills/tencent-adm/agently-mail
+    - generic: "4"
+    - img "Agently Mail"
+    - generic: Agently Mail
+    - generic: 腾讯 · 8.7 万下载
+  - link "5 视频号爆款短视频拆解（付费版：全能）【零一数科·出品】 视频号爆款短视频拆解（付费版：全能）【零一数科·出品】 零一数科 · 7.9 万下载":
+    - /url: /skills/org-28ib33ph/lingyi-wx-video-decomposer-plus
+    - generic: "5"
+    - img "视频号爆款短视频拆解（付费版：全能）【零一数科·出品】"
+    - generic: 视频号爆款短视频拆解（付费版：全能）【零一数科·出品】
+    - generic: 零一数科 · 7.9 万下载
+  - link "6 find-skills find-skills 瓶子星球 · 6.7 万下载":
+    - /url: /skills/org-xyyuvez5/find-skills
+    - generic: "6"
+    - img "find-skills"
+    - generic: find-skills
+    - generic: 瓶子星球 · 6.7 万下载
+  - button "全部"
+  - button "互联网/科技"
+  - button "金融"
+  - button "医疗健康"
+  - button "零售/电商"
+  - button "教育"
+  - button "企业服务"
+  - button "工业制造"
+  - button "政府/公共"
+  - button "媒体/通信"
+  - button "专业服务"
+  - button "开源社区"
+  - button "其他"
+  - generic: 如何入驻？
+  - textbox "请输入企业名称"
+  - link "腾讯开源 腾讯 已认证 互联网/科技 企业服务 媒体/通信 腾讯是一家世界领先的互联网科技公司，用创新的产品和服务提升全球各地人们的生活品质。 147 技能 125.2 万 下载":
+    - /url: /enterprise/org-bv6b8qcb
+    - img "腾讯开源"
+    - heading "腾讯" [level=3]
+    - img "已认证"
+    - generic: 互联网/科技
+    - generic: 企业服务
+    - generic: 媒体/通信
+    - paragraph: 腾讯是一家世界领先的互联网科技公司，用创新的产品和服务提升全球各地人们的生活品质。
+    - generic: 147 技能
+    - generic: 125.2 万 下载
+  - link "精英量界（武汉）工程管理有限公司 精英量界 已认证 互联网/科技 企业服务 专业服务 精英量界聚焦 AI 办公与行业数据应用，提供招投标查询、商机挖掘、企业画像和市场分析等智能 Skill，帮助企业高效获取业务线索、洞察客户与竞争动态，提升销售获客和决策效率。 47 技能 83.1 万 下载":
+    - /url: /enterprise/org-mbvufw6y
+    - img "精英量界（武汉）工程管理有限公司"
+    - heading "精英量界" [level=3]
+    - img "已认证"
+    - generic: 互联网/科技
+    - generic: 企业服务
+    - generic: 专业服务
+    - paragraph: 精英量界聚焦 AI 办公与行业数据应用，提供招投标查询、商机挖掘、企业画像和市场分析等智能 Skill，帮助企业高效获取业务线索、洞察客户与竞争动态，提升销售获客和决策效率。
+    - generic: 47 技能
+    - generic: 83.1 万 下载
+  - link "零一裂变（深圳）科技有限公司 零一数科 已认证 互联网/科技 零售/电商 企业服务 零一数科是500强企业首选的全域运营伙伴，深耕微信生态十年，为企业提供“AIx运营”全链路增长解决方案。合作联系+V：jiangbin952 28 技能 63.6 万 下载":
+    - /url: /enterprise/org-28ib33ph
+    - img "零一裂变（深圳）科技有限公司"
+    - heading "零一数科" [level=3]
+    - img "已认证"
+    - generic: 互联网/科技
+    - generic: 零售/电商
+    - generic: 企业服务
+    - paragraph: 零一数科是500强企业首选的全域运营伙伴，深耕微信生态十年，为企业提供“AIx运营”全链路增长解决方案。合作联系+V：jiangbin952
+    - generic: 28 技能
+    - generic: 63.6 万 下载
+  - link "乐萱同行科技（深圳）有限公司 乐萱科技 已认证 互联网/科技 企业服务 专业服务 乐萱科技已服务超过 10 万客户，专注为企业与智能体提供 AI 媒体创作与AI数字资产管理解决方案，覆盖图像、视频、音乐和语音生成，助力内容资产高效生产、沉淀与复用。 147 技能 50.5 万 下载":
+    - /url: /enterprise/org-0bqts5ar
+    - img "乐萱同行科技（深圳）有限公司"
+    - heading "乐萱科技" [level=3]
+    - img "已认证"
+    - generic: 互联网/科技
+    - generic: 企业服务
+    - generic: 专业服务
+    - paragraph: 乐萱科技已服务超过 10 万客户，专注为企业与智能体提供 AI 媒体创作与AI数字资产管理解决方案，覆盖图像、视频、音乐和语音生成，助力内容资产高效生产、沉淀与复用。
+    - generic: 147 技能
+    - generic: 50.5 万 下载
+  - link "智雨千泽 智雨科技 已认证 互联网/科技 企业服务 专业服务 智雨科技专注打造外贸行业AI原生系统，使命是让外贸中小企业会用AI、用好AI。如有合作需求，加vx：XiaoJW__88888888 2089 技能 50.4 万 下载":
+    - /url: /enterprise/org-02qudk26
+    - img "智雨千泽"
+    - heading "智雨科技" [level=3]
+    - img "已认证"
+    - generic: 互联网/科技
+    - generic: 企业服务
+    - generic: 专业服务
+    - paragraph: 智雨科技专注打造外贸行业AI原生系统，使命是让外贸中小企业会用AI、用好AI。如有合作需求，加vx：XiaoJW__88888888
+    - generic: 2089 技能
+    - generic: 50.4 万 下载
+  - link "世舶科技（武汉）有限公司 世舶科技 已认证 互联网/科技 企业服务 世舶科技（武汉）有限公司专注招投标与企业大数据服务，日更新招投标数据30万+，累计招投标数据3.3亿+，全网覆盖率99.99%，企业数据1.2亿+，为企业提供商机发现、精准订阅、客户拓展与决策支持。 14 技能 42.1 万 下载":
+    - /url: /enterprise/org-wl7bwfbn
+    - img "世舶科技（武汉）有限公司"
+    - heading "世舶科技" [level=3]
+    - img "已认证"
+    - generic: 互联网/科技
+    - generic: 企业服务
+    - paragraph: 世舶科技（武汉）有限公司专注招投标与企业大数据服务，日更新招投标数据30万+，累计招投标数据3.3亿+，全网覆盖率99.99%，企业数据1.2亿+，为企业提供商机发现、精准订阅、客户拓展与决策支持。
+    - generic: 14 技能
+    - generic: 42.1 万 下载
+  - link "昆仑增长（深圳）技术有限公司 昆仑增长 已认证 互联网/科技 教育 企业服务 聚焦企业级 AI 应用落地。我们不做炫技的 Demo，只做能装进真实业务流程、能被团队日常使用、能产出结果的 AI 系统。skill使用反馈联系微信dasean-,电话13391116628。 3525 技能 27.4 万 下载":
+    - /url: /enterprise/org-zbk7xk96
+    - img "昆仑增长（深圳）技术有限公司"
+    - heading "昆仑增长" [level=3]
+    - img "已认证"
+    - generic: 互联网/科技
+    - generic: 教育
+    - generic: 企业服务
+    - paragraph: 聚焦企业级 AI 应用落地。我们不做炫技的 Demo，只做能装进真实业务流程、能被团队日常使用、能产出结果的 AI 系统。skill使用反馈联系微信dasean-,电话13391116628。
+    - generic: 3525 技能
+    - generic: 27.4 万 下载
+  - link "智创未来 智创未来 已认证 互联网/科技 企业服务 专业服务 从2024年开始玩Prompt，到后来无意中开始专业为各种OPC开发MCP、skill、agent、配置openclaw、hermes自动化系统，本地仓库6000+各行业的成熟技能。需定制联系 642 技能 20.8 万 下载":
+    - /url: /enterprise/org-2orcbd4z
+    - img "智创未来"
+    - heading "智创未来" [level=3]
+    - img "已认证"
+    - generic: 互联网/科技
+    - generic: 企业服务
+    - generic: 专业服务
+    - paragraph: 从2024年开始玩Prompt，到后来无意中开始专业为各种OPC开发MCP、skill、agent、配置openclaw、hermes自动化系统，本地仓库6000+各行业的成熟技能。需定制联系
+    - generic: 642 技能
+    - generic: 20.8 万 下载
+  - link "蚂蚁社保 蚂蚁社保 已认证 互联网/科技 企业服务 其他 蚂蚁社保，www.mayishebao.com，合规社保代缴的开创者，无稽查风险，可申领各类待遇。蚂蚁社保专注于为个人客户提供完全合规的社保代缴、社保补缴、社保缴费、公积金缴纳等服务，安全可靠。 2928 技能 17.5 万 下载":
+    - /url: /enterprise/org-oi56y7y3
+    - img "蚂蚁社保"
+    - heading "蚂蚁社保" [level=3]
+    - img "已认证"
+    - generic: 互联网/科技
+    - generic: 企业服务
+    - generic: 其他
+    - paragraph: 蚂蚁社保，www.mayishebao.com，合规社保代缴的开创者，无稽查风险，可申领各类待遇。蚂蚁社保专注于为个人客户提供完全合规的社保代缴、社保补缴、社保缴费、公积金缴纳等服务，安全可靠。
+    - generic: 2928 技能
+    - generic: 17.5 万 下载
+  - link "LaoXi 劳希 已认证 互联网/科技 企业服务 专业服务 聚焦AI行业应用，专注精品应用开发，精益求精。 17 技能 12.1 万 下载":
+    - /url: /enterprise/org-achi7v92
+    - img "LaoXi"
+    - heading "劳希" [level=3]
+    - img "已认证"
+    - generic: 互联网/科技
+    - generic: 企业服务
+    - generic: 专业服务
+    - paragraph: 聚焦AI行业应用，专注精品应用开发，精益求精。
+    - generic: 17 技能
+    - generic: 12.1 万 下载
+  - link "上海如蚁企业服务有限公司 蚂蚁HR 已认证 互联网/科技 企业服务 专业服务 蚂蚁HR官网：www.mayihr.com，企业人力资源社保外包服务伙伴，以\"降本增效控风险\"为核心理念，已服务超20万家企业，涵盖社保代理、岗位外包、代理记账等，二十年深耕人力资源领域。 1590 技能 11.6 万 下载":
+    - /url: /enterprise/org-ux5e2k6b
+    - img "上海如蚁企业服务有限公司"
+    - heading "蚂蚁HR" [level=3]
+    - img "已认证"
+    - generic: 互联网/科技
+    - generic: 企业服务
+    - generic: 专业服务
+    - paragraph: 蚂蚁HR官网：www.mayihr.com，企业人力资源社保外包服务伙伴，以"降本增效控风险"为核心理念，已服务超20万家企业，涵盖社保代理、岗位外包、代理记账等，二十年深耕人力资源领域。
+    - generic: 1590 技能
+    - generic: 11.6 万 下载
+  - link "蚂蚁工资条 蚂蚁工资条 已认证 互联网/科技 企业服务 专业服务 蚂蚁工资条：https://gzt.mayihr.com，十年帮20万企业发送超1亿条工资条，工资表智能识别一键导入批量群发，银行级加密支持手写签收、自动确认、撤回重发、添加公告、签后即焚、数据统计等 1271 技能 8.6 万 下载":
+    - /url: /enterprise/org-uz7pqext
+    - img "蚂蚁工资条"
+    - heading "蚂蚁工资条" [level=3]
+    - img "已认证"
+    - generic: 互联网/科技
+    - generic: 企业服务
+    - generic: 专业服务
+    - paragraph: 蚂蚁工资条：https://gzt.mayihr.com，十年帮20万企业发送超1亿条工资条，工资表智能识别一键导入批量群发，银行级加密支持手写签收、自动确认、撤回重发、添加公告、签后即焚、数据统计等
+    - generic: 1271 技能
+    - generic: 8.6 万 下载
+  - link "瓶子星球 瓶子星球 已认证 暂无介绍 1 技能 6.7 万 下载":
+    - /url: /enterprise/org-xyyuvez5
+    - img "瓶子星球"
+    - heading "瓶子星球" [level=3]
+    - img "已认证"
+    - paragraph: 暂无介绍
+    - generic: 1 技能
+    - generic: 6.7 万 下载
+  - link "Kutesmart 青岛酷特智能股份有限公司 已认证 互联网/科技 工业制造 专业服务 酷特智能官方账号，专注服装定制、智能制造和数字化运营服务。 227 技能 5.9 万 下载":
+    - /url: /enterprise/org-0qry5vm7
+    - img "Kutesmart"
+    - heading "青岛酷特智能股份有限公司" [level=3]
+    - img "已认证"
+    - generic: 互联网/科技
+    - generic: 工业制造
+    - generic: 专业服务
+    - paragraph: 酷特智能官方账号，专注服装定制、智能制造和数字化运营服务。
+    - generic: 227 技能
+    - generic: 5.9 万 下载
+  - link "义乌市瑞气电子商务商行（个体工商户） 义乌市瑞气电子商务商行 已认证 暂无介绍 4841 技能 5.6 万 下载":
+    - /url: /enterprise/org-eyw2ohcx
+    - img "义乌市瑞气电子商务商行（个体工商户）"
+    - heading "义乌市瑞气电子商务商行" [level=3]
+    - img "已认证"
+    - paragraph: 暂无介绍
+    - generic: 4841 技能
+    - generic: 5.6 万 下载
+  - link "北京赛柏蓝科技有限公司 百通AI服务平台 已认证 互联网/科技 医疗健康 专业服务 专为医药医疗健康产业打造的AI服务平台，助力医药、医疗、大健康企业实现智能化转型升级，让AI落地更专业、更高效、更合规、更好用。 191 技能 4.1 万 下载":
+    - /url: /enterprise/org-kfutt8td
+    - img "北京赛柏蓝科技有限公司"
+    - heading "百通AI服务平台" [level=3]
+    - img "已认证"
+    - generic: 互联网/科技
+    - generic: 医疗健康
+    - generic: 专业服务
+    - paragraph: 专为医药医疗健康产业打造的AI服务平台，助力医药、医疗、大健康企业实现智能化转型升级，让AI落地更专业、更高效、更合规、更好用。
+    - generic: 191 技能
+    - generic: 4.1 万 下载
+  - link "上海锋库网络科技有限公司 上海锋库网络科技有限公司 已认证 企业服务 工业制造 专业服务 专注质量管理领域AI应用，对技能使用的任何反馈可以联系VX：dracodu 123 技能 3.4 万 下载":
+    - /url: /enterprise/org-jaxjwo0r
+    - img "上海锋库网络科技有限公司"
+    - heading "上海锋库网络科技有限公司" [level=3]
+    - img "已认证"
+    - generic: 企业服务
+    - generic: 工业制造
+    - generic: 专业服务
+    - paragraph: 专注质量管理领域AI应用，对技能使用的任何反馈可以联系VX：dracodu
+    - generic: 123 技能
+    - generic: 3.4 万 下载
+  - link "北京达维时代科技有限公司 达维 已认证 互联网/科技 企业服务 专业服务 暂无介绍 6 技能 3.3 万 下载":
+    - /url: /enterprise/org-wo5prcgy
+    - img "北京达维时代科技有限公司"
+    - heading "达维" [level=3]
+    - img "已认证"
+    - generic: 互联网/科技
+    - generic: 企业服务
+    - generic: 专业服务
+    - paragraph: 暂无介绍
+    - generic: 6 技能
+    - generic: 3.3 万 下载
+  - generic: 共 1358 条
+  - navigation "分页":
+    - button "上一页" [disabled]:
+    - button "第 1 页": "1"
+    - button "第 2 页": "2"
+    - button "第 76 页": "76"
+    - button "下一页":
+- contentinfo:
+  - link "SkillHub 首页":
+    - /url: /
+    - img "SkillHub"
+  - paragraph: 专为中国用户优化的 AI Skills 社区，让 AI Agent 突破能力边界、持续进化。
+  - heading "快捷入口" [level=3]
+  - link "服务协议":
+    - /url: https://privacy.qq.com/document/preview/5bd4610b10f043d98df5dd69233cc3b3
+    - text: 服务协议
+  - link "隐私协议":
+    - /url: https://privacy.qq.com/document/preview/af7cf7a60e444f93a3fbff81c929cca8
+    - text: 隐私协议
+  - link "建议反馈":
+    - /url: https://wj.qq.com/s2/26026989/0c20
+    - text: 建议反馈
+  - heading "友情链接" [level=3]
+  - link "ClawHub":
+    - /url: https://clawhub.ai
+    - text: ClawHub
+  - paragraph: 来源声明：本站部分 Skill 内容来源于公开渠道、认证企业或由用户自主发布，使用前请注意识别相关风险，内容版权归原作者所有。
+  - paragraph:
+    - text: 侵权处理：如 Skill 涉及版权问题，请发送邮件至
+    - link "skillhub_ipr@tencent.com":
+      - /url: mailto:skillhub_ipr@tencent.com
+    - text: ，我们将在收到通知后及时核实并予以下架处理。
+  - paragraph: Copyright © 2026 SkillHub. 精选 AI Skills 推荐平台
+  - paragraph: 技能数据来源于公开渠道、认证企业及用户自主发布。
+  - paragraph:
+    - link "粤B2-20090059-4038":
+      - /url: https://beian.miit.gov.cn/#/Integrated/index
+- region "Notifications alt+T"
+- link "建议反馈":
+  - /url: https://wj.qq.com/s2/26026989/0c20
+  - generic: 建议反馈
