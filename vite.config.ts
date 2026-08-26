@@ -16,6 +16,7 @@ export default defineConfig({
     allowedHosts: ["terminal.local"],
     proxy: { "/internal": "http://127.0.0.1:3000" },
     warmup: { clientFiles: ["./src/main.tsx"] },
+    port: 4173
   },
   test: {
     environment: "jsdom",

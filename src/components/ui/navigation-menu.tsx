@@ -9,9 +9,13 @@ function NavigationMenu({
   className,
   children,
   viewport = true,
+  viewportProps,
   ...props
 }: React.ComponentProps<typeof NavigationMenuPrimitive.Root> & {
   viewport?: boolean
+  viewportProps?: React.ComponentProps<typeof NavigationMenuPrimitive.Viewport> & {
+    ref?: React.Ref<HTMLDivElement>
+  }
 }) {
   return (
     <NavigationMenuPrimitive.Root
@@ -24,7 +28,7 @@ function NavigationMenu({
       {...props}
     >
       {children}
-      {viewport && <NavigationMenuViewport />}
+      {viewport && <NavigationMenuViewport {...viewportProps} />}
     </NavigationMenuPrimitive.Root>
   )
 }
@@ -101,18 +105,22 @@ function NavigationMenuContent({
 
 function NavigationMenuViewport({
   className,
+  ref,
   ...props
-}: React.ComponentProps<typeof NavigationMenuPrimitive.Viewport>) {
+}: React.ComponentProps<typeof NavigationMenuPrimitive.Viewport> & {
+  ref?: React.Ref<HTMLDivElement>
+}) {
   return (
     <div
       className={cn(
-        "absolute top-full left-0 isolate z-50 flex justify-center"
+        "fixed inset-x-0 top-[61px] isolate z-50 flex justify-center"
       )}
     >
       <NavigationMenuPrimitive.Viewport
+        ref={ref}
         data-slot="navigation-menu-viewport"
         className={cn(
-          "origin-top-center relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-md border bg-popover text-popover-foreground shadow data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:zoom-in-90 md:w-[var(--radix-navigation-menu-viewport-width)]",
+          "origin-top relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-md border bg-popover text-popover-foreground shadow data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:zoom-in-90 md:w-[var(--radix-navigation-menu-viewport-width)]",
           className
         )}
         {...props}

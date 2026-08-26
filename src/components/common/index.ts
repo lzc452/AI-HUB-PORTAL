@@ -1,4 +1,5 @@
 export * from "@/components/common/DetailTabs";
+export * from "@/components/common/ExpandableSearch";
 export * from "@/components/common/Pagination";
 export * from "@/components/common/PortalFooter";
 export * from "@/components/common/PortalHeader";

@@ -1,49 +1,593 @@
-import { ArrowLeft, ArrowRight, Building2, PackageOpen, PlugZap, Rocket, ShieldCheck, Sparkles, WandSparkles } from "lucide-react";
-import { Link } from "react-router-dom";
 import { useRef } from "react";
+import { Link } from "react-router-dom";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Bookmark,
+  Building2,
+  Crown,
+  Globe2,
+  KeyRound,
+  Network,
+  PackageOpen,
+  PlugZap,
+  ScrollText,
+  ShieldCheck,
+  Star,
+  Trophy,
+  Users,
+  Wand2,
+} from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { ErrorState, LoadingState, ResourceCard } from "@/components/common";
+import { ErrorState, LoadingState, ResourceBadge } from "@/components/common";
 import { useHomeQuery } from "@/hooks";
-import type { ResourceSummary } from "@/types";
+import type { HomePayload, ResourceSummary } from "@/types";
+import { cn, formatCompactNumber, initials } from "@/utils";
 
-const capabilities = [
-  { icon: Rocket, tone: "bg-[#f7f5ff]", eyebrow: "APP HUNT", title: "发现正在改变工作方式的应用", text: "用员工真实投票形成每周榜单，让优秀实践更快进入团队。", href: "/apps-hunt", action: "查看本周榜单" },
-  { icon: PlugZap, tone: "bg-[#f5fbf7]", eyebrow: "PLUGIN & MCP", title: "把企业工具带进 AI 工作流", text: "从代码托管、知识库到数据平台，选择经过权限和安全检查的连接能力。", href: "/plugins", action: "浏览连接资源" },
-  { icon: Building2, tone: "bg-[#fff9f0]", eyebrow: "DEPARTMENT", title: "跟随部门实践复用成熟能力", text: "了解不同团队发布、维护与推荐的 AI 资源，找到最贴近业务的解法。", href: "/department-zone", action: "进入部门中心" },
+gsap.registerPlugin(useGSAP, ScrollTrigger);
+
+const title_1 = "把好用的 AI 能力";
+const title_2 = "，带到每个人的工作中";
+
+const marqueeItems = [
+  { icon: Star, label: "应用" },
+  { icon: Wand2, label: "技能" },
+  { icon: PlugZap, label: "插件" },
+  { icon: Network, label: "MCP" },
+  { icon: Trophy, label: "App Hunt 每周榜单" },
+  { icon: ShieldCheck, label: "统一安全扫描" },
+  { icon: Globe2, label: "网页端发布" },
+  { icon: KeyRound, label: "企业 SSO 与权限" },
+  { icon: Building2, label: "部门实践" },
+  { icon: Bookmark, label: "收藏复用" },
+  { icon: ScrollText, label: "审计透明" },
+  { icon: Users, label: "团队共享" },
+] as const;
+
+const accordionSlices = [
+  {
+    icon: Trophy,
+    keyword: "hunt",
+    eyebrow: "APP HUNT",
+    title: "发现正在改变工作方式的应用",
+    text: "用员工真实投票形成每周榜单，让优秀实践更快进入团队。",
+    href: "/apps-hunt",
+    action: "查看本周榜单",
+  },
+  {
+    icon: PlugZap,
+    keyword: "circuit",
+    eyebrow: "PLUGIN & MCP",
+    title: "把企业工具带进 AI 工作流",
+    text: "从代码托管、知识库到数据平台，选择经过权限和安全检查的连接能力。",
+    href: "/plugins",
+    action: "浏览连接资源",
+  },
+  {
+    icon: Building2,
+    keyword: "campus",
+    eyebrow: "DEPARTMENT",
+    title: "跟随部门实践复用成熟能力",
+    text: "了解不同团队发布、维护与推荐的 AI 资源，找到最贴近业务的解法。",
+    href: "/department-zone",
+    action: "进入部门中心",
+  },
 ] as const;
 
 export default function HomePage() {
   const query = useHomeQuery();
-  if (query.isPending) return <main className="mx-auto min-h-[calc(100vh-61px)] w-[min(1180px,calc(100%-48px))] py-12 max-md:w-[calc(100%-28px)]"><LoadingState label="正在准备 AI Hub" /></main>;
-  if (query.isError || !query.data) return <main className="mx-auto min-h-[calc(100vh-61px)] w-[min(1180px,calc(100%-48px))] py-12 max-md:w-[calc(100%-28px)]"><ErrorState retry={() => query.refetch()} /></main>;
-  const data = query.data;
-  return <main className="overflow-hidden">
-    <section className="mx-auto flex min-h-[330px] w-[min(1180px,calc(100%-48px))] flex-col items-start justify-center py-16 pb-11 text-left max-md:w-[calc(100%-28px)] max-md:min-h-0 max-md:py-[52px] max-md:pb-10">
-      <span className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-1.5 text-xs font-semibold text-muted-foreground"><Sparkles size={14} />企业 AI 能力门户</span>
-      <h1 className="mt-4 max-w-[620px] text-[clamp(36px,3.4vw,48px)] font-semibold leading-tight tracking-[-0.05em]">把好用的 AI 能力，<br />带到每个人的工作中</h1>
-      <p className="mt-3 max-w-[630px] text-[15px] leading-relaxed text-muted-foreground">发现、评估、收藏并发布可信的 App、Skill、Plugin 与 MCP。所有资源都来自企业内部审核与安全体系。</p>
-      <div className="mt-7 flex gap-2.5 max-md:w-full max-md:flex-col"><Button asChild className="rounded-full px-4"><Link to="/apps?sortBy=score">探索全部资源<ArrowRight size={16} /></Link></Button><Button asChild variant="outline" className="rounded-full px-4"><Link to="/tutorials">阅读使用指南</Link></Button></div>
-      <div className="mt-7 flex flex-wrap gap-x-5 gap-y-2.5 text-xs text-muted-foreground"><span className="inline-flex items-center gap-1.5"><ShieldCheck size={15} />统一安全扫描</span><span className="inline-flex items-center gap-1.5"><WandSparkles size={15} />网页端发布</span><span className="inline-flex items-center gap-1.5"><Building2 size={15} />企业 SSO 与权限</span></div>
-    </section>
-    <CapabilityRail />
-    <Featured title="热门应用" description="员工正在高频使用的 AI 应用" href="/apps?sortBy=score" resources={data.apps} />
-    <section className="mx-auto my-[74px] grid w-[min(1180px,calc(100%-48px))] grid-cols-[0.9fr_1.1fr] items-center gap-[78px] rounded-[26px] bg-zinc-900 p-16 text-white max-[900px]:grid-cols-1 max-[900px]:gap-9 max-md:w-[calc(100%-28px)] max-md:my-11 max-md:p-8 max-md:px-5">
-      <div><span className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-400">Build your workflow</span><h2 className="mt-2 text-[clamp(27px,3.5vw,40px)] font-semibold leading-tight tracking-[-0.04em]">从一个 Skill 开始，形成你的 AI 工作方式</h2><p className="mt-3 leading-relaxed text-zinc-400">Skills 把可靠的方法、约束和参考资料封装为可复用能力；SkillPackage 则按真实任务将多个 Skills 组织为完整工作流。</p><div className="mt-7 flex gap-2 max-md:flex-col"><Button asChild variant="secondary" className="rounded-full bg-white text-zinc-900 hover:bg-zinc-100"><Link to="/skills">浏览技能</Link></Button><Button asChild variant="outline" className="rounded-full border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700"><Link to="/skillpackage"><PackageOpen size={15} />查看技能包</Link></Button></div></div>
-      <div className="overflow-hidden rounded-2xl bg-white p-1 text-foreground">{data.skills.slice(0, 3).map((resource) => <ResourceCard key={resource.id} resource={resource} compact />)}</div>
-    </section>
-    <Featured title="连接你的企业资源" description="受控、透明、可审计的 Plugin 与 MCP" href="/plugins" resources={[...data.plugins, ...data.mcps]} />
-    <section className="mx-auto w-[min(1180px,calc(100%-48px))] py-20 max-md:w-[calc(100%-28px)] max-md:py-[52px]"><div className="mb-7 flex items-end justify-between gap-6 max-md:items-start"><div><span className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">Department zone</span><h2 className="mt-2 text-[clamp(27px,3.5vw,40px)] font-semibold tracking-[-0.04em]">部门实践中心</h2><p className="mt-1 text-sm text-muted-foreground">从业务团队的真实使用经验中发现更合适的资源。</p></div><Link className="inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold" to="/department-zone">查看全部<ArrowRight size={15} /></Link></div><div className="grid grid-cols-4 gap-3.5 max-[1020px]:grid-cols-2 max-md:grid-cols-1">{data.departments.slice(0, 4).map((department) => <Link key={department.departmentId} to={`/department/${department.departmentId}`}><Card className="h-full gap-3 rounded-xl p-5 shadow-none transition hover:-translate-y-0.5 hover:shadow-lg"><div className="grid size-11 place-items-center rounded-xl bg-indigo-50 text-indigo-600"><Building2 size={22} /></div><h3 className="m-0 text-base font-semibold">{department.name}</h3><p className="m-0 text-sm leading-relaxed text-muted-foreground">{department.description}</p><div className="mt-auto flex flex-wrap gap-3 text-xs text-muted-foreground"><span>{department.memberCount} 位成员</span><span>{department.resourceCount} 项资源</span></div></Card></Link>)}</div></section>
-    {data.updates && <section className="mx-auto mb-16 flex w-[min(1180px,calc(100%-48px))] items-center justify-between gap-5 rounded-2xl border border-border bg-muted p-6 max-md:w-[calc(100%-28px)] max-md:flex-col max-md:items-start"><div><span className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">Latest update · {new Date(data.updates.updatedAt).toLocaleDateString("zh-CN")}</span><h2 className="mt-2 text-xl font-semibold">{data.updates.title}</h2><p className="mt-1 text-sm text-muted-foreground">{data.updates.summary}</p></div><Button asChild variant="outline" className="rounded-full"><Link to="/updates">查看更新日志<ArrowRight size={15} /></Link></Button></section>}
-  </main>;
+  if (query.isPending)
+    return (
+      <main className="mx-auto min-h-[calc(100vh-61px)] w-[min(1180px,calc(100%-48px))] py-12 max-md:w-[calc(100%-28px)]">
+        <LoadingState label="正在准备 AI Hub" />
+      </main>
+    );
+  if (query.isError || !query.data)
+    return (
+      <main className="mx-auto min-h-[calc(100vh-61px)] w-[min(1180px,calc(100%-48px))] py-12 max-md:w-[calc(100%-28px)]">
+        <ErrorState retry={() => query.refetch()} />
+      </main>
+    );
+  return <HomeScene data={query.data} />;
 }
 
-function CapabilityRail() {
-  const railRef = useRef<HTMLDivElement>(null);
-  const scroll = (direction: "left" | "right") => railRef.current?.scrollBy({ left: direction === "left" ? -360 : 360, behavior: "smooth" });
-  return <section className="mx-auto w-[min(1180px,calc(100%-48px))] pb-20 max-md:w-[calc(100%-28px)] max-md:pb-14"><header className="mb-5 flex items-end justify-between gap-6 max-md:items-start"><div><span className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">Explore the portal</span><h2 className="mt-2 text-[clamp(24px,3vw,34px)] font-semibold tracking-[-0.04em]">从发现到复用，找到适合你的 AI 能力</h2></div><div className="flex gap-1"><Button variant="ghost" size="icon" className="rounded-full" aria-label="查看上一组能力" onClick={() => scroll("left")}><ArrowLeft size={16} /></Button><Button variant="ghost" size="icon" className="rounded-full" aria-label="查看下一组能力" onClick={() => scroll("right")}><ArrowRight size={16} /></Button></div></header><div ref={railRef} className="flex snap-x gap-3.5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">{capabilities.map(({ icon: Icon, tone, ...item }) => <Link className={`group relative min-h-[280px] min-w-[min(420px,36vw)] snap-start overflow-hidden rounded-2xl border border-border p-6 transition hover:-translate-y-1 hover:shadow-lg max-[900px]:min-w-[70vw] max-md:min-h-[310px] max-md:p-6 ${tone}`} to={item.href} key={item.title}><div className="grid size-[52px] place-items-center rounded-2xl bg-white/70"><Icon size={25} /></div><span className="mt-9 block text-[11px] font-bold tracking-[0.1em]">{item.eyebrow}</span><h2 className="mt-2 max-w-[330px] text-[22px] font-semibold leading-tight tracking-[-0.035em]">{item.title}</h2><p className="mt-2 max-w-[330px] text-sm leading-relaxed text-foreground/65">{item.text}</p><strong className="absolute bottom-5 inline-flex items-center gap-2 text-[13px]">{item.action}<ArrowRight size={15} /></strong></Link>)}</div></section>;
+function HomeScene({ data }: { data: HomePayload }) {
+  const mainRef = useRef<HTMLElement>(null);
+  const hoverTimer = useRef(0);
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        // Hero load-in: chars drift up out of blur, eye mark snaps in, meta fades.
+        const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+        tl.from(".hero-bg", { opacity: 0, yPercent: 6, duration: 1.4, ease: "power2.out" }, 0)
+          .from(".hero-wash", { opacity: 0, scale: 1.15, duration: 1.8, ease: "power2.out", stagger: 0.2 }, 0)
+          .from(".char", { opacity: 0, y: 34, filter: "blur(10px)", duration: 0.9, stagger: 0.028 }, 0.12)
+          .from(".eye-mark", { opacity: 0, scale: 0.4, rotate: -10, duration: 0.7, ease: "back.out(2)" }, 0.85)
+          .from(".hero-meta", { opacity: 0, y: 26, duration: 0.8, stagger: 0.1 }, 1.0);
+
+        // The brand eye keeps watching: pupils roam gently, blink handled by CSS.
+        gsap.to(".eye-pupil", {
+          x: 1.8,
+          y: -1.4,
+          duration: 2.1,
+          yoyo: true,
+          repeat: -1,
+          ease: "sine.inOut",
+          delay: 2.4,
+        });
+
+        // Hero parallax: wash drifts apart from the photograph.
+        gsap.to(".hero-bg", { yPercent: 14, ease: "none", scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+        gsap.to(".hero-wash", { yPercent: -10, ease: "none", scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+
+        // Image scale & fade: every .fx-zoom starts at 0.8, grows to 1.0 on entry,
+        // then darkens to 0.2 opacity as it leaves the viewport.
+        gsap.utils.toArray<HTMLElement>(".fx-zoom").forEach((el) => {
+          gsap.fromTo(el, { scale: 0.8 }, {
+            scale: 1,
+            ease: "none",
+            scrollTrigger: { trigger: el, start: "top 96%", end: "top 34%", scrub: true },
+          });
+          gsap.to(el, {
+            opacity: 0.2,
+            filter: "brightness(0.55) saturate(0.8)",
+            ease: "none",
+            scrollTrigger: { trigger: el.closest(".fx-frame") ?? el, start: "bottom 76%", end: "bottom 10%", scrub: true },
+          });
+        });
+
+        // Card stacking: the deck piles from the bottom, each card easing
+        // into full scale as it reaches the pin point.
+        gsap.utils.toArray<HTMLElement>(".stack-card").forEach((el) => {
+          gsap.fromTo(el, { y: 76, scale: 0.94, opacity: 0.8 }, {
+            y: 0,
+            scale: 1,
+            opacity: 1,
+            ease: "none",
+            scrollTrigger: { trigger: el, start: "top 92%", end: "top 60%", scrub: true },
+          });
+        });
+
+        // Bento cells drift in one after another.
+        gsap.utils.toArray<HTMLElement>(".bento-cell").forEach((el, index) => {
+          gsap.from(el, {
+            opacity: 0,
+            y: 40,
+            duration: 0.8,
+            ease: "power3.out",
+            delay: (index % 4) * 0.06,
+            scrollTrigger: { trigger: el, start: "top 90%", toggleActions: "play none none none" },
+          });
+        });
+      });
+      if (document.fonts?.ready) document.fonts.ready.then(() => ScrollTrigger.refresh());
+      if (document.readyState === "complete") ScrollTrigger.refresh();
+      else {
+        const onLoad = () => ScrollTrigger.refresh();
+        window.addEventListener("load", onLoad);
+        return () => window.removeEventListener("load", onLoad);
+      }
+    },
+    { scope: mainRef }
+  );
+
+  const onAccordionHover = () => {
+    if (hoverTimer.current) return;
+    hoverTimer.current = window.setTimeout(() => {
+      ScrollTrigger.refresh();
+      hoverTimer.current = 0;
+    }, 800);
+  };
+
+  return (
+    <main ref={mainRef} className="w-full max-w-full overflow-x-clip">
+      <HeroSection />
+      <MarqueeBand />
+      <BentoGrid data={data} />
+      <AccordionSection onHover={onAccordionHover} />
+      {data.apps.length > 0 && <AppStack apps={data.apps} />}
+      <CtaBand updates={data.updates} />
+    </main>
+  );
 }
 
-function Featured({ title, description, href, resources }: { title: string; description: string; href: string; resources: ResourceSummary[] }) {
-  return <section className="mx-auto w-[min(1180px,calc(100%-48px))] border-t border-border py-20 max-md:w-[calc(100%-28px)] max-md:py-[52px]"><div className="mb-7 flex items-end justify-between gap-6 max-md:items-start"><div><span className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">Curated resources</span><h2 className="mt-2 text-[clamp(27px,3.5vw,40px)] font-semibold tracking-[-0.04em]">{title}</h2><p className="mt-1 text-sm text-muted-foreground">{description}</p></div><Link className="inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold" to={href}>查看全部<ArrowRight size={15} /></Link></div><div className="grid grid-cols-4 gap-4 max-[1020px]:grid-cols-2 max-md:grid-cols-1">{resources.slice(0, 4).map((resource) => <ResourceCard className="min-h-[210px] flex-col" key={`${resource.type}-${resource.id}`} resource={resource} />)}</div></section>;
+function HeroSection() {
+  return (
+    <section className="hero relative flex min-h-[600px] flex-col justify-center overflow-hidden px-6 py-22 md:min-h-[720px] md:py-22 max-md:px-4">
+      <div className="hero-bg absolute inset-0">
+        <img
+          src="https://picsum.photos/seed/hub-portal/1920/1080"
+          alt=""
+          aria-hidden="true"
+          className="h-full w-full object-cover opacity-15 grayscale contrast-125"
+          loading="eager"
+        />
+      </div>
+      <div className="hero-wash absolute -top-48 left-1/2 size-[880px] -translate-x-1/2 rounded-full bg-indigo-200/25 blur-[150px]" />
+      <div className="hero-wash absolute top-1/3 -left-44 size-[560px] rounded-full bg-sky-200/30 blur-[130px]" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(17,17,17,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(17,17,17,0.045)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:radial-gradient(ellipse_at_center,black_25%,transparent_78%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_28%,transparent_38%,rgba(28,28,30,0.09)_100%)]" />
+
+      <div className="relative mx-auto flex max-w-6xl flex-col items-center text-center">
+        <h1
+          aria-label={title_1 + title_2}
+          className="m-0 flex w-full flex-wrap items-center justify-center text-[clamp(2.15rem,6vw,3.6rem)] leading-[1.12] tracking-[-0.045em] text-zinc-950 max-lg:flex-col"
+        >
+          <span aria-hidden="true" className="inline-flex flex-wrap justify-center">
+            {title_1.split("").map((str, index) => (
+              <span key={index} className="char inline-block">
+                {str}
+              </span>
+            ))}
+          </span>
+          <span
+            aria-hidden="true"
+            className="eye-mark relative mx-1 -top-2 -mr-[30px] inline-block h-[26px] w-[40px] shrink-0 origin-center animate-[eye-blink_5.5s_ease-in-out_infinite] sm:h-[32px] sm:w-[48px] sm:-top-3 md:-mr-[46px] md:h-[38px] md:w-[58px] md:-top-4"
+          >
+            <svg viewBox="0 0 50 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-full w-full overflow-visible">
+              <rect width="18.67" height="23.44" rx="10.72" fill="#fff" stroke="#111111" strokeWidth="1.5" />
+              <rect x="31.33" width="18.67" height="23.44" rx="10.72" fill="#fff" stroke="#111111" strokeWidth="1.5" />
+              <circle className="eye-pupil" cx="9.34" cy="11.72" r="5.39" fill="#111111" />
+              <circle className="eye-pupil" cx="40.67" cy="11.72" r="5.39" fill="#111111" />
+            </svg>
+          </span>
+          <span aria-hidden="true" className="inline-flex flex-wrap justify-center">
+            {title_2.split("").map((str, index) => (
+              <span key={index} className="char inline-block">
+                {str}
+              </span>
+            ))}
+          </span>
+        </h1>
+
+        <p className="hero-meta mt-7 max-w-[560px] text-[15px] leading-relaxed text-zinc-500">
+          发现、评估、收藏并发布可信的 App、Skill、Plugin 与 MCP
+        </p>
+        <div className="hero-meta mt-8 flex gap-2.5 max-md:w-full max-md:flex-col">
+          <Button asChild className="h-11 rounded-full px-6">
+            <Link to="/apps?sortBy=score">
+              探索全部资源
+              <ArrowRight size={16} />
+            </Link>
+          </Button>
+          <Button asChild variant="outline" className="h-11 rounded-full border-zinc-300 px-6">
+            <Link to="/tutorials">阅读使用指南</Link>
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function MarqueeBand() {
+  return (
+    <div className="relative overflow-hidden border-y border-zinc-900/10 bg-white py-3.5" aria-hidden="true">
+      <div className="flex w-max animate-[marquee-x_36s_linear_infinite] gap-0">
+        {[0, 1].map((group) => (
+          <div key={group} className="flex shrink-0 items-center gap-10 pr-10">
+            {marqueeItems.map(({ icon: Icon, label }, index) => (
+              <span key={label} className="inline-flex shrink-0 items-center gap-2.5 text-[13px] font-medium tracking-wide text-zinc-500">
+                {index > 0 && <span className="mr-7 size-1.5 rounded-full bg-zinc-300" />}
+                <Icon size={15} />
+                {label}
+              </span>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SectionHeading({
+  title,
+  description,
+  href,
+  hrefLabel = "查看全部",
+}: {
+  title: string;
+  description: string;
+  href: string;
+  hrefLabel?: string;
+}) {
+  return (
+    <div className="mb-9 flex items-end justify-between gap-6 max-md:items-start">
+      <div>
+        <h2 className="m-0 text-[clamp(1.9rem,3.4vw,2.75rem)] leading-tight font-semibold tracking-[-0.045em] text-zinc-950">
+          {title}
+        </h2>
+        <p className="mt-2 text-sm text-zinc-500">{description}</p>
+      </div>
+      <Link
+        className="inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-zinc-950"
+        to={href}
+      >
+        {hrefLabel}
+        <ArrowRight size={15} />
+      </Link>
+    </div>
+  );
+}
+
+function BentoGrid({ data }: { data: HomePayload }) {
+  const topApp = data.apps[0];
+  const typeCards = [
+    { icon: Wand2, tint: "bg-indigo-50 text-indigo-600", title: "技能", text: "可复用的方法与参考资产", count: `${data.skills.length} 项技能`, href: "/skills" },
+    { icon: PackageOpen, tint: "bg-sky-50 text-sky-600", title: "技能包", text: "按真实任务组织的完整工作流", count: `${data.skillPackages.length} 个技能包`, href: "/skillpackage" },
+    { icon: PlugZap, tint: "bg-emerald-50 text-emerald-600", title: "插件与 MCP", text: "受控、透明、可审计的连接能力", count: `${data.plugins.length + data.mcps.length} 项连接`, href: "/plugins" },
+    { icon: Building2, tint: "bg-amber-50 text-amber-600", title: "部门实践", text: "来自业务团队的真实使用经验", count: `${data.departments.length} 个部门`, href: "/department-zone" },
+  ] as const;
+
+  return (
+    <section className="mx-auto w-[min(1180px,calc(100%-48px))] py-20 md:py-28 max-md:w-[calc(100%-28px)]">
+      <SectionHeading
+        title="从一个入口，进入整个 AI 资源生态"
+        description="应用、技能、插件、MCP 与部门实践，统一发现与复用"
+        href="/apps?sortBy=score"
+        hrefLabel="探索全部资源"
+      />
+      <div className="grid grid-flow-dense grid-cols-1 gap-3.5 md:grid-cols-2 lg:grid-cols-4">
+        {topApp && (
+          <Link
+            to={topApp.href}
+            className="bento-cell group relative col-span-1 row-span-1 flex min-h-[420px] flex-col justify-between gap-5 rounded-[26px] bg-zinc-950 p-6 text-white md:col-span-2 md:row-span-2 md:p-8"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <span className="text-[11px] font-bold tracking-[0.14em] text-zinc-500">HOT PICKS</span>
+                <h3 className="mt-2 text-2xl font-semibold tracking-[-0.03em]">热门应用</h3>
+                <p className="mt-1 text-sm text-zinc-400">员工正在高频使用的 AI 应用</p>
+              </div>
+              <ArrowUpRight size={20} className="mt-1 shrink-0 text-zinc-500 transition-colors group-hover:text-white" />
+            </div>
+            <div className="fx-frame relative aspect-[16/9] overflow-hidden rounded-2xl">
+              <div className="fx-zoom h-full w-full">
+                <img
+                  src={`https://picsum.photos/seed/${encodeURIComponent(topApp.name)}/1200/675`}
+                  alt=""
+                  loading="lazy"
+                  className="h-full w-full object-cover grayscale-[30%] opacity-90 contrast-125 transition-transform duration-700 ease-out group-hover:scale-105"
+                />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/70 via-transparent to-transparent" />
+            </div>
+            <div className="flex items-center gap-3.5">
+              <Avatar className="size-11 shrink-0 rounded-xl border border-white/15 bg-white/10">
+                <AvatarImage src={topApp.iconUrl ?? undefined} alt="" />
+                <AvatarFallback className="rounded-xl bg-transparent text-xs font-extrabold text-white">{initials(topApp.name)}</AvatarFallback>
+              </Avatar>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <strong className="truncate text-[15px]">{topApp.name}</strong>
+                  <ResourceBadge type={topApp.type} />
+                </div>
+                <div className="mt-1 flex flex-wrap gap-3 text-xs text-zinc-400">
+                  <span>{topApp.owner.displayName}</span>
+                  <span className="inline-flex items-center gap-1">
+                    <Star size={12} />
+                    {formatCompactNumber(topApp.stars)}
+                  </span>
+                  <span className="inline-flex items-center gap-1">
+                    {formatCompactNumber(topApp.downloads)} 次使用
+                  </span>
+                </div>
+              </div>
+            </div>
+          </Link>
+        )}
+        {typeCards.map(({ icon: Icon, tint, title, text, count, href }) => (
+          <Link
+            key={title}
+            to={href}
+            className="bento-cell group flex min-h-[220px] flex-col justify-between rounded-[22px] border border-zinc-900/10 bg-white p-6 transition-[transform,box-shadow,border-color] duration-500 hover:-translate-y-1 hover:border-zinc-900/20 hover:shadow-[0_24px_50px_-24px_rgba(28,28,30,0.22)]"
+          >
+            <div>
+              <div className={cn("grid size-12 place-items-center rounded-2xl transition-transform duration-500 group-hover:scale-105", tint)}>
+                <Icon size={23} />
+              </div>
+              <h3 className="mt-5 text-lg font-semibold tracking-[-0.02em] text-zinc-950">{title}</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-zinc-500">{text}</p>
+            </div>
+            <div className="mt-6 flex items-center justify-between">
+              <span className="text-xs font-medium text-zinc-400">{count}</span>
+              <ArrowUpRight size={17} className="text-zinc-400 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-zinc-950" />
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function AccordionSection({ onHover }: { onHover: () => void }) {
+  return (
+    <section className="mx-auto w-[min(1180px,calc(100%-48px))] py-20 md:py-28 max-md:w-[calc(100%-28px)]">
+      <SectionHeading
+        title="从发现到复用，找到适合你的 AI 能力"
+        description="悬停展开每一类能力，直达对应的资源入口"
+        href="/skills"
+        hrefLabel="浏览全部技能"
+      />
+      <div className="flex h-[440px] gap-2.5 overflow-x-auto snap-x max-md:h-[420px] [scrollbar-width:none] md:overflow-visible [&::-webkit-scrollbar]:hidden">
+        {accordionSlices.map(({ icon: Icon, keyword, eyebrow, title, text, href, action }) => (
+          <Link
+            key={title}
+            to={href}
+            onPointerEnter={onHover}
+            className="group fx-frame relative flex-1 snap-start overflow-hidden rounded-[26px] transition-[flex-grow] duration-700 ease-out hover:flex-[2.2] max-md:min-w-[82%] max-md:flex-none"
+          >
+            <div className="fx-zoom absolute inset-0">
+              <img
+                src={`https://picsum.photos/seed/${keyword}/900/1400`}
+                alt=""
+                loading="lazy"
+                className="h-full w-full object-cover grayscale-[25%] contrast-125"
+              />
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-zinc-950/25 to-zinc-950/10 transition-opacity duration-500 group-hover:via-zinc-950/45" />
+            <div className="absolute inset-x-0 bottom-0 p-7">
+              <div className="grid size-11 place-items-center rounded-2xl bg-white/15 text-white backdrop-blur-sm">
+                <Icon size={21} />
+              </div>
+              <span className="mt-6 block text-[11px] font-bold tracking-[0.14em] text-white/70">{eyebrow}</span>
+              <h3 className="mt-2 text-[22px] font-semibold leading-tight tracking-[-0.03em] text-white">{title}</h3>
+              <p className="mt-2.5 max-w-sm text-sm leading-relaxed text-white/75 transition-all duration-500 md:translate-y-3 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100">
+                {text}
+              </p>
+              <strong className="mt-5 inline-flex items-center gap-2 text-[13px] font-semibold text-white">
+                {action}
+                <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
+              </strong>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function AppStack({ apps }: { apps: ResourceSummary[] }) {
+  return (
+    <section className="mx-auto w-[min(1180px,calc(100%-48px))] py-20 md:py-32 max-md:w-[calc(100%-28px)]">
+      <SectionHeading
+        title="员工都在用的应用"
+        description="顶部卡片会随着滚动堆叠，像翻阅一份热榜清单"
+        href="/apps?sortBy=score"
+      />
+      <div className="mt-12">
+        {apps.slice(0, 4).map((resource, index) => (
+          <StackCard key={resource.id} rank={index + 1} resource={resource} />
+        ))}
+        <StackCta />
+      </div>
+    </section>
+  );
+}
+
+function StackCard({ rank, resource }: { rank: number; resource: ResourceSummary }) {
+  return (
+    <Link
+      to={resource.href}
+      className="stack-card group relative sticky top-[84px] z-10 -mt-12 block min-h-[210px] rounded-3xl border border-zinc-900/10 bg-white p-6 shadow-[0_24px_60px_-28px_rgba(28,28,30,0.28)] transition-shadow duration-500 hover:shadow-[0_28px_70px_-26px_rgba(28,28,30,0.38)] first:mt-0 md:min-h-[240px] md:p-7"
+    >
+      <span className="absolute -top-5 left-8 z-10 grid size-10 place-items-center rounded-full bg-zinc-950 text-sm font-bold tracking-tight text-white">
+        {String(rank).padStart(2, "0")}
+      </span>
+      <div className="flex h-full min-h-[162px] items-center gap-5 max-md:min-h-0 max-md:flex-col max-md:items-start max-md:justify-center">
+        <Avatar className="size-12 shrink-0 rounded-2xl border border-zinc-900/10 bg-gradient-to-br from-indigo-50 to-violet-50">
+          <AvatarImage src={resource.iconUrl ?? undefined} alt="" />
+          <AvatarFallback className="rounded-2xl bg-transparent text-sm font-extrabold text-indigo-700">{initials(resource.name)}</AvatarFallback>
+        </Avatar>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2">
+            <strong className="truncate text-[16px] text-zinc-950">{resource.name}</strong>
+            <ResourceBadge type={resource.type} />
+          </div>
+          <p className="mt-1.5 line-clamp-2 max-w-2xl text-sm leading-relaxed text-zinc-500">{resource.description}</p>
+        </div>
+        <div className="flex shrink-0 flex-col items-end gap-1.5 max-md:w-full max-md:flex-row max-md:items-center max-md:justify-between">
+          <div className="flex items-center gap-3 text-xs text-zinc-500">
+            <span className="inline-flex items-center gap-1">
+              <Star size={13} />
+              {formatCompactNumber(resource.stars)}
+            </span>
+            <span>{formatCompactNumber(resource.downloads)} 次使用</span>
+          </div>
+          <span className="text-xs text-zinc-400">{resource.owner.displayName} 推荐</span>
+        </div>
+        <ArrowUpRight size={19} className="shrink-0 text-zinc-400 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-zinc-950" />
+      </div>
+    </Link>
+  );
+}
+
+function StackCta() {
+  return (
+    <Link
+      to="/apps?sortBy=score"
+      className="stack-card group relative sticky top-[84px] z-10 -mt-12 block min-h-[210px] rounded-3xl bg-zinc-950 p-8 text-white md:min-h-[240px] md:p-10"
+    >
+      <span className="absolute -top-5 left-8 z-10 grid size-10 place-items-center rounded-full bg-white text-sm font-bold tracking-tight text-zinc-950">
+        <ArrowUpRight size={17} />
+      </span>
+      <div className="flex h-full min-h-[146px] items-center justify-between gap-6 max-md:min-h-0 max-md:flex-col max-md:items-start max-md:justify-center">
+        <div>
+          <h3 className="text-2xl font-semibold tracking-[-0.03em]">还没找到合适的？</h3>
+          <p className="mt-2 text-sm text-zinc-400">浏览全部应用，或到部门实践中心看看同事们的真实推荐。</p>
+        </div>
+        <Button
+          asChild
+          variant="secondary"
+          className="shrink-0 rounded-full bg-white px-6 text-zinc-950 hover:bg-zinc-100"
+        >
+          <span className="inline-flex items-center gap-1.5">
+            浏览全部应用
+            <ArrowRight size={15} />
+          </span>
+        </Button>
+      </div>
+    </Link>
+  );
+}
+
+function CtaBand({ updates }: { updates: HomePayload["updates"] }) {
+  return (
+    <section className="mx-auto w-[min(1180px,calc(100%-48px))] py-20 md:py-36 max-md:w-[calc(100%-28px)]">
+      <div className="relative overflow-hidden rounded-[32px] bg-zinc-950 px-8 py-16 text-white md:px-16 md:py-24 max-md:px-6">
+        <div className="absolute -top-40 right-0 size-[560px] rounded-full bg-indigo-500/20 blur-[150px]" />
+        <div className="absolute bottom-0 left-0 size-[420px] rounded-full bg-sky-500/10 blur-[140px]" />
+        <div className="relative grid items-center gap-12 md:grid-cols-[1.25fr_0.75fr]">
+          <div>
+            <h2 className="m-0 text-[clamp(2.1rem,4.2vw,3.4rem)] leading-[1.12] font-semibold tracking-[-0.045em]">
+              准备好分享你的 AI 实践了吗
+            </h2>
+            <p className="mt-5 max-w-md text-[15px] leading-relaxed text-zinc-400">
+              发布、维护并推荐你的 Skill 与插件，让团队共享经过验证的工作方式。
+            </p>
+            <div className="mt-9 flex flex-wrap gap-2.5 max-md:w-full max-md:flex-col">
+              <Button
+                asChild
+                variant="secondary"
+                className="h-11 rounded-full bg-white px-6 text-zinc-950 hover:bg-zinc-100"
+              >
+                <Link to="/dashboard/publish">
+                  发布资源
+                  <ArrowRight size={16} />
+                </Link>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="h-11 rounded-full border-white/25 text-white hover:bg-white/10 hover:text-white"
+              >
+                <Link to="/updates">查看更新日志</Link>
+              </Button>
+            </div>
+          </div>
+          {updates && (
+            <Link
+              to="/updates"
+              className="group rounded-2xl border border-white/15 bg-white/5 p-6 transition-colors duration-500 hover:border-white/25 hover:bg-white/10"
+            >
+              <span className="text-xs font-semibold tracking-[0.08em] text-zinc-500">
+                LATEST · {new Date(updates.updatedAt).toLocaleDateString("zh-CN")}
+              </span>
+              <h3 className="mt-2 text-xl font-semibold tracking-[-0.02em]">{updates.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-zinc-400">{updates.summary}</p>
+              <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-white">
+                查看更新
+                <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
+              </span>
+            </Link>
+          )}
+        </div>
+      </div>
+    </section>
+  );
 }

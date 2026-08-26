@@ -43,6 +43,7 @@ test("规范化默认排序与部门旧入口", async ({ page }) => {
 
 test("搜索、排序和评论双视图以 URL 为唯一状态", async ({ page }) => {
   await page.goto("/apps?sortBy=score");
+  await page.getByRole("button", { name: "展开搜索" }).click();
   await page.getByPlaceholder("搜索全部应用").fill("合同");
   await expect(page).toHaveURL(/q=%E5%90%88%E5%90%8C/);
   await expect(page.getByText("合同风险助手")).toBeVisible();
