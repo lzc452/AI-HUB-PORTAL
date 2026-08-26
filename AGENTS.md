@@ -18,3 +18,11 @@ Before making substantial visual changes, use the Product Design plugin's `get-c
 When implementing from a selected generated mock, treat that image as the source of truth for layout, component anatomy, density, spacing, color, typography, visible content, and hierarchy.
 
 Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts/prepare-sites-build.mjs`, and `tests/sites-worker.test.mjs` intact so the same local prototype can be handed to Sites. Before a Sites handoff, run `npm run build` and `npm run test:sites`; the build must leave `dist/client/index.html`, `dist/server/index.js`, and `dist/.openai/hosting.json`.
+
+## Tailwind / shadcn 样式约束
+
+- 页面和业务组件默认使用 Tailwind CSS utilities；通用控件优先组合 `src/components/ui` 中的 shadcn/ui primitives。
+- 只有复杂、动态或第三方库要求的样式才允许新增自定义 className；禁止恢复页面级 BEM class、`components.css` 或 `pages.css`。
+- 资源类型、状态等动态视觉必须通过静态类型映射或 CVA 实现，不能拼接 Tailwind class 字符串。
+- JSX `style` 仅允许 `ResourceCodeViewer` 对接 `react-arborist`/`react-syntax-highlighter` 的 API；其他布局使用 utilities。
+- 全局 CSS 仅保留 `src/styles/index.css`，用于 Tailwind 导入、主题 token、字体、基础元素、focus 与 reduced-motion。

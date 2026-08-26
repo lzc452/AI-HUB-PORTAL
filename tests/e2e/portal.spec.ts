@@ -85,15 +85,15 @@ test("评论详情、收藏和完整发布步骤可交互", async ({ page }) => 
 test("四类资源列表视图切换在刷新后保持", async ({ page }) => {
   for (const route of ["/apps?sortBy=score", "/skills", "/plugins", "/mcp"]) {
     await page.goto(route);
-    const gridButton = page.getByRole("button", { name: "卡片显示" });
-    const listButton = page.getByRole("button", { name: "列表显示" });
+    const gridButton = page.getByRole("radio", { name: "卡片显示" });
+    const listButton = page.getByRole("radio", { name: "列表显示" });
     await gridButton.click();
-    await expect(gridButton).toHaveAttribute("aria-pressed", "true");
-    await expect(page.locator(".resource-state-region .resource-grid")).toBeVisible();
+    await expect(gridButton).toHaveAttribute("aria-checked", "true");
+    await expect(page.locator('[data-testid="resource-state-region"] [data-view="grid"]')).toBeVisible();
     await page.reload();
-    await expect(page.getByRole("button", { name: "卡片显示" })).toHaveAttribute("aria-pressed", "true");
+    await expect(page.getByRole("radio", { name: "卡片显示" })).toHaveAttribute("aria-checked", "true");
     await listButton.click();
-    await expect(page.locator(".resource-state-region .resource-list")).toBeVisible();
+    await expect(page.locator('[data-testid="resource-state-region"] [data-view="list"]')).toBeVisible();
   }
 });
 
@@ -107,12 +107,12 @@ test("四类资源详情可浏览嵌套文件和复制代码", async ({ page }, 
     await page.goto(route);
     await page.getByRole("tab", { name: "代码" }).click();
     await page.getByText(fileName, { exact: true }).first().click();
-    await expect(page.locator(".resource-code-panel pre")).toContainText(snippet);
+    await expect(page.locator('[data-testid="resource-code-panel"] pre')).toContainText(snippet);
     await page.getByRole("button", { name: "复制" }).click();
     await expect(page.getByRole("button", { name: "已复制" })).toBeVisible();
     if (testInfo.project.name === "mobile") {
-      const tree = await page.locator(".resource-file-tree").boundingBox();
-      const panel = await page.locator(".resource-code-panel").boundingBox();
+      const tree = await page.locator('[data-testid="resource-file-tree"]').boundingBox();
+      const panel = await page.locator('[data-testid="resource-code-panel"]').boundingBox();
       expect(tree && panel && panel.y >= tree.y + tree.height - 1).toBeTruthy();
     }
   }

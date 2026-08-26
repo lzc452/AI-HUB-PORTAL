@@ -1,5 +1,6 @@
 import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
+import App from "@/App";
 import { PortalLayout } from "@/layouts";
 import { SsoGuard } from "@/router/guards";
 import { appsRoutes } from "@/router/apps";
@@ -14,13 +15,18 @@ const NotFoundPage = lazy(() => import("@/pages/system/NotFoundPage"));
 const RouteErrorPage = lazy(() => import("@/pages/system/RouteErrorPage"));
 
 export const router = createBrowserRouter([
-  { path: "/login", element: <LoginPage />, errorElement: <RouteErrorPage /> },
   {
-    element: <SsoGuard />,
-    errorElement: <RouteErrorPage />,
+    element: <App />,
     children: [
-      { element: <PortalLayout />, children: [{ index: true, element: <HomePage /> }, ...appsRoutes, ...skillsRoutes, ...sourceRoutes, ...docsRoutes, { path: "*", element: <NotFoundPage /> }] },
-      ...dashboardRoutes,
+      { path: "/login", element: <LoginPage />, errorElement: <RouteErrorPage /> },
+      {
+        element: <SsoGuard />,
+        errorElement: <RouteErrorPage />,
+        children: [
+          { element: <PortalLayout />, children: [{ index: true, element: <HomePage /> }, ...appsRoutes, ...skillsRoutes, ...sourceRoutes, ...docsRoutes, { path: "*", element: <NotFoundPage /> }] },
+          ...dashboardRoutes,
+        ],
+      },
     ],
   },
 ]);

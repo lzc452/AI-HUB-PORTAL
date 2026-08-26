@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
-export const cn = (...values: ClassValue[]) => clsx(values);
+export const cn = (...values: ClassValue[]) => twMerge(clsx(values));
 
 export function formatCompactNumber(value: number): string {
   return new Intl.NumberFormat("zh-CN", { notation: "compact", maximumFractionDigits: 1 }).format(value);

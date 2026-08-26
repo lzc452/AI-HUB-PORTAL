@@ -1,8 +1,24 @@
-import { Bell, ChevronDown, Menu, Plus, UserRound, X } from "lucide-react";
-import { useEffect } from "react";
+import { Bell, Menu, Plus, UserRound, X } from "lucide-react";
+import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import logoUrl from "@/assets/ai-hub-logo.png";
-import { useUiStore } from "@/store";
+import { Button } from "@/components/ui/button";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 const navItems = [
   { label: "应用", href: "/apps?sortBy=score", children: [{ label: "全部应用", href: "/apps?sortBy=score" }, { label: "应用猎手", href: "/apps-hunt" }, { label: "部门中心", href: "/department-zone" }] },
@@ -14,48 +30,56 @@ const navItems = [
 const mobileNavItems = navItems.reduce<Array<{ label: string; href: string }>>((items, group) => [...items, ...group.children], []);
 
 export function PortalHeader() {
-  const mobileMenuOpen = useUiStore((state) => state.mobileMenuOpen);
-  const setMobileMenuOpen = useUiStore((state) => state.setMobileMenuOpen);
-
-  useEffect(() => {
-    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [mobileMenuOpen]);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="portal-header">
-      <div className="portal-header__inner">
-        <Link className="portal-brand" to="/" aria-label="AI Hub Portal 首页">
-          <span className="portal-brand__mark"><img src={logoUrl} alt="" /></span>
+    <header className="sticky top-0 z-50 h-[61px] border-b border-black/5 bg-white/85 backdrop-blur-xl">
+      <div className="mx-auto flex h-full w-[min(1280px,calc(100%-48px))] items-center justify-between max-[767px]:w-[calc(100%-28px)]">
+        <Link className="inline-flex items-center gap-2.5 text-[17px] font-extrabold tracking-[-0.03em]" to="/" aria-label="AI Hub Portal 首页">
+          <span className="size-7 overflow-hidden rounded-lg bg-white"><img className="size-full object-cover" src={logoUrl} alt="" /></span>
           <span>AI Hub</span>
         </Link>
-        <nav className="portal-nav" aria-label="主导航">
-          {navItems.map((item) => (
-            <div className="portal-nav__group" key={item.label}>
-              <NavLink to={item.href}>{item.label}<ChevronDown size={13} /></NavLink>
-              <div className="portal-nav__dropdown">
-                {item.children.map((child) => <Link key={child.href} to={child.href}>{child.label}</Link>)}
-              </div>
-            </div>
-          ))}
-        </nav>
-        <div className="portal-header__actions">
-          <Link className="portal-button portal-button--primary portal-header__publish" to="/dashboard/publish"><Plus size={15} />发布</Link>
-          <button className="portal-icon-button" aria-label="通知"><Bell size={18} /></button>
-          <Link className="portal-icon-button" to="/dashboard" aria-label="个人中心"><UserRound size={18} /></Link>
-          <button className="portal-icon-button portal-menu-button" aria-label={mobileMenuOpen ? "关闭菜单" : "打开菜单"} aria-expanded={mobileMenuOpen} onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+
+        <NavigationMenu className="hidden min-[901px]:flex" viewport={false}>
+          <NavigationMenuList className="gap-3">
+            {navItems.map((item) => (
+              <NavigationMenuItem key={item.label}>
+                <NavigationMenuTrigger className="h-[38px] px-3 text-sm font-normal text-muted-foreground hover:text-foreground">
+                  {item.label}
+                </NavigationMenuTrigger>
+                <NavigationMenuContent className="w-44">
+                  <div className="grid gap-1">
+                    {item.children.map((child) => <NavigationMenuLink key={child.href} asChild><NavLink to={child.href} className="rounded-md px-2.5 py-2 text-sm">{child.label}</NavLink></NavigationMenuLink>)}
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            ))}
+          </NavigationMenuList>
+        </NavigationMenu>
+
+        <div className="flex items-center gap-3 max-[767px]:gap-0.5">
+          <Button asChild className="h-[38px] rounded-full px-4 text-sm font-semibold max-[900px]:hidden"><Link to="/dashboard/publish"><Plus size={15} />发布</Link></Button>
+          <Button variant="ghost" size="icon" className="size-9 rounded-full text-muted-foreground hover:text-foreground" aria-label="通知"><Bell size={18} /></Button>
+          <Button asChild variant="ghost" size="icon" className="size-9 rounded-full text-muted-foreground hover:text-foreground" aria-label="个人中心"><Link to="/dashboard"><UserRound size={18} /></Link></Button>
+          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="hidden size-9 rounded-full text-muted-foreground hover:text-foreground max-[900px]:inline-flex" aria-label={mobileMenuOpen ? "关闭菜单" : "打开菜单"}>
+                {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-full max-w-sm p-6">
+              <SheetHeader className="text-left">
+                <SheetTitle>AI Hub</SheetTitle>
+                <SheetDescription className="sr-only">移动端主导航</SheetDescription>
+              </SheetHeader>
+              <nav className="mt-8 flex flex-col gap-1" aria-label="移动端导航">
+                {mobileNavItems.map((item) => <Link className="flex min-h-12 items-center border-b border-border text-base font-semibold" key={item.href} to={item.href} onClick={() => setMobileMenuOpen(false)}>{item.label}</Link>)}
+                <Link className="mt-3 inline-flex min-h-11 items-center justify-center rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground" to="/dashboard/publish" onClick={() => setMobileMenuOpen(false)}><Plus size={15} />发布资源</Link>
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
-      {mobileMenuOpen && (
-        <nav className="portal-mobile-nav" aria-label="移动端导航">
-          {mobileNavItems.map((item) => (
-            <Link key={item.href} to={item.href} onClick={() => setMobileMenuOpen(false)}>{item.label}</Link>
-          ))}
-          <Link to="/dashboard/publish" onClick={() => setMobileMenuOpen(false)}>发布资源</Link>
-        </nav>
-      )}
     </header>
   );
 }
