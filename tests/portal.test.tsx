@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, renderHook, screen, waitFor } from "@testing-library/react";
 import { http, HttpResponse } from "msw";
+import { StrictMode } from "react";
 import { MemoryRouter, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 import { appKeys, commonKeys, dashboardKeys, useFavoriteMutation, usePublishMutation } from "@/hooks";
@@ -8,6 +9,8 @@ import {
   ApiError,
   apiFetch,
   buildLoginEnvelope,
+  completeDingTalkLogin,
+  createDingTalkCallbackPath,
   createPublishDraft,
   createApplicationUpload,
   createResourceComment,
@@ -41,6 +44,7 @@ import {
 } from "@/apis";
 import { publishStatusLabels, resourceCategories, resourceLabels, resourceTone, statusTone } from "@/apis/static-data";
 import { MarkdownContent } from "@/components/common";
+import LoginPage from "@/pages/system/LoginPage";
 import { AppsDefaultRedirect, DepartmentRedirect } from "@/router/redirects";
 import { dashboardCommentsQuerySchema, publishDraftSchema } from "@/schemas";
 import { useDashboardStore } from "@/store";
@@ -170,7 +174,10 @@ describe("Portal 基础约束", () => {
       code: "DRAFT_VALIDATION_FAILED",
       detail: "草稿未通过提交校验",
       traceId: "trace-1",
-      issues: [{ code: "DELIVERY_REQUIRED", message: "至少配置一个可用交付渠道", path: ["deliveries"] }],
+      issues: [
+        { code: "DELIVERY_REQUIRED", message: "至少配置一个可用交付渠道", path: "deliveries.0.entryUrl" },
+        { code: "LEGACY_FAQ_REQUIRED", message: "请填写 FAQ", path: ["faq", "0", "answer"] },
+      ],
     }, { status: 400 })));
 
     const error = await apiFetch("http://localhost/internal/test", { method: "POST" }).catch((value: unknown) => value);
@@ -180,7 +187,10 @@ describe("Portal 基础约束", () => {
       code: "DRAFT_VALIDATION_FAILED",
       message: "草稿未通过提交校验",
       traceId: "trace-1",
-      issues: [{ code: "DELIVERY_REQUIRED", message: "至少配置一个可用交付渠道", path: ["deliveries"] }],
+      issues: [
+        { code: "DELIVERY_REQUIRED", message: "至少配置一个可用交付渠道", path: ["deliveries", "0", "entryUrl"] },
+        { code: "LEGACY_FAQ_REQUIRED", message: "请填写 FAQ", path: ["faq", "0", "answer"] },
+      ],
     });
   });
 
@@ -229,10 +239,53 @@ describe("Portal 基础约束", () => {
 
   it("DingTalk 登录仅通过服务端返回的 redirectUrl 跳转", async () => {
     server.use(http.get("/internal/identity/login/dingtalk/start", ({ request }) => {
-      expect(new URL(request.url).searchParams.get("returnTo")).toBe("/dashboard");
+      expect(new URL(request.url).searchParams.get("returnTo")).toBe("/login?dingtalk=complete&returnTo=%2Fdashboard");
       return HttpResponse.json({ redirectUrl: "https://login.example.test/dingtalk" });
     }));
-    await expect(startDingTalkLogin("/dashboard")).resolves.toEqual({ redirectUrl: "https://login.example.test/dingtalk" });
+    await expect(startDingTalkLogin(createDingTalkCallbackPath("/dashboard"))).resolves.toEqual({ redirectUrl: "https://login.example.test/dingtalk" });
+  });
+
+  it("DingTalk 回调使用 HttpOnly handoff cookie 完成会话", async () => {
+    server.use(http.post("/internal/identity/login/dingtalk/complete", ({ request }) => {
+      expect(request.credentials).toBe("same-origin");
+      return HttpResponse.json({
+        actor: { employeeId: "E1001", displayName: "林知行", roleCodes: ["employee"], departmentIds: ["dept-1"], primaryDepartmentId: "dept-1", sessionId: "session-1" },
+        session: { sessionId: "session-1", employeeId: "E1001", deviceLabel: "browser", expiresAt: "2026-08-29T00:00:00.000Z", revokedAt: null },
+      }, { status: 201 });
+    }));
+
+    await expect(completeDingTalkLogin()).resolves.toMatchObject({ actor: { employeeId: "E1001" }, session: { sessionId: "session-1" } });
+  });
+
+  it("DingTalk 回调只完成一次会话并跳转 returnTo", async () => {
+    let completeCalls = 0;
+    server.use(
+      http.get("/internal/identity/login/options", () => HttpResponse.json({ methods: ["password", "dingtalk_sso"] })),
+      http.post("/internal/identity/login/dingtalk/complete", () => {
+        completeCalls += 1;
+        return HttpResponse.json({
+          actor: { employeeId: "E1001", displayName: "林知行", roleCodes: ["employee"], departmentIds: ["dept-1"], primaryDepartmentId: "dept-1", sessionId: "session-1" },
+          session: { sessionId: "session-1", employeeId: "E1001", deviceLabel: "browser", expiresAt: "2026-08-29T00:00:00.000Z", revokedAt: null },
+        }, { status: 201 });
+      }),
+    );
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+
+    render(
+      <StrictMode>
+        <QueryClientProvider client={client}>
+          <MemoryRouter initialEntries={["/login?dingtalk=complete&returnTo=%2Fdashboard"]}>
+            <Routes>
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/dashboard" element={<LocationProbe />} />
+            </Routes>
+          </MemoryRouter>
+        </QueryClientProvider>
+      </StrictMode>,
+    );
+
+    await waitFor(() => expect(screen.getByText("/dashboard")).toBeInTheDocument());
+    expect(completeCalls).toBe(1);
   });
 
   it("应用创建发送完整 applicationDraft，非应用仍沿用 metadata", async () => {
@@ -353,7 +406,7 @@ describe("Portal 基础约束", () => {
 
     expect(requestLog).toEqual([
       { method: "POST", path: "/internal/portal/dashboard/publish/app/app-resume-1/uploads", body: { kind: "screenshot", fileName: "screen.png", mimeType: "image/png", sizeBytes: 3 } },
-      { method: "PUT", path: "/internal/portal/dashboard/publish/app/app-resume-1/uploads/upload-1/content", bytes: expect.any(Number), contentType: "image/png" },
+      { method: "PUT", path: "/internal/portal/dashboard/publish/app/app-resume-1/uploads/upload-1/content", bytes: expect.any(Number), contentType: "application/octet-stream" },
       { method: "POST", path: "/internal/portal/dashboard/publish/app/app-resume-1/uploads/upload-1/complete", body: {} },
     ]);
     expect(requestLog[1]?.bytes).toBeGreaterThan(0);

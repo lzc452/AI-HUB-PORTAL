@@ -49,3 +49,13 @@ export async function loginWithPassword(employeeId: string, password: string): P
 export async function startDingTalkLogin(returnTo: string): Promise<{ redirectUrl: string }> {
   return apiFetch<{ redirectUrl: string }>(`/internal/identity/login/dingtalk/start?returnTo=${encodeURIComponent(returnTo)}`);
 }
+
+/** DingTalk OAuth 回调必须先回到 Portal，才能消费同源 HttpOnly handoff cookie。 */
+export function createDingTalkCallbackPath(returnTo: string): string {
+  return `/login?${new URLSearchParams({ dingtalk: "complete", returnTo }).toString()}`;
+}
+
+/** OAuth 回调已写入 HttpOnly handoff cookie；用它换取正式 Portal 会话。 */
+export async function completeDingTalkLogin(): Promise<LoginResponse> {
+  return apiFetch<LoginResponse>("/internal/identity/login/dingtalk/complete", { method: "POST" });
+}

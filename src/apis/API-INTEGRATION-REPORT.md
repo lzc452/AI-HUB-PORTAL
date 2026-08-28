@@ -3,7 +3,7 @@
 | 项目 | 内容 |
 | --- | --- |
 | 更新日期 | `2026-08-28` |
-| 接口事实来源 | `AI-HUB-PLATFORM/docs/handoff/ai-hub-portal-api.md`（v1.1，后端 `packages/server/src/portal/*`、`identity.controller.ts` 已对照核实） |
+| 接口事实来源 | `AI-HUB-PLATFORM/docs/handoff/ai-hub-portal-api.md`（v1.2，后端 `packages/server/src/portal/*`、`identity.controller.ts` 已对照核实） |
 | 前端运行模式 | `VITE_PORTAL_USE_FIXTURES` 默认关闭（`useFixtures = import.meta.env.DEV && VITE_PORTAL_USE_FIXTURES === "true"`）；默认直连同域 `/internal/portal/*`（dev 经 Vite 代理到 `http://127.0.0.1:3000`） |
 | 认证 | `credentials: "same-origin"` + HttpOnly Cookie（`aihub_eid`/`aihub_sid`）；写请求带 `x-csrf-token`/`x-request-nonce`/`x-request-timestamp`；不写 localStorage |
 
@@ -28,7 +28,7 @@
 | `GET /internal/portal/apps-hunt` | `getAppsHunt`（apps.ts） | ✅ 已适配（消费服务端按员工计算的 `hasVoted`） |
 | `GET /internal/portal/docs/:pageKey` | `getContentPage`（docs.ts） | ✅ 已适配（消费服务端 `summary` 并映射 `ContentPageDto`） |
 | `GET /internal/portal/dashboard/publish/app/:applicationId` | `getPublishAppDraft`（dashboard.ts） | ✅ 已适配（回读 `PortalResourceItem + ApplicationDraft`，用于续编） |
-| `POST/PUT/complete/GET /internal/portal/dashboard/publish/app/:applicationId/uploads/*` | `createApplicationUpload` / `uploadApplicationContent` / `completeApplicationUpload` / `getApplicationUpload`（dashboard.ts） | ✅ 已适配（raw body、服务端扫描状态和 `assetId`） |
+| `POST/PUT/complete/GET /internal/portal/dashboard/publish/app/:applicationId/uploads/*` | `createApplicationUpload` / `uploadApplicationContent` / `completeApplicationUpload` / `getApplicationUpload`（dashboard.ts） | ✅ 已适配（canonical `application/octet-stream` raw body；服务端兼容浏览器 MIME、扫描状态和 `assetId`） |
 
 ### 写入
 
@@ -50,11 +50,12 @@
 | `GET /internal/identity/login/options` | `getLoginOptions`（auth.ts） | ✅ 已适配（按服务端 methods 条件渲染） |
 | `GET /internal/identity/login/challenge` | `getLoginChallenge`（auth.ts） | ✅ 已适配（仅用于密码登录加密） |
 | `POST /internal/identity/login/password` | `loginWithPassword`（auth.ts） | ✅ 已适配（RSA-OAEP-256/AES-GCM 信封，不发送明文密码） |
-| `GET /internal/identity/login/dingtalk/start` | `startDingTalkLogin`（auth.ts） | ✅ 条件适配（options 未声明时不展示） |
+| `GET /internal/identity/login/dingtalk/start` | `startDingTalkLogin`（auth.ts） | ✅ 条件适配（options 未声明时不展示；回调固定回 Portal `/login?dingtalk=complete`） |
+| `POST /internal/identity/login/dingtalk/complete` | `completeDingTalkLogin`（auth.ts） | ✅ 已适配（消费 HttpOnly handoff cookie 后建立正式会话并跳转 `returnTo`） |
 
 ### 错误处理
 
-- `apiFetch` 解析 Problem Details → `ApiError`（status/code/message/traceId/issues），`DRAFT_VALIDATION_FAILED` 的字段级 `issues` 完整保留。
+- `apiFetch` 解析 Problem Details → `ApiError`（status/code/message/traceId/issues）；后端 canonical `issues[].path` dotted string 规范化为页面使用的 `string[]`，同时兼容历史数组路径。
 - `publishErrorGuidance`（dashboard.ts）按错误码给「返回编辑 / 刷新重试 / 仅提示」指引；发布页已展示 message + issues。
 - 任意接口 401 → 派发 `portal:unauthorized` → `handleUnauthorized`（session.ts）清空 React Query 缓存并跳转登录（`main.tsx` 监听）。
 
@@ -99,7 +100,7 @@
 
 ## 4. 真实后端联调阻塞项
 
-1. **真实后端浏览器冒烟仍受环境阻塞（最大）**：前端已消费登录、草稿回读与四段式上传契约，但当前 `127.0.0.1:3000` 不可用，无法在本地会话/测试数据库上确认 Cookie、扫描和 `in_review` 状态。
+1. **真实后端浏览器端到端验收仍未完成（最大）**：本轮已在 HTTP/组件测试覆盖钉钉 handoff、草稿回读、四段式上传和字段级错误，但尚未使用可重置数据库与真实 DingTalk OAuth 凭据跑“登录 → 创建 → 上传 → 回读 → 提交”浏览器链路。
 2. 应用写入没有清理接口；前端创建成功后保留 `resourceId`，提交失败回编辑使用 `PUT` 更新同一草稿，避免重复创建。测试/验收环境应使用可重置数据库。
 3. 资产扫描失败、魔数/MIME/大小校验失败或会话过期时，前端展示服务端 `errorCode` 并要求重新创建上传会话，不重试失败会话。
 4. 审核/下架等生命周期接口已按契约实现，但 Portal 一期无审核队列查询和可操作资源来源，继续依赖外部控制台。
@@ -107,8 +108,8 @@
 
 ### 4.1 后端支持契约门禁（已满足，前端不越界实现）
 
-- handoff v1.1 已提供同源 Portal 资产上传四段式接口；前端只发送初始化 JSON、raw bytes 和完成请求，不暴露底层存储键，也不把文件名当作 `assetId`。
-- handoff v1.1 已提供应用草稿读取接口；前端以 `resourceId/applicationId` 作为稳定身份，刷新时回读完整草稿。
+- handoff v1.2 已提供同源 Portal 资产上传四段式接口；前端统一发送 `application/octet-stream` raw bytes，服务端在上传内容路由兼容真实文件 MIME；前端不暴露底层存储键，也不把文件名当作 `assetId`。
+- handoff v1.2 已提供应用草稿读取接口；前端以 `resourceId/applicationId` 作为稳定身份，刷新时回读完整草稿。
 - 本仓库不调用 `/internal/applications/*`，不修改后端、数据库 migration、生产数据或凭据。若后端契约再次变更，应先更新 handoff 再调整适配层。
 
 ## 5. 验收状态
@@ -116,9 +117,9 @@
 - [x] `npm run typecheck` / `npm run lint` / `npm test` / `npm run build`
 - [x] fixtures 默认关闭（测试锁定 `useFixtures === false`）
 - [x] `PortalResourceItem`/`PortalCommentItem`/`ContentPage` 等 DTO → 页面模型映射（测试锁定）
-- [x] `ApiError` 字段级 issues 保留与展示
+- [x] `ApiError` 字段级 issues 保留与展示（dotted path → UI `string[]`，兼容历史数组）
 - [x] 应用请求契约：app 发完整 `applicationDraft`、非 app 发 `metadata`（测试锁定）
-- [x] 登录 options/challenge/password/DingTalk 条件入口；加密信封测试确认不含明文密码
+- [x] 登录 options/challenge/password/DingTalk 条件入口与 handoff complete 状态机；加密信封测试确认不含明文密码
 - [x] App 发布表单完整草稿校验、字段级 issues 映射、创建失败后复用同一 `resourceId`
 - [x] App `web_app` 资产初始化 → raw 上传 → complete 扫描、`assetId` 回填及草稿回读契约测试
 - [x] 缺失版本/安全报告时显示未知/待校验，不再展示伪造“扫描通过”

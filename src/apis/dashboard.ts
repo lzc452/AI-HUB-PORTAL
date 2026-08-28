@@ -103,10 +103,10 @@ export async function createApplicationUpload(resourceId: string, input: CreateA
   return apiFetch<PortalApplicationUpload>(`/internal/portal/dashboard/publish/app/${encodeURIComponent(resourceId)}/uploads`, { method: "POST", body: JSON.stringify(input) });
 }
 
-/** 上传原始文件内容；必须使用文件 MIME，不让 apiFetch 按 JSON 编码。 */
+/** 上传原始文件内容；统一使用 binary MIME，避免浏览器 MIME 绕过服务端 raw parser。 */
 export async function uploadApplicationContent(resourceId: string, uploadId: string, content: Blob): Promise<PortalApplicationUpload> {
   if (useFixtures) throw new ApiError(503, "PORTAL_ASSET_SERVICE_UNAVAILABLE", "fixture 模式不提供真实资产上传");
-  return apiFetch<PortalApplicationUpload>(`/internal/portal/dashboard/publish/app/${encodeURIComponent(resourceId)}/uploads/${encodeURIComponent(uploadId)}/content`, { method: "PUT", headers: { "content-type": content.type || "application/octet-stream" }, body: content });
+  return apiFetch<PortalApplicationUpload>(`/internal/portal/dashboard/publish/app/${encodeURIComponent(resourceId)}/uploads/${encodeURIComponent(uploadId)}/content`, { method: "PUT", headers: { "content-type": "application/octet-stream" }, body: content });
 }
 
 /** 完成上传并接收服务端扫描状态与 assetId。 */

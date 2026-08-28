@@ -145,5 +145,10 @@ export interface ApiProblem {
   message?: string;
   detail?: string;
   traceId?: string;
-  issues?: ApiIssue[];
+  issues?: Array<{
+    code: string;
+    message: string;
+    /** 后端 canonical 形式为点路径；数组仅为旧服务兼容。 */
+    path?: string | string[];
+  }>;
 }

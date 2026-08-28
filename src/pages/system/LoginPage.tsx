@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowRight, LoaderCircle, ShieldCheck } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import logoUrl from "@/assets/ai-hub-logo.png";
-import { ApiError, startDingTalkLogin } from "@/apis";
+import { ApiError, completeDingTalkLogin, createDingTalkCallbackPath, startDingTalkLogin } from "@/apis";
 import { copy } from "@/apis/static-data";
 import { useLoginMutation, useLoginOptionsQuery } from "@/hooks";
 import { isSafeReturnTo } from "@/utils";
@@ -20,9 +20,37 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
   const [dingTalkPending, setDingTalkPending] = useState(false);
+  const dingTalkCompletionRef = useRef<Promise<void> | null>(null);
   const candidate = params.get("returnTo") ?? "/";
   const returnTo = isSafeReturnTo(candidate) ? candidate : "/";
+  const isDingTalkCallback = params.get("dingtalk") === "complete";
   const methods = options.data?.methods ?? [];
+
+  useEffect(() => {
+    if (!isDingTalkCallback) {
+      dingTalkCompletionRef.current = null;
+      return;
+    }
+    let active = true;
+    setFormError(null);
+    setDingTalkPending(true);
+    const completion = dingTalkCompletionRef.current ?? completeDingTalkLogin().then(() => undefined);
+    dingTalkCompletionRef.current = completion;
+    void completion.then(
+      () => {
+        if (!active) return;
+        navigate(returnTo, { replace: true });
+      },
+      () => {
+        if (!active) return;
+        setFormError(copy.login.dingTalkFailed);
+        setDingTalkPending(false);
+      },
+    );
+    return () => {
+      active = false;
+    };
+  }, [isDingTalkCallback, navigate, returnTo]);
 
   const submit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -48,7 +76,7 @@ export default function LoginPage() {
     setFormError(null);
     setDingTalkPending(true);
     try {
-      const result = await startDingTalkLogin(returnTo);
+      const result = await startDingTalkLogin(createDingTalkCallbackPath(returnTo));
       window.location.assign(result.redirectUrl);
     } catch {
       setFormError(copy.login.dingTalkFailed);

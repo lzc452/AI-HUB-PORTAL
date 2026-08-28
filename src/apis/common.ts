@@ -27,6 +27,38 @@ function readCookie(name: string): string | undefined {
     .join("=");
 }
 
+function normalizeIssuePath(path: string | string[] | undefined): string[] | undefined {
+  const segments = typeof path === "string"
+    ? path.split(".")
+    : Array.isArray(path)
+      ? path
+      : [];
+  const normalized = segments.filter(
+    (segment): segment is string => typeof segment === "string" && segment.length > 0,
+  );
+  return normalized.length > 0 ? normalized : undefined;
+}
+
+function normalizeApiIssues(issues: ApiProblem["issues"]): ApiIssue[] {
+  if (!Array.isArray(issues)) return [];
+  return issues.flatMap((issue) => {
+    if (
+      issue === null ||
+      typeof issue !== "object" ||
+      typeof issue.code !== "string" ||
+      typeof issue.message !== "string"
+    ) {
+      return [];
+    }
+    const path = normalizeIssuePath(issue.path);
+    return [{
+      code: issue.code,
+      message: issue.message,
+      ...(path === undefined ? {} : { path }),
+    }];
+  });
+}
+
 export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
   const method = (init.method ?? "GET").toUpperCase();
   const headers = new Headers(init.headers);
@@ -43,7 +75,7 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise
   if (!response.ok) {
     const problem = (await response.json().catch(() => ({}))) as ApiProblem;
     if (response.status === 401) window.dispatchEvent(new CustomEvent(UNAUTHORIZED_EVENT));
-    throw new ApiError(response.status, problem.code ?? "PORTAL_REQUEST_FAILED", problem.detail ?? problem.message ?? fallbacks.requestFailed, problem.traceId, problem.issues ?? []);
+    throw new ApiError(response.status, problem.code ?? "PORTAL_REQUEST_FAILED", problem.detail ?? problem.message ?? fallbacks.requestFailed, problem.traceId, normalizeApiIssues(problem.issues));
   }
   if (response.status === 204) return undefined as T;
   return response.json() as Promise<T>;
