@@ -16,9 +16,37 @@ export interface SkillPackageSummary {
   slug: string;
   name: string;
   description: string;
+  owner?: { employeeId: string; displayName: string };
   skillCount: number;
-  skills: SkillSummary[];
-  updatedAt: string;
+  skills?: SkillPackageItem[];
+  updatedAt?: string;
+}
+
+export interface SkillPackageItem {
+  id: string;
+  slug: string;
+  name: string;
+  description: string;
+  href: string;
+  owner?: { employeeId: string; displayName: string };
+}
+
+export interface SkillPackageDetail extends SkillPackageSummary {
+  skills: SkillPackageItem[];
+}
+
+export interface SkillPackageDto {
+  packageId: string;
+  packageSlug: string;
+  name: string;
+  summary: string;
+  ownerEmployeeId: string;
+  ownerName: string;
+  skillCount: number;
+}
+
+export interface SkillPackageDetailDto extends Omit<SkillPackageDto, "skillCount"> {
+  skills: Array<{ skillId: string; skillSlug: string; name: string; summary: string; ownerEmployeeId: string; ownerName: string }>;
 }
 
 export type SkillPage = PageResult<SkillSummary>;

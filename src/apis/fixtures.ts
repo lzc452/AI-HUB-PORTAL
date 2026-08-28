@@ -181,7 +181,7 @@ export function fixtureList<T extends ResourceSummary>(items: T[], query: ListQu
   let filtered = keyword ? items.filter((item) => `${item.name} ${item.description} ${item.tags.join(" ")}`.toLowerCase().includes(keyword)) : [...items];
   if (query.category) filtered = filtered.filter((item) => item.tags.includes(query.category!));
   const sortBy = query.sortBy ?? "score";
-  filtered.sort((a, b) => sortBy === "updatedAt" ? b.updatedAt.localeCompare(a.updatedAt) : sortBy === "downloads" ? b.downloads - a.downloads : b.score - a.score);
+  filtered.sort((a, b) => sortBy === "updatedAt" ? b.updatedAt.localeCompare(a.updatedAt) : sortBy === "downloads" ? (b.downloads ?? 0) - (a.downloads ?? 0) : (b.score ?? 0) - (a.score ?? 0));
   const page = query.page ?? 1;
   const pageSize = query.pageSize ?? 20;
   return { items: filtered.slice((page - 1) * pageSize, page * pageSize), page, pageSize, total: filtered.length };
@@ -253,7 +253,7 @@ export function fixtureHunt(): AppHuntPayload {
 }
 
 export function fixtureDashboard(): DashboardOverview {
-  return { counts: { app: 3, skill: 6, plugin: 2, mcp: 1 }, pendingReviewCount: 2, publishedCount: 10, recent: allResources().slice(0, 6).map((item, index) => ({ id: item.id, name: item.name, type: item.type, status: index === 1 ? "pending_review" : item.status, href: item.href, updatedAt: item.updatedAt })) };
+  return { counts: { app: 3, skill: 6, plugin: 2, mcp: 1 }, favoriteCount: 8, recent: allResources().slice(0, 6).map((item, index) => ({ id: item.id, name: item.name, type: item.type, status: index === 1 ? "in_review" : item.status, href: item.href, updatedAt: item.updatedAt })) };
 }
 
 const dashboardComments: DashboardCommentItem[] = [

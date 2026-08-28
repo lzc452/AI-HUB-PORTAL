@@ -9,6 +9,7 @@ import markdown from "react-syntax-highlighter/dist/esm/languages/prism/markdown
 import tsx from "react-syntax-highlighter/dist/esm/languages/prism/tsx";
 import typescript from "react-syntax-highlighter/dist/esm/languages/prism/typescript";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { copy, interpolate } from "@/apis/static-data";
 import type { ResourceFileNode } from "@/types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/utils";
@@ -40,7 +41,7 @@ export function ResourceCodeViewer({ files }: { files: ResourceFileNode[] }) {
   const initialFile = useMemo(() => findFirstFile(files), [files]);
   const [selected, setSelected] = useState<ResourceFileNode | null>(initialFile);
   const [copied, setCopied] = useState(false);
-  const copy = async () => {
+  const copyContent = async () => {
     if (!selected?.content) return;
     try {
       await navigator.clipboard.writeText(selected.content);
@@ -58,14 +59,14 @@ export function ResourceCodeViewer({ files }: { files: ResourceFileNode[] }) {
     window.setTimeout(() => setCopied(false), 1800);
   };
   return <div data-testid="resource-code-viewer" className="grid grid-cols-[250px_minmax(0,1fr)] overflow-hidden rounded-xl border border-zinc-700 bg-zinc-900 text-zinc-200 max-md:grid-cols-1">
-    <aside className="min-w-0 border-r border-zinc-700 bg-zinc-800 max-md:border-r-0 max-md:border-b" aria-label="资源文件" data-testid="resource-file-tree">
-      <header className="flex h-12 items-center justify-between gap-3 border-b border-zinc-700 px-3 text-xs"><strong>文件</strong><span className="text-[10px] text-zinc-400">{files.length} 个根节点</span></header>
+    <aside className="min-w-0 border-r border-zinc-700 bg-zinc-800 max-md:border-r-0 max-md:border-b" aria-label={copy.codeViewer.resourceFiles} data-testid="resource-file-tree">
+      <header className="flex h-12 items-center justify-between gap-3 border-b border-zinc-700 px-3 text-xs"><strong>{copy.codeViewer.files}</strong><span className="text-[10px] text-zinc-400">{interpolate(copy.codeViewer.rootNodes, { count: files.length })}</span></header>
       <div className="max-md:!h-[230px] max-md:max-h-[230px] max-md:overflow-hidden"><Tree<ResourceFileNode> data={files} width="100%" height={430} rowHeight={34} indent={18} openByDefault disableDrag disableDrop disableEdit disableMultiSelection onActivate={(node) => { if (node.data.type === "file") setSelected(node.data); }}>
         {(props) => <FileTreeNode {...props} selectedPath={selected?.path ?? null} />}
       </Tree></div>
     </aside>
     <section className="min-w-0" data-testid="resource-code-panel">
-      {selected ? <><header className="flex h-12 items-center justify-between gap-3 border-b border-zinc-700 px-3 text-xs"><div className="flex min-w-0 items-center gap-2"><FileCode2 size={15} /><strong className="truncate">{selected.path}</strong><span className="text-[10px] text-zinc-400">{selected.size ? `${selected.size} B` : selected.language}</span></div><Button variant="outline" size="sm" className="h-8 shrink-0 border-zinc-600 bg-zinc-800 px-2.5 text-[11px] text-zinc-200 hover:bg-zinc-700 hover:text-white" onClick={copy}>{copied ? <Check size={14} /> : <Clipboard size={14} />}{copied ? "已复制" : "复制"}</Button></header><div className="max-h-[430px] max-w-full overflow-auto max-md:max-h-[390px]"><SyntaxHighlighter language={selected.language ?? "text"} style={oneDark} showLineNumbers wrapLongLines={false} customStyle={{ margin: 0, minHeight: "430px", borderRadius: 0, background: "#17181c", fontSize: "12px", lineHeight: "1.7" }} codeTagProps={{ style: { fontFamily: "ui-monospace, SFMono-Regular, Consolas, monospace" } }}>{selected.content ?? ""}</SyntaxHighlighter></div></> : <div className="grid min-h-[430px] place-items-center text-xs text-zinc-400">请选择一个文件查看内容</div>}
+      {selected ? <><header className="flex h-12 items-center justify-between gap-3 border-b border-zinc-700 px-3 text-xs"><div className="flex min-w-0 items-center gap-2"><FileCode2 size={15} /><strong className="truncate">{selected.path}</strong><span className="text-[10px] text-zinc-400">{selected.size ? `${selected.size} B` : selected.language}</span></div><Button variant="outline" size="sm" className="h-8 shrink-0 border-zinc-600 bg-zinc-800 px-2.5 text-[11px] text-zinc-200 hover:bg-zinc-700 hover:text-white" onClick={copyContent}>{copied ? <Check size={14} /> : <Clipboard size={14} />}{copied ? copy.codeViewer.copied : copy.codeViewer.copy}</Button></header><div className="max-h-[430px] max-w-full overflow-auto max-md:max-h-[390px]"><SyntaxHighlighter language={selected.language ?? "text"} style={oneDark} showLineNumbers wrapLongLines={false} customStyle={{ margin: 0, minHeight: "430px", borderRadius: 0, background: "#17181c", fontSize: "12px", lineHeight: "1.7" }} codeTagProps={{ style: { fontFamily: "ui-monospace, SFMono-Regular, Consolas, monospace" } }}>{selected.content ?? ""}</SyntaxHighlighter></div></> : <div className="grid min-h-[430px] place-items-center text-xs text-zinc-400">{copy.codeViewer.selectFile}</div>}
     </section>
   </div>;
 }

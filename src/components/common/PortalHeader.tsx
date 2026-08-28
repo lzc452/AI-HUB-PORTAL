@@ -1,6 +1,6 @@
-import { Bell, Menu, Plus, UserRound, X } from "lucide-react";
+import { Bell, LogOut, Menu, Plus, UserRound, X } from "lucide-react";
 import { useRef, useState, type PointerEvent } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import logoUrl from "@/assets/ai-hub-logo.png";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,45 +21,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-
-const navItems = [
-  {
-    label: "应用",
-    href: "/apps?sortBy=score",
-    children: [
-      { label: "全部应用", description: "发现经过审核与安全扫描、可在企业内直接使用的 AI 应用。", href: "/apps?sortBy=score" },
-      { label: "应用猎手", description: "用员工真实投票形成每周榜单，让优秀实践更快进入团队。", href: "/apps-hunt" },
-      { label: "部门中心", description: "从业务团队的真实使用经验中发现更合适的资源。", href: "/department-zone" },
-    ],
-  },
-  {
-    label: "技能",
-    href: "/skills",
-    children: [
-      { label: "全部技能", description: "把可靠的方法、约束和参考资料封装为可复用能力。", href: "/skills" },
-      { label: "技能包", description: "按真实任务将多个 Skills 组织为完整工作流。", href: "/skillpackage" },
-    ],
-  },
-  {
-    label: "资源",
-    href: "/plugins",
-    children: [
-      { label: "插件", description: "从代码托管、知识库到数据平台，选择受控的连接能力。", href: "/plugins" },
-      { label: "MCP", description: "以 MCP 协议透明、可审计地连接企业数据与工具。", href: "/mcp" },
-    ],
-  },
-  {
-    label: "文档",
-    href: "/tutorials",
-    children: [
-      { label: "使用指南", description: "图文与示例驱动的上手教程，从入门到进阶。", href: "/tutorials" },
-      { label: "更新日志", description: "跟随每次更新，了解 Portal 的新能力与修复。", href: "/updates" },
-      { label: "关于我们", description: "了解 AI Hub Portal 如何把 AI 能力带到每个人的工作中。", href: "/about" },
-    ],
-  },
-] as const;
-
-const mobileNavItems = navItems.reduce<Array<{ label: string; href: string }>>((items, group) => [...items, ...group.children], []);
+import { portalMobileNavItems, portalNavItems } from "@/apis/static-data";
+import { useCurrentActor, useLogoutMutation } from "@/hooks";
 
 export function PortalHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -97,7 +60,7 @@ export function PortalHeader() {
           }}
         >
           <NavigationMenuList className="gap-3">
-            {navItems.map((item) => (
+            {portalNavItems.map((item) => (
               <NavigationMenuItem key={item.label}>
                 {item.children.length > 0 ? (
                   <>
@@ -142,6 +105,7 @@ export function PortalHeader() {
           <Button asChild className="h-[38px] rounded-full px-4 text-sm font-semibold max-[900px]:hidden"><Link to="/dashboard/publish"><Plus size={15} />发布</Link></Button>
           <Button variant="ghost" size="icon" className="size-9 rounded-full text-muted-foreground hover:text-foreground" aria-label="通知"><Bell size={18} /></Button>
           <Button asChild variant="ghost" size="icon" className="size-9 rounded-full text-muted-foreground hover:text-foreground" aria-label="个人中心"><Link to="/dashboard"><UserRound size={18} /></Link></Button>
+          <AccountActions />
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="hidden size-9 rounded-full text-muted-foreground hover:text-foreground max-[900px]:inline-flex" aria-label={mobileMenuOpen ? "关闭菜单" : "打开菜单"}>
@@ -154,8 +118,9 @@ export function PortalHeader() {
                 <SheetDescription className="sr-only">移动端主导航</SheetDescription>
               </SheetHeader>
               <nav className="mt-8 flex flex-col gap-1" aria-label="移动端导航">
-                {mobileNavItems.map((item) => <Link className="flex min-h-12 items-center border-b border-border text-base font-semibold" key={item.href} to={item.href} onClick={() => setMobileMenuOpen(false)}>{item.label}</Link>)}
+                {portalMobileNavItems.map((item) => <Link className="flex min-h-12 items-center border-b border-border text-base font-semibold" key={item.href} to={item.href} onClick={() => setMobileMenuOpen(false)}>{item.label}</Link>)}
                 <Link className="mt-3 inline-flex min-h-11 items-center justify-center rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground" to="/dashboard/publish" onClick={() => setMobileMenuOpen(false)}><Plus size={15} />发布资源</Link>
+                <AccountActions mobile onSignedOut={() => setMobileMenuOpen(false)} />
               </nav>
             </SheetContent>
           </Sheet>
@@ -163,4 +128,12 @@ export function PortalHeader() {
       </div>
     </header>
   );
+}
+
+function AccountActions({ mobile = false, onSignedOut }: { mobile?: boolean; onSignedOut?: () => void }) {
+  const actor = useCurrentActor();
+  const logoutMutation = useLogoutMutation();
+  const navigate = useNavigate();
+  const signOut = () => logoutMutation.mutate(undefined, { onSuccess: () => { onSignedOut?.(); navigate("/login", { replace: true }); } });
+  return <div className={cn("items-center gap-2", mobile ? "mt-5 flex border-t border-border pt-4" : "hidden min-[901px]:flex")}><span className={cn("truncate text-xs text-muted-foreground", mobile ? "flex-1 text-sm" : "max-w-28")} title={actor.data?.displayName}>{actor.data?.displayName ?? "当前账号"}</span><Button type="button" variant="ghost" size={mobile ? "default" : "icon"} className={cn("rounded-full text-muted-foreground hover:text-foreground", mobile ? "gap-2" : "size-9")} aria-label="退出登录" disabled={logoutMutation.isPending} onClick={signOut}><LogOut size={16} />{mobile && "退出登录"}</Button></div>;
 }

@@ -21,7 +21,7 @@ export function ResourceCard({ resource, compact = false, className }: { resourc
       <div className="mt-3 flex flex-wrap gap-3 text-xs text-muted-foreground">
         <span>{resource.owner.displayName}</span>
         <span className="inline-flex items-center gap-1"><Star size={13} />{formatCompactNumber(resource.stars)}</span>
-        <span className="inline-flex items-center gap-1"><Download size={13} />{formatCompactNumber(resource.downloads)}</span>
+        {resource.downloads !== undefined && <span className="inline-flex items-center gap-1"><Download size={13} />{formatCompactNumber(resource.downloads)}</span>}
       </div>
     </div>
     <ArrowUpRight className="size-[17px] shrink-0 text-muted-foreground/60 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />

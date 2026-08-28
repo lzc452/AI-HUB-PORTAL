@@ -1,3 +1,4 @@
+import { resourceCategories } from "@/apis/static-data";
 import { ResourceListView } from "@/components/common";
 import { useAppsQuery, useListUrlState } from "@/hooks";
 import { useAppsStore } from "@/store";
@@ -17,7 +18,7 @@ export default function AppsPage() {
       retry={() => result.refetch()}
       display={display}
       onDisplayChange={setDisplay}
-      categories={["效率", "数据", "研发", "客服", "法务"]}
+      categories={[...resourceCategories.app]}
     />
   );
 }

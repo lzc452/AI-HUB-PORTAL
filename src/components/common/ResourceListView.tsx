@@ -1,3 +1,4 @@
+import { copy, resourceSortOptions } from "@/apis/static-data";
 import { Grid2X2, List, SlidersHorizontal } from "lucide-react";
 import type { PageResult, ResourceSummary } from "@/types";
 import {
@@ -63,7 +64,7 @@ export function ResourceListView<T extends ResourceSummary>({
         <strong className="text-2xl font-semibold">
           {data?.total ?? 0}
           <small className="ml-1 text-xs font-normal text-muted-foreground">
-            项资源
+            {copy.listView.itemCount}
           </small>
         </strong>
       </header>
@@ -80,14 +81,10 @@ export function ResourceListView<T extends ResourceSummary>({
           }
           variant="outline"
           size="sm"
-          aria-label="排序方式"
+          aria-label={copy.listView.sortBy}
           className="max-md:order-1 max-md:w-full"
         >
-          {[
-            { key: "score", label: "精选" },
-            { key: "downloads", label: "下载量" },
-            { key: "updatedAt", label: "最近上新" },
-          ].map((item) => (
+          {resourceSortOptions.map((item) => (
             <ToggleGroupItem key={item.key} value={item.key}>
               {item.label}
             </ToggleGroupItem>
@@ -95,7 +92,7 @@ export function ResourceListView<T extends ResourceSummary>({
         </ToggleGroup>
         <div
           className="relative flex min-w-0 flex-1 justify-end max-md:order-2"
-          aria-label="搜索"
+          aria-label={copy.listView.search}
         >
           <ExpandableSearch
             value={query.q ?? ""}
@@ -107,18 +104,18 @@ export function ResourceListView<T extends ResourceSummary>({
         {categories.length > 0 && (
           <label className="flex min-w-[150px] items-center gap-2 max-md:order-3">
             <SlidersHorizontal size={14} className="text-muted-foreground" />
-            <span className="sr-only">分类</span>
+            <span className="sr-only">{copy.listView.category}</span>
             <Select
               value={query.category ?? "all"}
               onValueChange={(value) =>
                 update({ category: value === "all" ? undefined : value })
               }
             >
-              <SelectTrigger className="min-w-[140px]" aria-label="分类">
-                <SelectValue placeholder="全部分类" />
+              <SelectTrigger className="min-w-[140px]" aria-label={copy.listView.category}>
+                <SelectValue placeholder={copy.listView.allCategories} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">全部分类</SelectItem>
+                <SelectItem value="all">{copy.listView.allCategories}</SelectItem>
                 {categories.map((category) => (
                   <SelectItem key={category} value={category}>
                     {category}
@@ -136,13 +133,13 @@ export function ResourceListView<T extends ResourceSummary>({
           }
           variant="outline"
           size="sm"
-          aria-label="显示方式"
+          aria-label={copy.listView.display}
           className="max-md:order-4"
         >
-          <ToggleGroupItem value="list" aria-label="列表显示">
+          <ToggleGroupItem value="list" aria-label={copy.listView.listDisplay}>
             <List size={16} />
           </ToggleGroupItem>
-          <ToggleGroupItem value="grid" aria-label="卡片显示">
+          <ToggleGroupItem value="grid" aria-label={copy.listView.gridDisplay}>
             <Grid2X2 size={16} />
           </ToggleGroupItem>
         </ToggleGroup>
@@ -154,8 +151,8 @@ export function ResourceListView<T extends ResourceSummary>({
           <ErrorState retry={retry} />
         ) : !data?.items.length ? (
           <EmptyState
-            title="没有找到匹配资源"
-            description="尝试更换搜索词或清除筛选条件。"
+            title={copy.listView.emptyTitle}
+            description={copy.listView.emptyDescription}
             action={
               hasFilter ? (
                 <Button
@@ -164,7 +161,7 @@ export function ResourceListView<T extends ResourceSummary>({
                     update({ q: undefined, category: undefined, page: 1 })
                   }
                 >
-                  清除筛选
+                  {copy.listView.clearFilter}
                 </Button>
               ) : undefined
             }

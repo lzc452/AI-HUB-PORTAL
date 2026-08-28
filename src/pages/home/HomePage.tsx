@@ -3,24 +3,8 @@ import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Bookmark,
-  Building2,
-  Crown,
-  Globe2,
-  KeyRound,
-  Network,
-  PackageOpen,
-  PlugZap,
-  ScrollText,
-  ShieldCheck,
-  Star,
-  Trophy,
-  Users,
-  Wand2,
-} from "lucide-react";
+import { ArrowRight, ArrowUpRight, Star } from "lucide-react";
+import { copy, homeAccordionSlices, homeHeroTitle, homeMarqueeItems, homeTypeCards, interpolate } from "@/apis/static-data";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ErrorState, LoadingState, ResourceBadge } from "@/components/common";
@@ -29,54 +13,6 @@ import type { HomePayload, ResourceSummary } from "@/types";
 import { cn, formatCompactNumber, initials } from "@/utils";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
-
-const title_1 = "把好用的 AI 能力";
-const title_2 = "，带到每个人的工作中";
-
-const marqueeItems = [
-  { icon: Star, label: "应用" },
-  { icon: Wand2, label: "技能" },
-  { icon: PlugZap, label: "插件" },
-  { icon: Network, label: "MCP" },
-  { icon: Trophy, label: "App Hunt 每周榜单" },
-  { icon: ShieldCheck, label: "统一安全扫描" },
-  { icon: Globe2, label: "网页端发布" },
-  { icon: KeyRound, label: "企业 SSO 与权限" },
-  { icon: Building2, label: "部门实践" },
-  { icon: Bookmark, label: "收藏复用" },
-  { icon: ScrollText, label: "审计透明" },
-  { icon: Users, label: "团队共享" },
-] as const;
-
-const accordionSlices = [
-  {
-    icon: Trophy,
-    keyword: "hunt",
-    eyebrow: "APP HUNT",
-    title: "发现正在改变工作方式的应用",
-    text: "用员工真实投票形成每周榜单，让优秀实践更快进入团队。",
-    href: "/apps-hunt",
-    action: "查看本周榜单",
-  },
-  {
-    icon: PlugZap,
-    keyword: "circuit",
-    eyebrow: "PLUGIN & MCP",
-    title: "把企业工具带进 AI 工作流",
-    text: "从代码托管、知识库到数据平台，选择经过权限和安全检查的连接能力。",
-    href: "/plugins",
-    action: "浏览连接资源",
-  },
-  {
-    icon: Building2,
-    keyword: "campus",
-    eyebrow: "DEPARTMENT",
-    title: "跟随部门实践复用成熟能力",
-    text: "了解不同团队发布、维护与推荐的 AI 资源，找到最贴近业务的解法。",
-    href: "/department-zone",
-    action: "进入部门中心",
-  },
-] as const;
 
 export default function HomePage() {
   const query = useHomeQuery();
@@ -216,11 +152,11 @@ function HeroSection() {
 
       <div className="relative mx-auto flex max-w-6xl flex-col items-center text-center">
         <h1
-          aria-label={title_1 + title_2}
+          aria-label={homeHeroTitle.first + homeHeroTitle.second}
           className="m-0 flex w-full flex-wrap items-center justify-center text-[clamp(2.15rem,6vw,3.6rem)] leading-[1.12] tracking-[-0.045em] text-zinc-950 max-lg:flex-col"
         >
           <span aria-hidden="true" className="inline-flex flex-wrap justify-center">
-            {title_1.split("").map((str, index) => (
+            {homeHeroTitle.first.split("").map((str, index) => (
               <span key={index} className="char inline-block">
                 {str}
               </span>
@@ -238,7 +174,7 @@ function HeroSection() {
             </svg>
           </span>
           <span aria-hidden="true" className="inline-flex flex-wrap justify-center">
-            {title_2.split("").map((str, index) => (
+            {homeHeroTitle.second.split("").map((str, index) => (
               <span key={index} className="char inline-block">
                 {str}
               </span>
@@ -247,17 +183,17 @@ function HeroSection() {
         </h1>
 
         <p className="hero-meta mt-7 max-w-[560px] text-[15px] leading-relaxed text-zinc-500">
-          发现、评估、收藏并发布可信的 App、Skill、Plugin 与 MCP
+          {copy.home.heroSubtitle}
         </p>
         <div className="hero-meta mt-8 flex gap-2.5 max-md:w-full max-md:flex-col">
           <Button asChild className="h-11 rounded-full px-6">
             <Link to="/apps?sortBy=score">
-              探索全部资源
+              {copy.home.exploreAll}
               <ArrowRight size={16} />
             </Link>
           </Button>
           <Button asChild variant="outline" className="h-11 rounded-full border-zinc-300 px-6">
-            <Link to="/tutorials">阅读使用指南</Link>
+            <Link to="/tutorials">{copy.home.readGuide}</Link>
           </Button>
         </div>
       </div>
@@ -271,7 +207,7 @@ function MarqueeBand() {
       <div className="flex w-max animate-[marquee-x_36s_linear_infinite] gap-0">
         {[0, 1].map((group) => (
           <div key={group} className="flex shrink-0 items-center gap-10 pr-10">
-            {marqueeItems.map(({ icon: Icon, label }, index) => (
+            {homeMarqueeItems.map(({ icon: Icon, label }, index) => (
               <span key={label} className="inline-flex shrink-0 items-center gap-2.5 text-[13px] font-medium tracking-wide text-zinc-500">
                 {index > 0 && <span className="mr-7 size-1.5 rounded-full bg-zinc-300" />}
                 <Icon size={15} />
@@ -289,7 +225,7 @@ function SectionHeading({
   title,
   description,
   href,
-  hrefLabel = "查看全部",
+  hrefLabel = copy.home.viewAll,
 }: {
   title: string;
   description: string;
@@ -317,20 +253,15 @@ function SectionHeading({
 
 function BentoGrid({ data }: { data: HomePayload }) {
   const topApp = data.apps[0];
-  const typeCards = [
-    { icon: Wand2, tint: "bg-indigo-50 text-indigo-600", title: "技能", text: "可复用的方法与参考资产", count: `${data.skills.length} 项技能`, href: "/skills" },
-    { icon: PackageOpen, tint: "bg-sky-50 text-sky-600", title: "技能包", text: "按真实任务组织的完整工作流", count: `${data.skillPackages.length} 个技能包`, href: "/skillpackage" },
-    { icon: PlugZap, tint: "bg-emerald-50 text-emerald-600", title: "插件与 MCP", text: "受控、透明、可审计的连接能力", count: `${data.plugins.length + data.mcps.length} 项连接`, href: "/plugins" },
-    { icon: Building2, tint: "bg-amber-50 text-amber-600", title: "部门实践", text: "来自业务团队的真实使用经验", count: `${data.departments.length} 个部门`, href: "/department-zone" },
-  ] as const;
+  const cardCounts = [data.skills.length, data.skillPackages.length, data.plugins.length + data.mcps.length, data.departments.length];
 
   return (
     <section className="mx-auto w-[min(1180px,calc(100%-48px))] py-20 md:py-28 max-md:w-[calc(100%-28px)]">
       <SectionHeading
-        title="从一个入口，进入整个 AI 资源生态"
-        description="应用、技能、插件、MCP 与部门实践，统一发现与复用"
+        title={copy.home.ecosystemTitle}
+        description={copy.home.ecosystemDescription}
         href="/apps?sortBy=score"
-        hrefLabel="探索全部资源"
+        hrefLabel={copy.home.exploreAll}
       />
       <div className="grid grid-flow-dense grid-cols-1 gap-3.5 md:grid-cols-2 lg:grid-cols-4">
         {topApp && (
@@ -340,9 +271,9 @@ function BentoGrid({ data }: { data: HomePayload }) {
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <span className="text-[11px] font-bold tracking-[0.14em] text-zinc-500">HOT PICKS</span>
-                <h3 className="mt-2 text-2xl font-semibold tracking-[-0.03em]">热门应用</h3>
-                <p className="mt-1 text-sm text-zinc-400">员工正在高频使用的 AI 应用</p>
+                <span className="text-[11px] font-bold tracking-[0.14em] text-zinc-500">{copy.home.hotPicks}</span>
+                <h3 className="mt-2 text-2xl font-semibold tracking-[-0.03em]">{copy.home.hotTitle}</h3>
+                <p className="mt-1 text-sm text-zinc-400">{copy.home.hotDescription}</p>
               </div>
               <ArrowUpRight size={20} className="mt-1 shrink-0 text-zinc-500 transition-colors group-hover:text-white" />
             </div>
@@ -374,14 +305,14 @@ function BentoGrid({ data }: { data: HomePayload }) {
                     {formatCompactNumber(topApp.stars)}
                   </span>
                   <span className="inline-flex items-center gap-1">
-                    {formatCompactNumber(topApp.downloads)} 次使用
+                    {topApp.downloads === undefined ? copy.home.noUsage : interpolate(copy.home.usageCount, { count: formatCompactNumber(topApp.downloads) })}
                   </span>
                 </div>
               </div>
             </div>
           </Link>
         )}
-        {typeCards.map(({ icon: Icon, tint, title, text, count, href }) => (
+        {homeTypeCards.map(({ icon: Icon, tint, title, text, count, href }, index) => (
           <Link
             key={title}
             to={href}
@@ -395,7 +326,7 @@ function BentoGrid({ data }: { data: HomePayload }) {
               <p className="mt-1.5 text-sm leading-relaxed text-zinc-500">{text}</p>
             </div>
             <div className="mt-6 flex items-center justify-between">
-              <span className="text-xs font-medium text-zinc-400">{count}</span>
+              <span className="text-xs font-medium text-zinc-400">{count(cardCounts[index])}</span>
               <ArrowUpRight size={17} className="text-zinc-400 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-zinc-950" />
             </div>
           </Link>
@@ -409,13 +340,13 @@ function AccordionSection({ onHover }: { onHover: () => void }) {
   return (
     <section className="mx-auto w-[min(1180px,calc(100%-48px))] py-20 md:py-28 max-md:w-[calc(100%-28px)]">
       <SectionHeading
-        title="从发现到复用，找到适合你的 AI 能力"
-        description="悬停展开每一类能力，直达对应的资源入口"
+        title={copy.home.discoverTitle}
+        description={copy.home.discoverDescription}
         href="/skills"
-        hrefLabel="浏览全部技能"
+        hrefLabel={copy.home.browseSkills}
       />
       <div className="flex h-[440px] gap-2.5 overflow-x-auto snap-x max-md:h-[420px] [scrollbar-width:none] md:overflow-visible [&::-webkit-scrollbar]:hidden">
-        {accordionSlices.map(({ icon: Icon, keyword, eyebrow, title, text, href, action }) => (
+        {homeAccordionSlices.map(({ icon: Icon, keyword, eyebrow, title, text, href, action }) => (
           <Link
             key={title}
             to={href}
@@ -456,8 +387,8 @@ function AppStack({ apps }: { apps: ResourceSummary[] }) {
   return (
     <section className="mx-auto w-[min(1180px,calc(100%-48px))] py-20 md:py-32 max-md:w-[calc(100%-28px)]">
       <SectionHeading
-        title="员工都在用的应用"
-        description="顶部卡片会随着滚动堆叠，像翻阅一份热榜清单"
+        title={copy.home.appsInUse}
+        description={copy.home.appsInUseDescription}
         href="/apps?sortBy=score"
       />
       <div className="mt-12">
@@ -497,9 +428,9 @@ function StackCard({ rank, resource }: { rank: number; resource: ResourceSummary
               <Star size={13} />
               {formatCompactNumber(resource.stars)}
             </span>
-            <span>{formatCompactNumber(resource.downloads)} 次使用</span>
+            {resource.downloads !== undefined && <span>{interpolate(copy.home.usageCount, { count: formatCompactNumber(resource.downloads) })}</span>}
           </div>
-          <span className="text-xs text-zinc-400">{resource.owner.displayName} 推荐</span>
+          <span className="text-xs text-zinc-400">{interpolate(copy.home.recommendedBy, { name: resource.owner.displayName })}</span>
         </div>
         <ArrowUpRight size={19} className="shrink-0 text-zinc-400 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-zinc-950" />
       </div>
@@ -518,8 +449,8 @@ function StackCta() {
       </span>
       <div className="flex h-full min-h-[146px] items-center justify-between gap-6 max-md:min-h-0 max-md:flex-col max-md:items-start max-md:justify-center">
         <div>
-          <h3 className="text-2xl font-semibold tracking-[-0.03em]">还没找到合适的？</h3>
-          <p className="mt-2 text-sm text-zinc-400">浏览全部应用，或到部门实践中心看看同事们的真实推荐。</p>
+          <h3 className="text-2xl font-semibold tracking-[-0.03em]">{copy.home.stackCtaTitle}</h3>
+          <p className="mt-2 text-sm text-zinc-400">{copy.home.stackCtaDescription}</p>
         </div>
         <Button
           asChild
@@ -527,7 +458,7 @@ function StackCta() {
           className="shrink-0 rounded-full bg-white px-6 text-zinc-950 hover:bg-zinc-100"
         >
           <span className="inline-flex items-center gap-1.5">
-            浏览全部应用
+            {copy.home.browseAllApps}
             <ArrowRight size={15} />
           </span>
         </Button>
@@ -545,10 +476,10 @@ function CtaBand({ updates }: { updates: HomePayload["updates"] }) {
         <div className="relative grid items-center gap-12 md:grid-cols-[1.25fr_0.75fr]">
           <div>
             <h2 className="m-0 text-[clamp(2.1rem,4.2vw,3.4rem)] leading-[1.12] font-semibold tracking-[-0.045em]">
-              准备好分享你的 AI 实践了吗
+              {copy.home.ctaTitle}
             </h2>
             <p className="mt-5 max-w-md text-[15px] leading-relaxed text-zinc-400">
-              发布、维护并推荐你的 Skill 与插件，让团队共享经过验证的工作方式。
+              {copy.home.ctaDescription}
             </p>
             <div className="mt-9 flex flex-wrap gap-2.5 max-md:w-full max-md:flex-col">
               <Button
@@ -557,7 +488,7 @@ function CtaBand({ updates }: { updates: HomePayload["updates"] }) {
                 className="h-11 rounded-full bg-white px-6 text-zinc-950 hover:bg-zinc-100"
               >
                 <Link to="/dashboard/publish">
-                  发布资源
+                  {copy.home.publishResource}
                   <ArrowRight size={16} />
                 </Link>
               </Button>
@@ -566,7 +497,7 @@ function CtaBand({ updates }: { updates: HomePayload["updates"] }) {
                 variant="outline"
                 className="h-11 rounded-full border-white/25 text-white hover:bg-white/10 hover:text-white"
               >
-                <Link to="/updates">查看更新日志</Link>
+                <Link to="/updates">{copy.home.viewChangelog}</Link>
               </Button>
             </div>
           </div>
@@ -576,12 +507,12 @@ function CtaBand({ updates }: { updates: HomePayload["updates"] }) {
               className="group rounded-2xl border border-white/15 bg-white/5 p-6 transition-colors duration-500 hover:border-white/25 hover:bg-white/10"
             >
               <span className="text-xs font-semibold tracking-[0.08em] text-zinc-500">
-                LATEST · {new Date(updates.updatedAt).toLocaleDateString("zh-CN")}
+                {copy.home.latestEyebrow}{new Date(updates.updatedAt).toLocaleDateString("zh-CN")}
               </span>
               <h3 className="mt-2 text-xl font-semibold tracking-[-0.02em]">{updates.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-400">{updates.summary}</p>
+              {updates.summary && <p className="mt-2 text-sm leading-relaxed text-zinc-400">{updates.summary}</p>}
               <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-white">
-                查看更新
+                {copy.home.viewUpdates}
                 <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
               </span>
             </Link>

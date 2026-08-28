@@ -1,5 +1,53 @@
 export type ResourceType = "app" | "skill" | "plugin" | "mcp";
-export type PublishStatus = "draft" | "scanning" | "pending_review" | "published" | "rejected" | "withdrawn";
+export type PublishStatus = "draft" | "in_review" | "approved" | "published" | "withdrawn" | "archived";
+
+export interface ApiIssue {
+  code: string;
+  message: string;
+  path?: string[];
+}
+
+export interface PortalResourceItemDto {
+  resourceId: string;
+  resourceType: ResourceType;
+  ownerEmployeeId: string;
+  ownerName: string;
+  slug: string;
+  name: string;
+  summary: string;
+  status: PublishStatus;
+  currentVersionId?: string | null;
+  metadata: unknown;
+  favoriteCount: number;
+  isFavorited: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+/** 服务端 PortalCommentItem（资源详情评论与 Dashboard 评论共用结构）。 */
+export interface PortalCommentAuthorDto {
+  employeeId: string;
+  displayName: string;
+}
+
+export interface PortalCommentParentDto {
+  commentId: string;
+  body: string;
+  author: PortalCommentAuthorDto;
+}
+
+export interface PortalCommentItemDto {
+  commentId: string;
+  resourceType: ResourceType;
+  resourceId: string;
+  resourceName: string;
+  resourceHref: string;
+  body: string;
+  kind: "comment" | "reply";
+  author: PortalCommentAuthorDto;
+  parentComment: PortalCommentParentDto | null;
+  createdAt: string;
+}
 
 export interface EmployeeSummary {
   employeeId: string;
@@ -18,20 +66,21 @@ export interface ResourceSummary {
   iconUrl: string | null;
   owner: EmployeeSummary;
   tags: string[];
-  score: number;
   stars: number;
-  downloads: number;
+  score?: number;
+  downloads?: number;
   updatedAt: string;
   status: PublishStatus;
   isStarred: boolean;
+  currentVersionId?: string | null;
 }
 
 export interface ResourceDetail extends ResourceSummary {
   overview: string;
-  version: string;
+  version: string | null;
   compatibility: string[];
   screenshots: string[];
-  securityStatus: "passed" | "pending" | "failed";
+  securityStatus: "passed" | "pending" | "failed" | "unknown";
   publishedAt: string | null;
   files?: ResourceFileNode[];
 }
@@ -61,8 +110,8 @@ export interface HomePayload {
   skills: ResourceSummary[];
   plugins: ResourceSummary[];
   mcps: ResourceSummary[];
-  departments: Array<{ departmentId: string; name: string; description: string; memberCount: number; resourceCount: number; logoUrl: string | null }>;
-  skillPackages: Array<{ id: string; slug: string; name: string; description: string; skillCount: number; updatedAt: string }>;
+  departments: Array<{ departmentId: string; name: string; description: string; memberCount?: number; resourceCount: number; logoUrl: string | null }>;
+  skillPackages: Array<{ id: string; slug: string; name: string; description: string; skillCount: number; updatedAt?: string }>;
   updates: { title: string; summary: string; updatedAt: string } | null;
 }
 
@@ -83,9 +132,12 @@ export interface ListQuery {
 
 export interface SessionActor {
   employeeId: string;
-  displayName: string;
-  avatarUrl: string | null;
-  permissions: string[];
+  displayName?: string;
+  roleCodes: readonly string[];
+  permissions?: readonly string[];
+  departmentIds: readonly string[];
+  primaryDepartmentId: string;
+  sessionId: string;
 }
 
 export interface ApiProblem {
@@ -93,4 +145,5 @@ export interface ApiProblem {
   message?: string;
   detail?: string;
   traceId?: string;
+  issues?: ApiIssue[];
 }

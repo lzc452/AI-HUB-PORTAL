@@ -27,27 +27,27 @@ const routes = [
 
 test("全部一期路由可访问且呈现对应页面", async ({ page }) => {
   // 该用例顺序打开 20 个懒加载路由，桌面端首次加载各页面 chunk 的总耗时可能略高于默认 30 秒。
-  test.setTimeout(90_000);
+  test.setTimeout(180_000);
   for (const [route, heading] of routes) {
-    await page.goto(route);
+    await page.goto(route, { waitUntil: "domcontentloaded" });
     await expect(page.getByRole("heading", { name: heading, exact: false }).first()).toBeVisible();
   }
 });
 
 test("规范化默认排序与部门旧入口", async ({ page }) => {
-  await page.goto("/apps?q=会议#directory");
+  await page.goto("/apps?q=会议#directory", { waitUntil: "domcontentloaded" });
   await expect(page).toHaveURL(/\/apps\?q=%E4%BC%9A%E8%AE%AE&sortBy=score#directory$/);
-  await page.goto("/department?q=产品#teams");
+  await page.goto("/department?q=产品#teams", { waitUntil: "domcontentloaded" });
   await expect(page).toHaveURL(/\/department-zone\?q=%E4%BA%A7%E5%93%81#teams$/);
 });
 
 test("搜索、排序和评论双视图以 URL 为唯一状态", async ({ page }) => {
-  await page.goto("/apps?sortBy=score");
+  await page.goto("/apps?sortBy=score", { waitUntil: "domcontentloaded" });
   await page.getByRole("button", { name: "展开搜索" }).click();
   await page.getByPlaceholder("搜索全部应用").fill("合同");
   await expect(page).toHaveURL(/q=%E5%90%88%E5%90%8C/);
   await expect(page.getByText("合同风险助手")).toBeVisible();
-  await page.goto("/dashboard/comments");
+  await page.goto("/dashboard/comments", { waitUntil: "domcontentloaded" });
   await page.getByRole("tab", { name: "我的评论" }).click();
   await expect(page).toHaveURL(/view=mine/);
   await expect(page.getByText("GitLab 工作流")).toBeVisible();
@@ -55,19 +55,20 @@ test("搜索、排序和评论双视图以 URL 为唯一状态", async ({ page }
 
 for (const type of ["App", "Skill", "Plugin", "MCP"] as const) {
   test(`${type} 可进入统一发布流程`, async ({ page }) => {
-    await page.goto("/dashboard/publish");
+    await page.goto("/dashboard/publish", { waitUntil: "domcontentloaded" });
     await page.getByRole("button", { name: new RegExp(type) }).click();
     await expect(page.getByRole("heading", { name: new RegExp(type === "App" ? "应用基本信息" : type === "Skill" ? "技能基本信息" : type === "Plugin" ? "插件基本信息" : "MCP基本信息") })).toBeVisible();
   });
 }
 
 test("评论详情、收藏和完整发布步骤可交互", async ({ page }) => {
-  await page.goto("/apps/E1001/meeting-copilot?tab=comments");
+  test.setTimeout(90_000);
+  await page.goto("/apps/E1001/meeting-copilot?tab=comments", { waitUntil: "domcontentloaded" });
   await expect(page.getByRole("heading", { name: "评论与交流" })).toBeVisible();
   await page.getByRole("button", { name: "收藏" }).click();
   await expect(page.getByText("已加入收藏")).toBeVisible();
 
-  await page.goto("/dashboard/publish");
+  await page.goto("/dashboard/publish", { waitUntil: "domcontentloaded" });
   await page.getByRole("button", { name: /Skill/ }).click();
   await page.getByLabel("资源名称").fill("知识校准技能");
   await page.getByLabel("英文标识").fill("knowledge-calibration");
@@ -75,9 +76,9 @@ test("评论详情、收藏和完整发布步骤可交互", async ({ page }) => 
   await page.getByLabel("标签").fill("知识库，质量");
   await page.getByLabel("版本说明").fill("首次发布完整能力与参考资料。");
   await page.getByRole("button", { name: /下一步/ }).click();
-  await expect(page.getByRole("heading", { name: "上传资产" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "资产" })).toBeVisible();
   await page.getByRole("button", { name: /下一步/ }).click();
-  await page.getByRole("button", { name: "开始扫描" }).click();
+  await expect(page.getByText("安全扫描由服务端在提交审核时执行")).toBeVisible();
   await page.getByRole("button", { name: /下一步/ }).click();
   await page.getByRole("button", { name: /提交审核/ }).click();
   await expect(page.getByRole("heading", { name: "已提交审核" })).toBeVisible();
@@ -85,13 +86,13 @@ test("评论详情、收藏和完整发布步骤可交互", async ({ page }) => 
 
 test("四类资源列表视图切换在刷新后保持", async ({ page }) => {
   for (const route of ["/apps?sortBy=score", "/skills", "/plugins", "/mcp"]) {
-    await page.goto(route);
+    await page.goto(route, { waitUntil: "domcontentloaded" });
     const gridButton = page.getByRole("radio", { name: "卡片显示" });
     const listButton = page.getByRole("radio", { name: "列表显示" });
     await gridButton.click();
     await expect(gridButton).toHaveAttribute("aria-checked", "true");
     await expect(page.locator('[data-testid="resource-state-region"] [data-view="grid"]')).toBeVisible();
-    await page.reload();
+    await page.reload({ waitUntil: "domcontentloaded" });
     await expect(page.getByRole("radio", { name: "卡片显示" })).toHaveAttribute("aria-checked", "true");
     await listButton.click();
     await expect(page.locator('[data-testid="resource-state-region"] [data-view="list"]')).toBeVisible();
@@ -105,7 +106,7 @@ test("四类资源详情可浏览嵌套文件和复制代码", async ({ page }, 
     ["/plugins/P3001/gitlab-flow", "index.ts", "definePlugin"],
     ["/mcp/postgres-readonly", "index.ts", "McpServer"],
   ] as const) {
-    await page.goto(route);
+    await page.goto(route, { waitUntil: "domcontentloaded" });
     await page.getByRole("tab", { name: "代码" }).click();
     await page.getByText(fileName, { exact: true }).first().click();
     await expect(page.locator('[data-testid="resource-code-panel"] pre')).toContainText(snippet);

@@ -1,3 +1,4 @@
+import { copy } from "@/apis/static-data";
 import { Search, X } from "lucide-react";
 import { useRef, useState, type FocusEvent, type KeyboardEvent, type TransitionEvent } from "react";
 import { Button } from "@/components/ui/button";
@@ -75,7 +76,7 @@ export function ExpandableSearch({
           type="button"
           variant="ghost"
           size="icon-xs"
-          aria-label="清除搜索"
+          aria-label={copy.search.clear}
           className="absolute right-10 top-1/2 -translate-y-1/2 text-muted-foreground"
           onMouseDown={(event) => event.preventDefault()}
           onClick={onClear}
@@ -87,7 +88,7 @@ export function ExpandableSearch({
         type="button"
         variant="ghost"
         size="icon"
-        aria-label={open ? "收起搜索" : "展开搜索"}
+        aria-label={open ? copy.search.collapse : copy.search.expand}
         aria-expanded={open}
         className={cn(
           "absolute inset-y-0 right-0 z-10 size-9 rounded-full hover:bg-transparent",

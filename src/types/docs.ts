@@ -6,4 +6,14 @@ export interface ContentPage {
   updatedAt: string;
 }
 
+/** 服务端 /internal/portal/docs/:pageKey 的内容页结构。 */
+export interface ContentPageDto {
+  pageKey: string;
+  title: string;
+  bodyMarkdown: string;
+  summary: string;
+  publishedAt: string;
+  updatedAt: string;
+}
+
 export type ContentPageSlug = ContentPage["slug"];

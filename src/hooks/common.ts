@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
-import { createResourceComment, favoriteResource, getCurrentActor, getHome, listResourceComments } from "@/apis";
+import { createResourceComment, favoriteResource, getCurrentActor, getHome, listResourceComments, logout } from "@/apis";
+import { loginHref } from "@/utils/routes";
 import { listQuerySchema } from "@/schemas";
 import type { ListQuery, ResourceDetail, ResourceType } from "@/types";
 
@@ -16,6 +17,18 @@ export function useCurrentActor() {
 
 export function useHomeQuery() {
   return useQuery({ queryKey: commonKeys.home, queryFn: getHome });
+}
+
+/** 退出登录：注销服务端会话后清空缓存并跳转登录页。 */
+export function useLogout() {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: logout,
+    onSuccess: () => {
+      client.clear();
+      window.location.assign(loginHref());
+    },
+  });
 }
 
 export function useListUrlState() {
@@ -38,7 +51,13 @@ export function useResourceComments(type: ResourceType, id: string) {
 
 export function useCreateComment(type: ResourceType, id: string) {
   const client = useQueryClient();
-  return useMutation({ mutationFn: ({ body, parentCommentId }: { body: string; parentCommentId: string | null }) => createResourceComment(type, id, body, parentCommentId), onSuccess: () => client.invalidateQueries({ queryKey: commonKeys.comments(type, id) }) });
+  return useMutation({
+    mutationFn: ({ body, parentCommentId }: { body: string; parentCommentId: string | null }) => createResourceComment(type, id, body, parentCommentId),
+    onSuccess: () => {
+      client.invalidateQueries({ queryKey: commonKeys.comments(type, id) });
+      client.invalidateQueries({ queryKey: ["portal", "dashboard", "comments"] });
+    },
+  });
 }
 
 export function useFavoriteMutation(type: ResourceType, id: string) {
@@ -54,6 +73,10 @@ export function useFavoriteMutation(type: ResourceType, id: string) {
       return snapshots;
     },
     onError: (_error, _active, snapshots) => snapshots?.forEach(([key, value]) => client.setQueryData(key, value)),
-    onSettled: () => client.invalidateQueries({ queryKey: ["portal", type] }),
+    onSettled: () => {
+      client.invalidateQueries({ queryKey: ["portal", type] });
+      client.invalidateQueries({ queryKey: ["portal", "dashboard"] });
+      client.invalidateQueries({ queryKey: commonKeys.home });
+    },
   });
 }

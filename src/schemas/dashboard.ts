@@ -19,6 +19,43 @@ export const publishDraftSchema = z.object({
   changelog: z.string().trim().min(4, "请填写版本说明").max(8000),
   repositoryUrl: z.string().url("请输入有效 URL").or(z.literal("")),
   connectionType: z.enum(["stdio", "sse", "streamable_http"]),
+  applicationType: z.enum(["web_app", "desktop_app", "mobile_app", "mini_program"]).default("web_app"),
+  departmentId: z.string().trim().default(""),
+  categoryName: z.string().default(""),
+  manualText: z.string().default(""),
+  examplesText: z.string().default(""),
+  faqQuestion: z.string().default(""),
+  faqAnswer: z.string().default(""),
+  screenshotAssetIdsText: z.string().default(""),
+  entryUrl: z.string().url("请输入有效的 Web 应用 URL").or(z.literal("")).default(""),
+  inputRestrictionDisclaimer: z.string().default(""),
+  modelProvider: z.enum(["deepseek", "qwen", "wenxin", "hunyuan", "local", "other"]).default("local"),
+  handlesSensitiveData: z.boolean().default(false),
+  sendsDataExternally: z.boolean().default(false),
+  retainsConversations: z.boolean().default(false),
+  affectsHighRiskDecisions: z.boolean().default(false),
+  retentionPeriod: z.string().default(""),
+}).superRefine((value, context) => {
+  if (value.type !== "app") return;
+  if (value.applicationType !== "web_app") {
+    context.addIssue({ code: z.ZodIssueCode.custom, path: ["applicationType"], message: "一期仅支持 Web App" });
+  }
+  const required: Array<[keyof typeof value, string]> = [
+    ["departmentId", "请选择所属部门"],
+    ["categoryName", "请填写应用分类"],
+    ["manualText", "请填写使用手册"],
+    ["examplesText", "请填写使用示例"],
+    ["faqQuestion", "请填写至少一条 FAQ 问题"],
+    ["faqAnswer", "请填写至少一条 FAQ 答案"],
+    ["inputRestrictionDisclaimer", "请填写输入限制免责声明"],
+    ["entryUrl", "请输入 Web 应用入口 URL"],
+  ];
+  required.forEach(([path, message]) => {
+    if (typeof value[path] !== "string" || value[path].trim() === "") context.addIssue({ code: z.ZodIssueCode.custom, path: [path], message });
+  });
 });
 
-export type PublishDraftForm = z.infer<typeof publishDraftSchema>;
+/** Values accepted by react-hook-form before Zod applies defaults. */
+export type PublishDraftFormInput = z.input<typeof publishDraftSchema>;
+/** Fully-normalized values emitted after Zod validation/defaults. */
+export type PublishDraftForm = z.output<typeof publishDraftSchema>;

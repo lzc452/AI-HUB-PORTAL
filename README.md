@@ -17,11 +17,13 @@ npm install
 npm run dev
 ```
 
-开发环境默认启用真实感 fixtures，便于在 API 未启动时完整预览。连接本地 AI Hub API 时使用：
+开发环境默认关闭 fixtures，`/internal/*` 请求通过 Vite 代理直连本地 AI Hub API（`http://127.0.0.1:3000`）。仅当本地无后端、需要完整预览时才启用 fixtures：
 
 ```bash
-VITE_PORTAL_USE_FIXTURES=false npm run dev
+VITE_PORTAL_USE_FIXTURES=true npm run dev
 ```
+
+生产静态数据与接口缺失时的回退数据统一在 `src/apis/static-data.ts` 管理；联调状态见 `src/apis/API-INTEGRATION-REPORT.md`。
 
 ## 质量门禁
 

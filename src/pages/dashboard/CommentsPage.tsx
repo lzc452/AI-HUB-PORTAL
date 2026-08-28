@@ -17,6 +17,7 @@ import {
   Pagination,
   ResourceBadge,
 } from "@/components/common";
+import { commentResourceTypeOptions, commentSortOptions, copy } from "@/apis/static-data";
 import { useDashboardCommentsQuery } from "@/hooks";
 import { dashboardCommentsQuerySchema } from "@/schemas";
 import { formatDate, initials } from "@/utils";
@@ -43,13 +44,13 @@ export default function CommentsPage() {
       { replace: true },
     );
   const list = query.isPending ? (
-    <LoadingState label="正在加载评论" />
+    <LoadingState label={copy.comments.loading} />
   ) : query.isError ? (
     <ErrorState retry={() => query.refetch()} />
   ) : !query.data?.items.length ? (
     <EmptyState
-      title={state.view === "replies" ? "暂时没有收到回复" : "你还没有发表评论"}
-      description="参与资源讨论后，相关内容会显示在这里。"
+      title={state.view === "replies" ? copy.comments.emptyReplies : copy.comments.emptyMine}
+      description={copy.comments.emptyDescription}
     />
   ) : (
     <Card className="overflow-hidden p-0 shadow-none">
@@ -69,7 +70,7 @@ export default function CommentsPage() {
                 <div className="flex items-center gap-2 text-sm">
                   <strong>{item.author.displayName}</strong>
                   <span className="text-xs text-muted-foreground">
-                    {item.kind === "reply" ? "回复了你的评论" : "发表了评论"}
+                    {item.kind === "reply" ? copy.comments.repliedToYou : copy.comments.postedComment}
                   </span>
                 </div>
                 <time className="text-xs text-muted-foreground">
@@ -103,13 +104,13 @@ export default function CommentsPage() {
     <div className="space-y-5">
       <header className="mb-7">
         <span className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-          Conversations
+          {copy.comments.eyebrow}
         </span>
         <h1 className="mt-1 text-3xl font-semibold tracking-[-0.04em]">
-          我的评论
+          {copy.comments.title}
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          查看他人给你的回复，以及你在各类资源下参与的讨论。
+          {copy.comments.description}
         </p>
       </header>
       <Tabs
@@ -122,19 +123,19 @@ export default function CommentsPage() {
             className="flex-none rounded-none border-b-2 border-transparent px-3.5 py-2.5 text-sm data-[state=active]:border-black data-[state=active]:bg-transparent data-[state=active]:text-foreground/60 group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none"
           >
             <MessageCircleReply size={17} />
-            收到的回复
+            {copy.comments.repliesTab}
           </TabsTrigger>
           <TabsTrigger
             value="mine"
             className="flex-none rounded-none border-b-2 border-transparent px-3.5 py-2.5 text-sm data-[state=active]:border-black data-[state=active]:bg-transparent data-[state=active]:text-foreground/60 group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none"
           >
             <MessagesSquare size={17} />
-            我的评论
+            {copy.comments.mineTab}
           </TabsTrigger>
         </TabsList>
         <div className="flex flex-wrap gap-4 py-4">
           <label className="flex items-center gap-2 text-xs font-semibold">
-            资源类型
+            {copy.comments.resourceType}
             <Select
               value={state.resourceType ?? "all"}
               onValueChange={(value) =>
@@ -142,29 +143,32 @@ export default function CommentsPage() {
               }
             >
               <SelectTrigger size="sm" aria-label="资源类型">
-                <SelectValue placeholder="全部资源" />
+                <SelectValue placeholder={commentResourceTypeOptions[0].label} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">全部资源</SelectItem>
-                <SelectItem value="app">应用</SelectItem>
-                <SelectItem value="skill">技能</SelectItem>
-                <SelectItem value="plugin">插件</SelectItem>
-                <SelectItem value="mcp">MCP</SelectItem>
+                {commentResourceTypeOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </label>
           <label className="flex items-center gap-2 text-xs font-semibold">
-            排序
+            {copy.comments.sort}
             <Select
               value={state.sort}
               onValueChange={(value) => update({ sort: value })}
             >
               <SelectTrigger size="sm" aria-label="排序">
-                <SelectValue placeholder="最新优先" />
+                <SelectValue placeholder={commentSortOptions[0].label} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="latest">最新优先</SelectItem>
-                <SelectItem value="oldest">最早优先</SelectItem>
+                {commentSortOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </label>

@@ -1,3 +1,4 @@
+import { resourceLabels } from "@/apis/static-data";
 import type { ResourceType } from "@/types";
 
 export function isSafeReturnTo(value: string): boolean {
@@ -13,6 +14,7 @@ export function loginHref(returnTo = currentReturnTo()): string {
   return `/login?returnTo=${encodeURIComponent(safe)}`;
 }
 
+/** 静态映射统一在 src/apis/static-data.ts 管理。 */
 export function resourceLabel(type: ResourceType): string {
-  return ({ app: "应用", skill: "技能", plugin: "插件", mcp: "MCP" } as const)[type];
+  return resourceLabels[type];
 }

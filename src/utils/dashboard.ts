@@ -1,3 +1,5 @@
+import { publishStatusLabels } from "@/apis/static-data";
 import type { PublishStatus } from "@/types";
 
-export const publishStatusLabel = (status: PublishStatus) => ({ draft: "草稿", scanning: "安全扫描", pending_review: "审核中", published: "已发布", rejected: "已退回", withdrawn: "已撤回" })[status];
+/** 静态映射统一在 src/apis/static-data.ts 管理。 */
+export const publishStatusLabel = (status: PublishStatus) => publishStatusLabels[status];

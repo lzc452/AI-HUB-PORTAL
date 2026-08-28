@@ -12,6 +12,7 @@
     "generate:api": "openapi-typescript http://127.0.0.1:3000/openapi.json -o src/apis/generated/portal.ts",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "test:e2e:real": "playwright test -c playwright.real.config.ts",
     "preview": "vite preview",
     "test:sites": "node --test tests/sites-worker.test.mjs"
   },
