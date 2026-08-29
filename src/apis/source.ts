@@ -17,26 +17,26 @@ function mapMcpSummary(item: PortalResourceItemDto): McpSummary {
 
 export async function listPlugins(query: ListQuery): Promise<PluginPage> {
   if (useFixtures) return fixturePluginPage(query);
-  const result = await apiFetch<PageResult<PortalResourceItemDto>>(`/internal/portal/plugins${queryString({ query: query.q, sortBy: query.sortBy === "updatedAt" ? "latest" : query.sortBy === "downloads" ? "score" : query.sortBy, page: query.page, pageSize: query.pageSize })}`);
+  const result = await apiFetch<PageResult<PortalResourceItemDto>>(`/internal/portal/plugins${queryString({ query: query.q, sortBy: query.sortBy === "updatedAt" ? "latest" : query.sortBy === "downloads" ? "score" : query.sortBy, page: query.page, pageSize: query.pageSize })}`, {}, { allowAnonymousRetry: true });
   return { ...result, items: result.items.map(mapPluginSummary) };
 }
 
 export async function getPlugin(userId: string, slug: string): Promise<PluginDetail> {
   if (useFixtures) return fixtureDetail("plugin", slug) as PluginDetail;
-  const item = await apiFetch<PortalResourceItemDto>(`/internal/portal/plugins/${encodeURIComponent(userId)}/${encodeURIComponent(slug)}`);
+  const item = await apiFetch<PortalResourceItemDto>(`/internal/portal/plugins/${encodeURIComponent(userId)}/${encodeURIComponent(slug)}`, {}, { allowAnonymousRetry: true });
   const metadata = portalMetadata(item.metadata);
   return { ...mapPortalResourceDetail(item), ...mapPluginSummary(item), type: "plugin", readme: typeof metadata.readme === "string" ? metadata.readme : item.summary, installCommand: typeof metadata.installCommand === "string" ? metadata.installCommand : "" };
 }
 
 export async function listMcps(query: ListQuery): Promise<McpPage> {
   if (useFixtures) return fixtureMcpPage(query);
-  const result = await apiFetch<PageResult<PortalResourceItemDto>>(`/internal/portal/mcps${queryString({ query: query.q, sortBy: query.sortBy === "updatedAt" ? "latest" : query.sortBy === "downloads" ? "score" : query.sortBy, page: query.page, pageSize: query.pageSize })}`);
+  const result = await apiFetch<PageResult<PortalResourceItemDto>>(`/internal/portal/mcps${queryString({ query: query.q, sortBy: query.sortBy === "updatedAt" ? "latest" : query.sortBy === "downloads" ? "score" : query.sortBy, page: query.page, pageSize: query.pageSize })}`, {}, { allowAnonymousRetry: true });
   return { ...result, items: result.items.map(mapMcpSummary) };
 }
 
 export async function getMcp(slug: string): Promise<McpDetail> {
   if (useFixtures) return fixtureDetail("mcp", slug) as McpDetail;
-  const item = await apiFetch<PortalResourceItemDto>(`/internal/portal/mcps/${encodeURIComponent(slug)}`);
+  const item = await apiFetch<PortalResourceItemDto>(`/internal/portal/mcps/${encodeURIComponent(slug)}`, {}, { allowAnonymousRetry: true });
   const metadata = portalMetadata(item.metadata);
   const tools = Array.isArray(metadata.tools) ? metadata.tools.filter((value): value is { name: string; description: string } => value !== null && typeof value === "object" && typeof (value as Record<string, unknown>).name === "string" && typeof (value as Record<string, unknown>).description === "string") : [];
   return { ...mapPortalResourceDetail(item), ...mapMcpSummary(item), type: "mcp", tools, configTemplate: typeof metadata.configTemplate === "string" ? metadata.configTemplate : "", authentication: typeof metadata.authentication === "string" ? metadata.authentication : "未声明" };

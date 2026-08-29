@@ -5,12 +5,13 @@ import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ErrorState, LoadingState } from "@/components/common";
 import { copy, interpolate } from "@/apis/static-data";
-import { useAppsHuntQuery, useHuntVoteMutation } from "@/hooks";
+import { useAppsHuntQuery, useHuntVoteMutation, useRequireLogin } from "@/hooks";
 import { appHuntMedal, formatCompactNumber, initials } from "@/utils";
 
 export default function AppsHuntPage() {
   const query = useAppsHuntQuery();
   const vote = useHuntVoteMutation();
+  const requireLogin = useRequireLogin();
   if (query.isPending) return <main className="mx-auto min-h-[calc(100vh-61px)] w-[min(1180px,calc(100%-48px))] py-12 max-md:w-[calc(100%-28px)]"><LoadingState label={copy.hunt.loading} /></main>;
   if (query.isError || !query.data) return <main className="mx-auto min-h-[calc(100vh-61px)] w-[min(1180px,calc(100%-48px))] py-12 max-md:w-[calc(100%-28px)]"><ErrorState retry={() => query.refetch()} /></main>;
   const data = query.data;
@@ -34,7 +35,7 @@ export default function AppsHuntPage() {
             <Avatar className="size-10 rounded-xl"><AvatarImage src={entry.app.iconUrl ?? undefined} alt="" /><AvatarFallback className="rounded-xl bg-indigo-50 text-xs font-bold text-indigo-700">{initials(entry.app.name)}</AvatarFallback></Avatar>
             <div className="min-w-0"><div className="flex items-center gap-2"><strong className="truncate text-sm">{entry.app.name}</strong><span className="text-xs text-muted-foreground">{appHuntMedal(entry)}</span></div><p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground">{entry.app.description}</p></div>
             <div className="text-right max-md:col-start-2 max-md:row-start-2 max-md:flex max-md:items-baseline max-md:gap-1 max-md:text-left"><strong>{formatCompactNumber(entry.votes)}</strong><span className="ml-1 text-xs text-muted-foreground">{copy.hunt.voteCount}</span></div>
-            <Button size="sm" variant={hasVoted ? "secondary" : "outline"} className="max-md:col-start-3 max-md:row-start-2 max-md:justify-self-end" disabled={vote.isPending || hasVoted || data.periodStatus !== "active"} onClick={() => vote.mutate({ periodId: data.periodId, entryId: entry.entryId }, { onSuccess: () => toast.success(copy.hunt.votedToast), onError: () => toast.error(copy.hunt.voteFailedToast) })}>{hasVoted ? copy.hunt.voted : copy.hunt.vote}</Button>
+            <Button size="sm" variant={hasVoted ? "secondary" : "outline"} className="max-md:col-start-3 max-md:row-start-2 max-md:justify-self-end" disabled={vote.isPending || hasVoted || data.periodStatus !== "active"} onClick={() => requireLogin(() => vote.mutate({ periodId: data.periodId, entryId: entry.entryId }, { onSuccess: () => toast.success(copy.hunt.votedToast), onError: () => toast.error(copy.hunt.voteFailedToast) }))}>{hasVoted ? copy.hunt.voted : copy.hunt.vote}</Button>
           </article>;
         })}
       </Card>

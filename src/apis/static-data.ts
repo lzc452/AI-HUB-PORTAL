@@ -607,6 +607,9 @@ export const copy = {
     failed: "登录失败，请检查员工 ID 和密码。",
     dingTalkFailed: "钉钉登录暂不可用，请稍后重试。",
     note: "仅使用必要的员工与部门信息完成鉴权",
+    requiredTitle: "登录后继续",
+    requiredDescription: "登录后即可访问个人中心、发布资源、管理收藏与评论。",
+    requiredButton: "立即登录",
     /** 服务端钉钉 SSO 起始地址（returnTo 由页面拼接） */
     startPath: "/internal/identity/login/dingtalk/start",
   },

@@ -103,11 +103,6 @@
   select,
   textarea {
     font: inherit;
-  }
-
-  button,
-  input,
-  select {
     border: none;
     outline: none;
   }

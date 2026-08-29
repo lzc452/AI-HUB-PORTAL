@@ -9,20 +9,20 @@ function mapAppSummary(item: PortalResourceItemDto): AppSummary {
 
 export async function listApps(query: ListQuery): Promise<AppPage> {
   if (useFixtures) return fixtureAppPage(query);
-  const result = await apiFetch<PageResult<PortalResourceItemDto>>(`/internal/portal/apps${queryString({ query: query.q, sortBy: query.sortBy === "updatedAt" ? "latest" : query.sortBy === "downloads" ? "score" : query.sortBy, page: query.page, pageSize: query.pageSize })}`);
+  const result = await apiFetch<PageResult<PortalResourceItemDto>>(`/internal/portal/apps${queryString({ query: query.q, sortBy: query.sortBy === "updatedAt" ? "latest" : query.sortBy === "downloads" ? "score" : query.sortBy, page: query.page, pageSize: query.pageSize })}`, {}, { allowAnonymousRetry: true });
   return { ...result, items: result.items.map(mapAppSummary) };
 }
 
 export async function getApp(userId: string, slug: string): Promise<AppDetail> {
   if (useFixtures) return fixtureDetail("app", slug) as AppDetail;
-  const item = await apiFetch<PortalResourceItemDto>(`/internal/portal/apps/${encodeURIComponent(userId)}/${encodeURIComponent(slug)}`);
+  const item = await apiFetch<PortalResourceItemDto>(`/internal/portal/apps/${encodeURIComponent(userId)}/${encodeURIComponent(slug)}`, {}, { allowAnonymousRetry: true });
   const metadata = portalMetadata(item.metadata);
   return { ...mapPortalResourceDetail(item), ...mapAppSummary(item), type: "app", deliveryTypes: Array.isArray(metadata.deliveryTypes) ? metadata.deliveryTypes.filter((value): value is string => typeof value === "string") : [], ...(typeof metadata.latestSecurityReport === "string" ? { latestSecurityReport: metadata.latestSecurityReport } : {}) };
 }
 
 export async function getAppsHunt(): Promise<AppHuntPayload> {
   if (useFixtures) return fixtureHunt();
-  const rows = await apiFetch<AppHuntRowDto[]>("/internal/portal/apps-hunt");
+  const rows = await apiFetch<AppHuntRowDto[]>("/internal/portal/apps-hunt", {}, { allowAnonymousRetry: true });
   const current = rows.find((row) => row.periodStatus === "active") ?? rows[0];
   if (!current) return { periodId: "", periodName: "暂无进行中的应用评选", periodStatus: "empty", entries: [], history: [] };
   const currentRows = rows.filter((row) => row.periodId === current.periodId);
@@ -52,7 +52,7 @@ export async function voteForApp(periodId: string, entryId: string) {
 
 export async function listDepartments(): Promise<DepartmentSummary[]> {
   if (useFixtures) return fixtureDepartments;
-  return (await apiFetch<DepartmentDto[]>("/internal/portal/departments")).map((item) => ({
+  return (await apiFetch<DepartmentDto[]>("/internal/portal/departments", {}, { allowAnonymousRetry: true })).map((item) => ({
     departmentId: item.departmentId,
     name: item.name,
     description: item.description,
@@ -64,7 +64,7 @@ export async function listDepartments(): Promise<DepartmentSummary[]> {
 
 export async function getDepartment(departmentId: string): Promise<DepartmentDetail> {
   if (useFixtures) return fixtureDepartment(departmentId);
-  const item = await apiFetch<DepartmentDetailDto>(`/internal/portal/departments/${encodeURIComponent(departmentId)}`);
+  const item = await apiFetch<DepartmentDetailDto>(`/internal/portal/departments/${encodeURIComponent(departmentId)}`, {}, { allowAnonymousRetry: true });
   const metadata = portalMetadata(item.metadata);
   const applications = item.applications.map(mapAppSummary);
   const members = Array.isArray(metadata.members)

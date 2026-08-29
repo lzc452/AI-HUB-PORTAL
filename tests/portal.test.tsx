@@ -1,10 +1,10 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { render, renderHook, screen, waitFor } from "@testing-library/react";
+import { act, render, renderHook, screen, waitFor } from "@testing-library/react";
 import { http, HttpResponse } from "msw";
 import { StrictMode } from "react";
 import { MemoryRouter, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
-import { appKeys, commonKeys, dashboardKeys, useFavoriteMutation, usePublishMutation } from "@/hooks";
+import { appKeys, commonKeys, dashboardKeys, useCurrentActor, useFavoriteMutation, usePublishMutation, useRequireLogin } from "@/hooks";
 import {
   ApiError,
   apiFetch,
@@ -14,6 +14,7 @@ import {
   createPublishDraft,
   createApplicationUpload,
   createResourceComment,
+  favoriteResource,
   getLoginOptions,
   getAppsHunt,
   getContentPage,
@@ -24,6 +25,7 @@ import {
   getDepartment,
   getHome,
   getSkillPackage,
+  handleSessionInvalid,
   handleUnauthorized,
   logout,
   listApps,
@@ -36,6 +38,7 @@ import {
   loginWithPassword,
   mapPortalResourceDetail,
   publishErrorGuidance,
+  SESSION_INVALID_EVENT,
   startDingTalkLogin,
   submitPublishDraft,
   completeApplicationUpload,
@@ -43,11 +46,12 @@ import {
   useFixtures,
 } from "@/apis";
 import { publishStatusLabels, resourceCategories, resourceLabels, resourceTone, statusTone } from "@/apis/static-data";
+import { LoginDialog } from "@/components/auth/LoginDialog";
 import { MarkdownContent } from "@/components/common";
-import LoginPage from "@/pages/system/LoginPage";
 import { AppsDefaultRedirect, DepartmentRedirect } from "@/router/redirects";
+import { AuthGuard } from "@/router/guards";
 import { dashboardCommentsQuerySchema, publishDraftSchema } from "@/schemas";
-import { useDashboardStore } from "@/store";
+import { useDashboardStore, useLoginDialogStore } from "@/store";
 import type { ApplicationDraft, PublishDraft } from "@/types";
 import { server } from "./setup";
 
@@ -239,7 +243,7 @@ describe("Portal 基础约束", () => {
 
   it("DingTalk 登录仅通过服务端返回的 redirectUrl 跳转", async () => {
     server.use(http.get("/internal/identity/login/dingtalk/start", ({ request }) => {
-      expect(new URL(request.url).searchParams.get("returnTo")).toBe("/login?dingtalk=complete&returnTo=%2Fdashboard");
+      expect(new URL(request.url).searchParams.get("returnTo")).toBe("/?dingtalk=complete&returnTo=%2Fdashboard");
       return HttpResponse.json({ redirectUrl: "https://login.example.test/dingtalk" });
     }));
     await expect(startDingTalkLogin(createDingTalkCallbackPath("/dashboard"))).resolves.toEqual({ redirectUrl: "https://login.example.test/dingtalk" });
@@ -270,15 +274,18 @@ describe("Portal 基础约束", () => {
       }),
     );
     const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    // 模拟钉钉回调入口（真实场景由 URL 携带 dingtalk=complete 触发弹窗打开）。
+    useLoginDialogStore.setState({ request: { returnTo: "/dashboard", dingTalkComplete: true } });
 
     render(
       <StrictMode>
         <QueryClientProvider client={client}>
-          <MemoryRouter initialEntries={["/login?dingtalk=complete&returnTo=%2Fdashboard"]}>
+          <MemoryRouter initialEntries={["/"]}>
             <Routes>
-              <Route path="/login" element={<LoginPage />} />
+              <Route path="/" element={<LocationProbe />} />
               <Route path="/dashboard" element={<LocationProbe />} />
             </Routes>
+            <LoginDialog />
           </MemoryRouter>
         </QueryClientProvider>
       </StrictMode>,
@@ -286,6 +293,7 @@ describe("Portal 基础约束", () => {
 
     await waitFor(() => expect(screen.getByText("/dashboard")).toBeInTheDocument());
     expect(completeCalls).toBe(1);
+    useLoginDialogStore.setState({ request: null });
   });
 
   it("应用创建发送完整 applicationDraft，非应用仍沿用 metadata", async () => {
@@ -593,12 +601,193 @@ describe("Portal 基础约束", () => {
     await expect(logout()).resolves.toBeUndefined();
   });
 
-  it("handleUnauthorized 清空查询客户端并跳转登录", () => {
-    const clear = vi.fn();
-    const assign = vi.fn();
-    handleUnauthorized({ clear }, assign);
-    expect(clear).toHaveBeenCalled();
-    expect(assign).toHaveBeenCalledWith(expect.stringContaining("/login?returnTo="));
+  it("handleUnauthorized 使 actor 查询失效并打开登录弹窗", () => {
+    useLoginDialogStore.setState({ request: null });
+    const invalidateQueries = vi.fn().mockResolvedValue(undefined);
+    handleUnauthorized({ invalidateQueries });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ["portal", "common", "actor"] });
+    expect(useLoginDialogStore.getState().request).toMatchObject({ returnTo: "/" });
+    useLoginDialogStore.setState({ request: null });
+  });
+
+  it("公开读端点 401 时清除登录态缓存并匿名重试一次，成功后正常返回且不弹窗", async () => {
+    const unauthorizedListener = vi.fn();
+    const sessionInvalidListener = vi.fn();
+    window.addEventListener("portal:unauthorized", unauthorizedListener);
+    window.addEventListener(SESSION_INVALID_EVENT, sessionInvalidListener);
+    let calls = 0;
+    server.use(http.get("/internal/portal/apps", () => {
+      calls += 1;
+      if (calls === 1) return HttpResponse.json({ code: "SESSION_EXPIRED", detail: "会话已过期" }, { status: 401 });
+      return HttpResponse.json({ items: [], total: 0, page: 1, pageSize: 20 });
+    }));
+    try {
+      await expect(listApps({ q: "", sortBy: "score", page: 1, pageSize: 20 })).resolves.toMatchObject({ total: 0 });
+      // 恰好重试一次；派发 session-invalid（清登录态缓存）但不派发 unauthorized（不弹窗）。
+      expect(calls).toBe(2);
+      expect(sessionInvalidListener).toHaveBeenCalledTimes(1);
+      expect(unauthorizedListener).not.toHaveBeenCalled();
+    } finally {
+      window.removeEventListener("portal:unauthorized", unauthorizedListener);
+      window.removeEventListener(SESSION_INVALID_EVENT, sessionInvalidListener);
+    }
+  });
+
+  it("公开读端点连续 401 时仅重试一次后抛错，不派发 unauthorized 事件", async () => {
+    const unauthorizedListener = vi.fn();
+    window.addEventListener("portal:unauthorized", unauthorizedListener);
+    let calls = 0;
+    server.use(http.get("/internal/portal/home", () => {
+      calls += 1;
+      return HttpResponse.json({ code: "SESSION_EXPIRED", detail: "会话已过期" }, { status: 401 });
+    }));
+    try {
+      await expect(getHome()).rejects.toMatchObject({ status: 401, code: "SESSION_EXPIRED" });
+      expect(calls).toBe(2);
+      expect(unauthorizedListener).not.toHaveBeenCalled();
+    } finally {
+      window.removeEventListener("portal:unauthorized", unauthorizedListener);
+    }
+  });
+
+  it("写端点 401 仍派发 portal:unauthorized 事件（保持登录弹窗引导）", async () => {
+    const listener = vi.fn();
+    window.addEventListener("portal:unauthorized", listener);
+    server.use(http.post("/internal/portal/app/app-1/favorite", () => HttpResponse.json({ code: "SESSION_EXPIRED", detail: "会话已过期" }, { status: 401 })));
+    try {
+      await expect(favoriteResource("app", "app-1", true)).rejects.toMatchObject({ status: 401, code: "SESSION_EXPIRED" });
+      expect(listener).toHaveBeenCalledTimes(1);
+    } finally {
+      window.removeEventListener("portal:unauthorized", listener);
+    }
+  });
+
+  it("handleSessionInvalid 使 actor 查询失效并触发重取，不打开登录弹窗", () => {
+    useLoginDialogStore.setState({ request: null });
+    const invalidateQueries = vi.fn().mockResolvedValue(undefined);
+    handleSessionInvalid({ invalidateQueries });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ["portal", "common", "actor"] });
+    expect(useLoginDialogStore.getState().request).toBeNull();
+  });
+
+  it("公开读 401 匿名重试后重新探测登录态（actor 被再次调用）", async () => {
+    // 模拟 main.tsx 对 portal:session-invalid 的监听：失效 actor 查询（活跃 observer 重取探测）。
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    const onSessionInvalid = () => handleSessionInvalid(client);
+    window.addEventListener(SESSION_INVALID_EVENT, onSessionInvalid);
+    let actorCalls = 0;
+    let readCalls = 0;
+    server.use(
+      http.get("/internal/identity/actor", () => {
+        actorCalls += 1;
+        return HttpResponse.json({ code: "SESSION_REQUIRED", detail: "未登录" }, { status: 401 });
+      }),
+      http.get("/internal/portal/home", () => {
+        readCalls += 1;
+        if (readCalls === 1) return HttpResponse.json({ code: "SESSION_EXPIRED", detail: "会话已过期" }, { status: 401 });
+        return HttpResponse.json({ apps: [], skills: [], plugins: [], mcps: [], departments: [], skillPackages: [], updates: null });
+      }),
+    );
+    try {
+      renderHook(() => useCurrentActor(), { wrapper: ({ children }: { children: React.ReactNode }) => <QueryClientProvider client={client}>{children}</QueryClientProvider> });
+      await waitFor(() => expect(actorCalls).toBe(1));
+      await act(async () => { await getHome(); });
+      await waitFor(() => expect(actorCalls).toBe(2));
+      expect(readCalls).toBe(2);
+    } finally {
+      window.removeEventListener(SESSION_INVALID_EVENT, onSessionInvalid);
+    }
+  });
+
+  it("公开读 401 匿名重试后，订阅 actor 的 UI 自动降级为未登录视图（回归：removeQueries 不冻结在途 observer）", async () => {
+    // main.tsx 等价接线：portal:session-invalid → 失效 actor 查询（活跃 observer 重取探测）。
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false, staleTime: 30_000 } } });
+    const onSessionInvalid = () => handleSessionInvalid(client);
+    window.addEventListener(SESSION_INVALID_EVENT, onSessionInvalid);
+    let actorCalls = 0;
+    let homeCalls = 0;
+    server.use(
+      http.get("/internal/identity/actor", () => {
+        actorCalls += 1;
+        if (actorCalls === 1) return HttpResponse.json({ employeeId: "E1001", displayName: "林知行", roleCodes: ["employee"], departmentIds: ["dept-1"], primaryDepartmentId: "dept-1", sessionId: "session-1" });
+        return HttpResponse.json({ code: "SESSION_REQUIRED", detail: "未登录" }, { status: 401 });
+      }),
+      http.get("/internal/portal/home", () => {
+        homeCalls += 1;
+        if (homeCalls === 1) return HttpResponse.json({ code: "SESSION_EXPIRED", detail: "会话已过期" }, { status: 401 });
+        return HttpResponse.json({ apps: [], skills: [], plugins: [], mcps: [], departments: [], skillPackages: [], updates: null });
+      }),
+    );
+    function ActorProbe() {
+      const actor = useCurrentActor();
+      return <output data-testid="actor-state">{actor.isPending ? "pending" : actor.isError ? "anonymous" : actor.data?.employeeId ?? "no-data"}</output>;
+    }
+    render(
+      <QueryClientProvider client={client}>
+        <ActorProbe />
+      </QueryClientProvider>,
+    );
+    // 启动探测：已登录。
+    await waitFor(() => expect(screen.getByTestId("actor-state")).toHaveTextContent("E1001"));
+    // 公开读端点 401（会话已过期）→ 匿名重试一次 → 恢复后 UI 应自动降级为未登录。
+    await act(async () => { await getHome(); });
+    await waitFor(() => expect(screen.getByTestId("actor-state")).toHaveTextContent("anonymous"));
+    expect(homeCalls).toBe(2);
+  });
+
+  it("未登录访问个人中心时展示登录提示并自动打开登录弹窗", async () => {
+    useLoginDialogStore.setState({ request: null });
+    server.use(
+      http.get("/internal/identity/actor", () => HttpResponse.json({ code: "SESSION_REQUIRED", detail: "未登录" }, { status: 401 })),
+      http.get("/internal/identity/login/options", () => HttpResponse.json({ methods: ["password"] })),
+    );
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+
+    render(
+      <StrictMode>
+        <QueryClientProvider client={client}>
+          <MemoryRouter initialEntries={["/dashboard"]}>
+            <Routes>
+              <Route element={<AuthGuard />}>
+                <Route path="/dashboard" element={<LocationProbe />} />
+              </Route>
+            </Routes>
+            <LoginDialog />
+          </MemoryRouter>
+        </QueryClientProvider>
+      </StrictMode>,
+    );
+
+    await waitFor(() => expect(screen.getByRole("dialog")).toBeInTheDocument());
+    // 弹窗（modal）会把背后的页面标记 aria-hidden，关闭后再断言登录提示面板。
+    useLoginDialogStore.setState({ request: null });
+    await waitFor(() => expect(screen.getByRole("heading", { name: "登录后继续" })).toBeInTheDocument());
+    expect(screen.getByRole("button", { name: "立即登录" })).toBeInTheDocument();
+    useLoginDialogStore.setState({ request: null });
+  });
+
+  it("useRequireLogin 未登录时打开登录弹窗并暂缓动作", async () => {
+    useLoginDialogStore.setState({ request: null });
+    server.use(http.get("/internal/identity/actor", () => HttpResponse.json({ code: "SESSION_REQUIRED", detail: "未登录" }, { status: 401 })));
+    const { client, result } = renderWithQueryClient(() => useRequireLogin());
+    await waitFor(() => expect(client.getQueryState(commonKeys.actor)?.status).toBe("error"));
+    await act(async () => {});
+    const onSuccess = vi.fn();
+    act(() => { result.current(onSuccess); });
+    expect(useLoginDialogStore.getState().request?.onSuccess).toBe(onSuccess);
+    expect(onSuccess).not.toHaveBeenCalled();
+    useLoginDialogStore.setState({ request: null });
+  });
+
+  it("useRequireLogin 已登录时直接执行动作", async () => {
+    server.use(http.get("/internal/identity/actor", () => HttpResponse.json({ employeeId: "E1001", displayName: "林知行", roleCodes: ["employee"], departmentIds: ["dept-1"], primaryDepartmentId: "dept-1", sessionId: "session-1" })));
+    const { client, result } = renderWithQueryClient(() => useRequireLogin());
+    await waitFor(() => expect(client.getQueryData(commonKeys.actor)).toBeTruthy());
+    await act(async () => {});
+    const onSuccess = vi.fn();
+    act(() => { result.current(onSuccess); });
+    expect(onSuccess).toHaveBeenCalledTimes(1);
+    expect(useLoginDialogStore.getState().request).toBeNull();
   });
 
   it("publishErrorGuidance 区分可编辑、需刷新与仅提示的错误", () => {

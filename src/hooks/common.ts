@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { createResourceComment, favoriteResource, getCurrentActor, getHome, listResourceComments, logout } from "@/apis";
-import { loginHref } from "@/utils/routes";
 import { listQuerySchema } from "@/schemas";
 import type { ListQuery, ResourceDetail, ResourceType } from "@/types";
 
@@ -16,17 +15,18 @@ export function useCurrentActor() {
 }
 
 export function useHomeQuery() {
-  return useQuery({ queryKey: commonKeys.home, queryFn: getHome });
+  // 公开读端点：401 匿名重试已由 apiFetch 完成，retry:false 避免 React Query 重试叠加（匿名限流敏感）。
+  return useQuery({ queryKey: commonKeys.home, queryFn: getHome, retry: false });
 }
 
-/** 退出登录：注销服务端会话后清空缓存并跳转登录页。 */
+/** 退出登录：注销服务端会话后清空缓存并回到门户首页。 */
 export function useLogout() {
   const client = useQueryClient();
   return useMutation({
     mutationFn: logout,
     onSuccess: () => {
       client.clear();
-      window.location.assign(loginHref());
+      window.location.assign("/");
     },
   });
 }
@@ -46,7 +46,8 @@ export function useListUrlState() {
 }
 
 export function useResourceComments(type: ResourceType, id: string) {
-  return useQuery({ queryKey: commonKeys.comments(type, id), queryFn: () => listResourceComments(type, id), enabled: Boolean(id) });
+  // 公开读端点：401 匿名重试已由 apiFetch 完成，retry:false 避免重试叠加。
+  return useQuery({ queryKey: commonKeys.comments(type, id), queryFn: () => listResourceComments(type, id), enabled: Boolean(id), retry: false });
 }
 
 export function useCreateComment(type: ResourceType, id: string) {

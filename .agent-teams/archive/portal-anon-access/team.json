@@ -1,0 +1,637 @@
+{
+  "name": "portal-anon-access",
+  "id": "portal-anon-access",
+  "description": "AI-HUB-PORTAL 前端适配匿名公开访问：按后端新契约（任务提示词 §一，repo 内无 docs/handoff/ai-hub-portal-api.md，以提示词契约为唯一事实来源）将门户从\"强制登录才能浏览\"改为\"未登录可浏览、登录后享受个性化\"。工作区已有上一轮未提交的匿名访问实现（登录弹窗方案，见 AGENTS.md 产品决策），团队任务=审计现状与契约的差距并修复，重点 P1-5 公开读端点 401 匿名重试；验收清单见任务提示词 §四；约束：不写 localStorage、不改 URL/方法/字段语义、不强制覆盖读响应缓存头、保持 credentials same-origin 与 CSRF 头逻辑。",
+  "captainSessionId": "session-6ef8978b-bf43-4715-be8e-7408946e2f33",
+  "createdAt": 1787975383222,
+  "members": [
+    {
+      "id": "978f4241-00ff-4ba1-a652-3d0f0df8086e",
+      "name": "auditor",
+      "role": "researcher",
+      "provider": "deepseek-official",
+      "model": "deepseek-v4-flash",
+      "reasoningEffort": "max",
+      "executionPrompt": "你是契约审计员。以任务提示词中的后端契约（端点分级/匿名语义/缓存头/限流/actor 探测）为唯一事实来源（repo 内不存在 docs/handoff/ai-hub-portal-api.md，不要假定其存在）。对照当前工作区实现逐项核对，输出差距清单。注意：AGENTS.md 已记录产品决策——登录不设独立页面，统一走全局登录弹窗（src/components/auth/LoginDialog.tsx），\"引导登录\"=打开弹窗并携带 returnTo，不要建议改回独立登录页。",
+      "joinedAt": 1787975392265,
+      "status": "removed"
+    },
+    {
+      "id": "283697e8-131a-45b9-af61-f008ca265aa2",
+      "name": "engineer",
+      "role": "engineer",
+      "provider": "deepseek-official",
+      "model": "deepseek-v4-flash",
+      "reasoningEffort": "max",
+      "executionPrompt": "你是实现工程师。按审计差距清单实施修复，重点实现 P1-5：公开读端点（home/列表/详情/评论 GET/部门/技能包/apps-hunt/docs）收到 401（携带无效会话）时，清除本地登录态缓存后以匿名身份重试一次，仍失败再提示；写端点与 dashboard 端点的 401 保持打开登录弹窗。严格遵守约束：不写 localStorage、不改 URL/方法/字段语义、不强制覆盖读响应缓存头、保持 credentials same-origin 与 CSRF 头逻辑、不引入无节制轮询。登录引导统一用现有全局弹窗（AGENTS.md 产品决策）。",
+      "joinedAt": 1787975392386,
+      "status": "removed"
+    },
+    {
+      "id": "fc6644ee-3c7d-4fcc-8bd8-bf95854da4b6",
+      "name": "verifier",
+      "role": "engineer",
+      "provider": "deepseek-official",
+      "model": "deepseek-v4-flash",
+      "reasoningEffort": "max",
+      "executionPrompt": "你是验收工程师。按任务提示词 §四验收清单逐项验证：无 Cookie 浏览（首页/四类列表/详情/评论读取/部门/技能包/docs/apps-hunt 200 且正常渲染、isFavorited=false、收藏/评论/投票入口引导登录不报错）；无 Cookie 写端点 401 → 打开登录弹窗并 returnTo；登录后个性化数据与写操作可用；会话过期访问公开读端点 → 自动降级匿名（不白屏不死循环）；actor 探测启动时与 401 恢复时调用。补齐单元测试（重点：公开读 401 匿名重试、写端点 401 弹窗、actor 探测）并运行 npm run typecheck、npm run lint、npm test、npm run build、npm run test:sites、npm run test:e2e。如环境允许可启动 dev server 用真实浏览器抽查未登录体验。",
+      "joinedAt": 1787975392428,
+      "status": "removed"
+    },
+    {
+      "id": "360bb4aa-070b-4723-b788-c2225bb03a23",
+      "name": "reviewer",
+      "role": "reviewer",
+      "provider": "deepseek-official",
+      "model": "deepseek-v4-flash",
+      "reasoningEffort": "max",
+      "executionPrompt": "你是评审员。对照任务提示词契约与 §四验收清单评审最终改动：匿名可浏览、写操作 401 引导登录（弹窗+returnTo）、公开读 401 匿名重试一次、登录后个性化一致、无 localStorage/无强制缓存头/无 URL 与字段语义改动、限流友好。评审需给出 pass 或 needs_revision 及具体 findings。",
+      "joinedAt": 1787975392457,
+      "status": "removed"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "t1",
+      "subject": "契约 v1.3 与现状差距审计",
+      "description": "以任务提示词 §一为唯一契约事实来源（repo 无 docs/handoff/ai-hub-portal-api.md，不要假定存在）。对照当前工作区实现（含上一轮未提交改动：src/apis/common.ts apiFetch 401 处理与 announceUnauthorized、src/apis/session.ts handleUnauthorized、src/router/guards.tsx AuthGuard、src/components/auth/LoginDialog.tsx 全局登录弹窗、src/hooks/auth.ts useRequireLogin/useLoginMutation、src/hooks/common.ts useCurrentActor、PortalHeader/ResourceDetailView/AppsHuntPage 登录门槛），逐项核对任务提示词 §四验收清单 7 项，输出差距清单：每项【通过/缺失/部分实现】+ 证据（文件:行）+ 修复建议。重点核查：①公开读端点 401（无效会话）是否只弹登录弹窗而未做\"清登录态+匿名重试一次\"（P1-5）；②actor 探测是否在启动与 401 恢复时调用；③前端是否强制覆盖读响应缓存头；④是否存在可能违反匿名限流（60s/120 次）的轮询/重试配置；⑤登录引导是否统一走弹窗（AGENTS.md 产品决策，勿建议恢复独立登录页）。",
+      "status": "completed",
+      "assignee": "auditor",
+      "dependencies": [],
+      "attempt": 1,
+      "createdAt": 1787975401666,
+      "updatedAt": 1787976377864,
+      "kind": "work",
+      "deliverables": [
+        ".scratch/portal-anon-access/audit.md"
+      ],
+      "attemptId": "4d21634d-e4ab-4129-8050-e1f8c7aabee4",
+      "reassigning": false,
+      "output": "审计完成，报告见 .scratch/portal-anon-access/audit.md。结论：\n【确认核心差距 P1-5】公开读端点（home/四类列表/详情/评论 GET/部门/技能包/apps-hunt/docs）收到 401（无效会话）时，apiFetch（src/apis/common.ts:78）对任何非 announceUnauthorized:false 的 401 派发 portal:unauthorized → main.tsx:14 → handleUnauthorized（src/apis/session.ts:17）打开登录弹窗；无「清登录态+匿名重试一次」逻辑，React Query 默认 retry:1 只是原样重发。需在 apiFetch 层增加公开读端点标记：401 → 清 actor 缓存 → 匿名重试一次（仅一次，限流敏感）→ 仍失败才 ErrorState；不弹窗不跳转不死循环。写端点/dashboard 401 保持弹窗（现状已满足：弹窗+returnTo+登录后继续 onSuccess）。\n【部分实现】actor 探测：启动时经 PortalHeader/AuthGuard 的 useCurrentActor 隐式探测 ✔；401 恢复时 handleUnauthorized 仅 removeQueries(actor)（session.ts:16），无显式重探测 ✘。\n【通过】匿名可浏览（AuthGuard 只包 dashboardRoutes，router/index.tsx:26）；isFavorited/hasVoted 匿名降级（common.ts:141, apps.ts:42）；写端点 401 弹窗+returnTo+继续动作（auth.ts:17-23, LoginDialog.tsx:61-66）；约束全合规（无 localStorage、无 Cache-Control 覆盖、credentials same-origin + CSRF 头、无 refetchInterval/轮询，main.tsx:10 仅 retry:1/staleTime:30s）；登录引导统一弹窗（/login 重定向、LoginPage.tsx 已删）。\n【P2 附带】ResourceDetailView.tsx:75「打开应用/查看安装」已登录时无后续动作（requireLogin() 无 onSuccess），建议顺带补。\n【P3】getLoginOptions/getLoginChallenge（auth.ts:17,21）未传 announceUnauthorized:false；现有测试 portal.test.tsx:584-608 锁定旧「任意 401 弹窗」行为，P1-5 实现后需同步改写并新增用例（t3 落实）。\n验收清单 7 项逐项核对：1.1-1.4、1.7 通过；1.5（P1-5）缺失；1.6 部分实现。"
+    },
+    {
+      "id": "t2",
+      "subject": "实现匿名 401 恢复与其余差距修复",
+      "description": "按审计差距清单实施修复。已知核心差距（以审计确认为准）：公开读端点的 401 目前会派发 portal:unauthorized 事件并打开登录弹窗，需改为「清登录态缓存 → 匿名重试一次 → 仍失败再提示」；仅写端点与 dashboard 端点保留弹窗引导。保持现有架构：apiFetch 单一客户端、React Query 缓存、全局登录弹窗（AGENTS.md 产品决策，勿引入独立登录页）。不要为匿名新建一套接口调用（同一 URL/类型），isFavorited 匿名恒 false 由页面按登录态决定展示。",
+      "status": "failed",
+      "assignee": "engineer",
+      "dependencies": [
+        "t1"
+      ],
+      "attempt": 1,
+      "createdAt": 1787975409994,
+      "updatedAt": 1787976996371,
+      "kind": "implementation",
+      "objective": "按后端契约 v1.3 与审计差距清单完成前端修复，使验收清单 7 项全部通过：匿名可浏览、写操作 401 弹窗引导登录并 returnTo、公开读端点 401 匿名重试一次、登录后个性化一致、会话过期自动降级匿名且不死循环。",
+      "inScope": [
+        "src",
+        "tests"
+      ],
+      "outOfScope": [
+        ".openai",
+        "worker",
+        "scripts/prepare-sites-build.mjs",
+        "tests/sites-worker.test.mjs",
+        "dist",
+        "docs/design-references"
+      ],
+      "acceptance": [
+        "公开读端点（home/四类列表/详情/评论 GET/部门/技能包/apps-hunt/docs）收到 401（携带无效会话）时：清除本地登录态缓存 → 以匿名身份重试一次 → 成功后页面正常渲染，不弹登录弹窗、不跳转、不死循环；仍失败才走错误提示。",
+        "写端点（favorite/comments POST/apps-hunt/votes/dashboard/publish/*）与 dashboard 读端点的 401：打开全局登录弹窗（含 returnTo），登录后 returnTo 回原页并继续原动作。",
+        "GET /internal/identity/actor 登录态探测：应用启动时与 401 恢复时各调用一次并缓存结果（200=已登录/401=未登录），不使用 document.cookie。",
+        "未登录时收藏/评论/投票/个人中心入口不报错：引导登录（弹窗），已登录行为与改造前一致。",
+        "不写入 localStorage；不修改任何后端 URL/请求方法/响应字段语义；不对读响应设置或强制覆盖 Cache-Control；保持 credentials same-origin 与 CSRF 头逻辑；不引入低于 60s 间隔的轮询。",
+        "审计差距清单中的其余 P0/P1 项按审计结论修复（每项有对应实现或明确说明无需改动）。"
+      ],
+      "verify": [
+        "npm run typecheck",
+        "npm run lint",
+        "npm test",
+        "npm run build"
+      ],
+      "attemptId": "a5fc056d-94cb-4060-b1a5-cc52b85c7a50",
+      "reassigning": false,
+      "output": "【实现已完成并全量验证，但任务无法通过完成门禁——计划声明缺陷，需船长裁决】实现工作全部完成：P1-5 匿名 401 重试（apiFetch allowAnonymousRetry + 16 个公开读端点 + 公开读查询 retry:false + SESSION_INVALID_EVENT/handleSessionInvalid 清登录态并重探测 actor）、写端点/dashboard 401 保持弹窗、登录流端点 announceUnauthorized:false、P2 打开应用按钮、5 个新测试；typecheck/lint/test(40 passed)/build 全绿。但 agent_teams_update_task(status=completed, changedPaths=[15 个实际改动文件]) 被质量门禁拒绝：`implementation cannot complete: src/apis/common.ts is undeclared`。根因（已对插件源码 quality-gates.js 的 classifyChangedPath/pathMatchesScope 直接执行验证）：t2 声明 inScope=[\"src\",\"tests\"]（无尾斜杠），而 pathMatchesScope 将无尾斜杠 pattern 视为\"精确文件名\"，因此 src/ 与 tests/ 下任何文件都归类为 'undeclared'；只有目录写法（\"src/\",\"tests/\"）才能匹配（插件自带质量规划提示即用 inScope:['src/']）。该缺陷在运行中团队内无工具可修：edit_plan 仅限 staged；update_task 无 inScope 字段；按协议不可直接编辑 .agent-teams 状态文件。且 t2 failed 会使 t3/t4 永久阻塞（依赖不可改）。建议船长：以修正声明（inScope 带尾斜杠，如 [\"src/\",\"tests/\"]）重建团队/任务——工作区改动与 .scratch/portal-anon-access/audit.md 均在，新 t2 直接复跑验证即可 completed。改动文件清单（供重建后使用）：src/apis/common.ts、src/apis/session.ts、src/apis/apps.ts、src/apis/skills.ts、src/apis/source.ts、src/apis/docs.ts、src/apis/auth.ts、src/hooks/common.ts、src/hooks/apps.ts、src/hooks/skills.ts、src/hooks/source.ts、src/hooks/docs.ts、src/main.tsx、src/components/common/ResourceDetailView.tsx、tests/portal.test.tsx。"
+    },
+    {
+      "id": "t3",
+      "subject": "验收清单逐项验证与质量门禁",
+      "description": "按任务提示词 §四验收清单逐项验证实现结果，并补齐缺失的自动化测试（重点：公开读端点 401→清登录态→匿名重试一次；写端点 401→弹窗；actor 探测调用时机；未登录入口行为）。运行全量质量门禁：npm run typecheck / lint / test / build / test:sites / test:e2e。如环境允许，可启动 dev server 用真实浏览器抽查未登录浏览与登录弹窗流程。产出结构化验证报告。",
+      "status": "pending",
+      "dependencies": [
+        "t2"
+      ],
+      "attempt": 0,
+      "createdAt": 1787975416531,
+      "updatedAt": 1787982618688,
+      "kind": "verification",
+      "objective": "以自动化证据验证任务提示词 §四验收清单全部 7 项在实现后的代码上成立，且全量质量门禁（typecheck/lint/test/build/test:sites/e2e）通过。",
+      "acceptance": [
+        "任务提示词 §四验收清单 7 项逐项有自动化证据（新增/更新单元测试覆盖：公开读 401 匿名重试一次、写端点 401 打开弹窗、actor 探测启动/401 恢复调用、未登录入口引导登录）。",
+        "npm run typecheck、npm run lint、npm test、npm run build 全绿；npm run test:sites 通过；npm run test:e2e 全绿（环境允许时）。",
+        "无 Cookie / 有会话 / 会话过期三态均有覆盖：匿名渲染 published 资源且 isFavorited=false、登录后个人化、过期自动降级匿名且无白屏/死循环。",
+        "验证结论以结构化证据记录（命令输出、测试名、必要时浏览器截图）。"
+      ],
+      "handoffId": "e5650180-107a-4075-8a0f-05eb81792242",
+      "reassigning": false
+    },
+    {
+      "id": "t4",
+      "subject": "按契约与验收清单评审最终改动",
+      "description": "评审实现改动（t2）与验证证据（t3）：是否符合后端契约 v1.3（端点分级/匿名语义/可选认证 401/缓存头/限流）与 AGENTS.md 产品决策（登录统一走全局弹窗）。给出 pass 或 needs_revision 及结构化 findings。",
+      "status": "pending",
+      "dependencies": [
+        "t2",
+        "t3"
+      ],
+      "attempt": 0,
+      "createdAt": 1787975422521,
+      "updatedAt": 1787982618688,
+      "kind": "review",
+      "objective": "确认最终改动满足任务契约与验收清单，无 blocker/high 级别问题，可交付。",
+      "acceptance": [
+        "评审必须基于最新实现与验证证据（t2 的 diff + t3 的报告）。",
+        "特别检查：公开读 401 只重试一次且不弹窗不死循环；写端点 401 仍弹窗并 returnTo；无 localStorage/无强制缓存头/无 URL 与字段语义改动；actor 探测时机正确。"
+      ],
+      "reviewedTaskId": "t2",
+      "handoffId": "dca177b8-da07-4875-a403-bb0e201b4701",
+      "reassigning": false
+    },
+    {
+      "id": "t5",
+      "subject": "实现匿名 401 恢复与其余差距修复（替代 t2，inScope 修正）",
+      "description": "替代已失败的 t2（原 t2 因 inScope 声明缺少尾斜杠被完成门禁拒绝，属计划声明缺陷，与实现质量无关）。工作区中 engineer 已完成的实现与测试改动仍在（上一轮 t2 attempt 1 已通过 typecheck/lint/test/build），本任务应复用这些改动：认领后先核对工作区现状（git status 与 .scratch/portal-anon-access/audit.md），按审计差距清单确认实现完整，必要时补齐，然后完成门禁（acceptanceResults 逐条 + commandsRun + changedPaths，本次 inScope 已修正为 src/、tests/ 目录写法）。",
+      "status": "completed",
+      "assignee": "engineer",
+      "dependencies": [
+        "t1"
+      ],
+      "attempt": 1,
+      "createdAt": 1787977057106,
+      "updatedAt": 1787977125728,
+      "kind": "implementation",
+      "objective": "按后端契约 v1.3 与审计差距清单完成前端修复（复用已实现的改动并确认完整性），使验收清单 7 项全部通过：匿名可浏览、写操作 401 弹窗引导登录并 returnTo、公开读端点 401 匿名重试一次、登录后个性化一致、会话过期自动降级匿名且不死循环。",
+      "inScope": [
+        "src/",
+        "tests/"
+      ],
+      "outOfScope": [
+        ".openai/",
+        "worker/",
+        "scripts/",
+        "tests/sites-worker.test.mjs",
+        "dist/",
+        "docs/design-references/"
+      ],
+      "acceptance": [
+        "公开读端点（home/四类列表/详情/评论 GET/部门/技能包/apps-hunt/docs）收到 401（携带无效会话）时：清除本地登录态缓存 → 以匿名身份重试一次（仅一次，不叠加 RQ retry）→ 成功后页面正常渲染，不弹登录弹窗、不跳转、不死循环；仍失败走 ErrorState。",
+        "写端点（favorite/comments POST/apps-hunt/votes/dashboard/publish/*）与 dashboard 读端点的 401：打开全局登录弹窗（含 returnTo），登录后 returnTo 回原页并继续原动作。",
+        "GET /internal/identity/actor 登录态探测：应用启动时与 401 恢复时调用并缓存结果（200=已登录/401=未登录），不使用 document.cookie。",
+        "未登录时收藏/评论/投票/个人中心入口不报错：引导登录（弹窗），已登录行为与改造前一致。",
+        "不写入 localStorage；不修改任何后端 URL/请求方法/响应字段语义；不对读响应设置或强制覆盖 Cache-Control；保持 credentials same-origin 与 CSRF 头逻辑；不引入低于 60s 间隔的轮询。",
+        "审计附带项：ResourceDetailView 打开应用按钮补 onSuccess 后续动作；getLoginOptions/getLoginChallenge 加 announceUnauthorized:false；旧 401 行为测试随实现改写。"
+      ],
+      "verify": [
+        "npm run typecheck",
+        "npm run lint",
+        "npm test",
+        "npm run build"
+      ],
+      "attemptId": "dbe876fa-de0b-448d-8a13-4342f8de90da",
+      "reassigning": false,
+      "output": "t5 完成（复用 t2 已实现并全量验证的改动，本次 inScope 已修正为 src/、tests/ 目录写法，changedPaths 15 项全部通过门禁预检）。实现内容：①P1-5 核心：apiFetch allowAnonymousRetry——公开读端点 401 → 派发 portal:session-invalid 清 actor 缓存（handleSessionInvalid 显式 prefetchQuery 重探测登录态）→ 同一请求匿名重试一次 → 成功返回；仍失败抛 ApiError 走 ErrorState，不弹窗不跳转不死循环；16 个公开读端点（home/四类列表/详情/评论 GET/部门/技能包/apps-hunt/docs）全部标记，公开读查询全部 retry:false（单次查询最多 2 次请求，限流友好）。②写端点/dashboard 401 保持弹窗+returnTo+继续原动作（handleUnauthorized 未动）。③actor 探测：启动 useCurrentActor + 401 恢复 handleSessionInvalid 重探测，不用 document.cookie。④P2 打开应用按钮补 onSuccess（跳安装页）；P3 getLoginOptions/getLoginChallenge 加 announceUnauthorized:false，并顺带覆盖登录流端点避免覆盖弹窗 returnTo/onSuccess。⑤tests/portal.test.tsx 新增 5 用例（匿名重试成功/连续 401 仅一次/写端点仍派发事件/handleSessionInvalid 重探测/401 恢复后 actor 被再次调用）。约束全合规：无 localStorage、URL/方法/字段未改、不触碰缓存头、same-origin+CSRF 保留、重试仅一次无轮询。验证：typecheck/lint/test(40 passed)/build 全绿。",
+      "changedPaths": [
+        "src/apis/common.ts",
+        "src/apis/session.ts",
+        "src/apis/apps.ts",
+        "src/apis/skills.ts",
+        "src/apis/source.ts",
+        "src/apis/docs.ts",
+        "src/apis/auth.ts",
+        "src/hooks/common.ts",
+        "src/hooks/apps.ts",
+        "src/hooks/skills.ts",
+        "src/hooks/source.ts",
+        "src/hooks/docs.ts",
+        "src/main.tsx",
+        "src/components/common/ResourceDetailView.tsx",
+        "tests/portal.test.tsx"
+      ],
+      "acceptanceResults": [
+        {
+          "criterion": "公开读端点（home/四类列表/详情/评论 GET/部门/技能包/apps-hunt/docs）收到 401（携带无效会话）时：清除本地登录态缓存 → 以匿名身份重试一次（仅一次，不叠加 RQ retry）→ 成功后页面正常渲染，不弹登录弹窗、不跳转、不死循环；仍失败走 ErrorState。",
+          "status": "passed",
+          "evidence": "apiFetch 新增 allowAnonymousRetry（src/apis/common.ts:100-111）：401 → 派发 portal:session-invalid（main.tsx 监听 → handleSessionInvalid 移除 actor 缓存）→ 同一 URL/方法/body 匿名重试一次 → 成功返回；仍失败（含再次 401）抛 ApiError 走页面 ErrorState，不派发事件、不弹窗、不跳转、不再次重试。16 个公开读端点全部标记（common/apps/skills/source/docs.ts），公开读查询全部 retry:false 避免 RQ 重试叠加（限流敏感，单次查询最多 2 次请求）。新增测试「公开读端点 401 时清除登录态缓存并匿名重试一次」断言恰好 2 次请求 + session-invalid 事件 1 次 + 无 unauthorized 事件；「连续 401 时仅重试一次后抛错」断言 2 次请求 + 无事件。"
+        },
+        {
+          "criterion": "写端点（favorite/comments POST/apps-hunt/votes/dashboard/publish/*）与 dashboard 读端点的 401：打开全局登录弹窗（含 returnTo），登录后 returnTo 回原页并继续原动作。",
+          "status": "passed",
+          "evidence": "写端点与 dashboard 端点未加 allowAnonymousRetry，401 仍走 UNAUTHORIZED_EVENT → handleUnauthorized（src/apis/session.ts:23-26）打开全局登录弹窗（returnTo=currentReturnTo），登录成功 finishLogin 执行 onSuccess 继续原动作并 navigate(returnTo)（LoginDialog.tsx:61-66）。新增测试「写端点 401 仍派发 portal:unauthorized 事件」；既有 handleUnauthorized/AuthGuard 弹窗测试保持通过。另将登录流端点（login/password、dingtalk start/complete、challenge、options）标记 announceUnauthorized:false，避免登录失败 401 覆盖弹窗的 returnTo/onSuccess。"
+        },
+        {
+          "criterion": "GET /internal/identity/actor 登录态探测：应用启动时与 401 恢复时调用并缓存结果（200=已登录/401=未登录），不使用 document.cookie。",
+          "status": "passed",
+          "evidence": "启动时：PortalHeader/AuthGuard 挂载即消费 useCurrentActor（src/hooks/common.ts:13-15，retry:false）。401 恢复时：handleSessionInvalid（src/apis/session.ts:36-38）移除 actor 缓存后显式 prefetchQuery（queryKey actor、retry:false、staleTime:30s）完成重探测并缓存结果；与挂载中 observer 自动重取由 React Query 去重为一次请求。登录态判断仅来自 actor 查询，document.cookie 仅用于写请求 CSRF 头。新增测试「handleSessionInvalid 清除登录态缓存并触发一次 actor 重探测，不打开登录弹窗」与「公开读 401 匿名重试后重新探测登录态（actor 被再次调用）」。"
+        },
+        {
+          "criterion": "未登录时收藏/评论/投票/个人中心入口不报错：引导登录（弹窗），已登录行为与改造前一致。",
+          "status": "passed",
+          "evidence": "useRequireLogin（src/hooks/auth.ts:31-41）与 AuthGuard 逻辑未改：未登录打开登录弹窗暂缓动作，登录后自动继续。P2 修复：「打开应用/查看安装」按钮（ResourceDetailView.tsx:75）从 requireLogin() 改为 requireLogin(() => changeTab('install'))，已登录直接跳安装页、未登录登录后自动跳转。既有测试（useRequireLogin 未登录/已登录、AuthGuard 未登录弹窗）全部通过。"
+        },
+        {
+          "criterion": "不写入 localStorage；不修改任何后端 URL/请求方法/响应字段语义；不对读响应设置或强制覆盖 Cache-Control；保持 credentials same-origin 与 CSRF 头逻辑；不引入低于 60s 间隔的轮询。",
+          "status": "passed",
+          "evidence": "全改动无 localStorage/sessionStorage；匿名重试仅重放同一 init（同 URL/方法/body，CSRF 头与 credentials:same-origin 复用同一构造逻辑 common.ts:92-98，未改语义）；未触碰 response headers/缓存头；匿名重试严格一次、公开读查询 retry:false、无 refetchInterval/setInterval/轮询。"
+        },
+        {
+          "criterion": "审计附带项：ResourceDetailView 打开应用按钮补 onSuccess 后续动作；getLoginOptions/getLoginChallenge 加 announceUnauthorized:false；旧 401 行为测试随实现改写。",
+          "status": "passed",
+          "evidence": "P2：ResourceDetailView.tsx:75 requireLogin(() => changeTab('install')) 登录后跳安装页。P3：getLoginOptions/getLoginChallenge（auth.ts:18,23）加 announceUnauthorized:false，并顺带覆盖 login/password、dingtalk start/complete（理由：401 会覆盖弹窗 returnTo/onSuccess）。旧 401 测试改写：保留「apiFetch 默认 401 派发事件」（未加标记的调用仍弹窗），新增公开读/写端点分类用例与 handleSessionInvalid 用例（tests/portal.test.tsx 新增 5 用例）。"
+        }
+      ],
+      "commandsRun": [
+        {
+          "command": "npm run typecheck",
+          "status": "passed",
+          "exitCode": 0,
+          "evidence": "tsc --noEmit 通过，0 错误"
+        },
+        {
+          "command": "npm run lint",
+          "status": "passed",
+          "exitCode": 0,
+          "evidence": "eslint src tests 0 errors（5 条既有 react-refresh warning 位于未触碰的 src/components/ui/*）；lint:styles 样式架构检查通过"
+        },
+        {
+          "command": "npm test",
+          "status": "passed",
+          "exitCode": 0,
+          "evidence": "vitest run：40 tests passed（35 既有 + 5 新增 P1-5 用例），1 file passed"
+        },
+        {
+          "command": "npm run build",
+          "status": "passed",
+          "exitCode": 0,
+          "evidence": "tsc --noEmit && vite build 成功（3459 modules），prepare-sites-build 产出 dist/client/index.html、dist/server/index.js、dist/.openai/hosting.json"
+        }
+      ]
+    },
+    {
+      "id": "t6",
+      "subject": "验收清单逐项验证与质量门禁（替代 t3）",
+      "description": "替代被 t2 声明缺陷波及的 t3（t3 依赖已失败的 t2，无法解锁）。验证对象为 t5 的实现（engineer 已在 t2 attempt 1 落盘实现并通过 typecheck/lint/40 tests/build，t5 将复核并完成门禁）。按任务提示词 §四验收清单逐项验证并补齐自动化测试（重点：公开读 401→清登录态→匿名重试一次且仅一次；写端点 401→弹窗；handleSessionInvalid 重探测 actor；未登录入口行为），运行全量门禁 npm run typecheck / lint / test / build / test:sites / test:e2e，产出结构化验证报告。",
+      "status": "failed",
+      "assignee": "verifier",
+      "dependencies": [
+        "t5"
+      ],
+      "attempt": 1,
+      "createdAt": 1787977069042,
+      "updatedAt": 1787977881626,
+      "kind": "verification",
+      "objective": "以自动化证据验证任务提示词 §四验收清单全部 7 项在 t5 实现上成立，且全量质量门禁（typecheck/lint/test/build/test:sites/e2e）通过。",
+      "acceptance": [
+        "任务提示词 §四验收清单 7 项逐项有自动化证据（覆盖：公开读 401 匿名重试一次、连续 401 仅一次重试、写端点 401 弹窗、actor 探测启动/401 恢复调用、未登录入口引导登录）。",
+        "npm run typecheck、npm run lint、npm test、npm run build 全绿；npm run test:sites 通过；npm run test:e2e 全绿（环境允许时）。",
+        "无 Cookie / 有会话 / 会话过期三态均有覆盖：匿名渲染 published 资源且 isFavorited=false、登录后个人化、过期自动降级匿名且无白屏/死循环。",
+        "验证结论以结构化证据记录（命令输出、测试名）。"
+      ],
+      "attemptId": "a7250d7f-f64a-4235-8c25-edd27bbaa352",
+      "reassigning": false,
+      "output": "验证发现 P1 级缺陷（阻止验收通过）：公开读 401 匿名重试的数据路径正确，但「清登录态 → UI 自动降级匿名」未达成——React Query v5 的 removeQueries 不通知已订阅 actor 查询的活跃 observer，PortalHeader/AccountActions 冻结在删除前的最后渲染状态（浏览器实测头部账户区永久空白；jsdom 回归测试复现停留在 E1001）。新增回归测试 tests/portal.test.tsx「公开读 401 匿名重试后，订阅 actor 的 UI 自动降级为未登录视图」失败即证据；其余门禁全绿：typecheck/lint(0 errors)/build/test:sites(4/4)/test:e2e(20/20)；npm test 40 passed + 1 failed（即回归测试）。浏览器验收脚本 .scratch/portal-anon-access/verify-anon.mjs：A 场景（无 Cookie 匿名浏览 13 项全过：首页/列表/详情渲染、isFavorited=false、收藏/评论/投票弹窗引导、/dashboard 守卫、/login 重定向、无白屏）；B 场景（会话过期：匿名重试恰好一次 calls=2、不弹窗、actor 重探测、无死循环）除 B5（头部自动降级）外全过。修复方向：handleSessionInvalid/handleUnauthorized 用会通知 observer 的方式替换 removeQueries（如 client.invalidateQueries({queryKey: actor})，invalidate 本身触发重探测；actor 探测已 announceUnauthorized:false，重取 401 不弹窗不死循环），并保持写端点 401 弹窗路径不变。",
+      "findings": [
+        {
+          "id": "F1",
+          "severity": "high",
+          "problem": "公开读端点 401（P1-5）恢复后，订阅 actor 查询的 UI 不会自动降级为匿名：handleSessionInvalid（src/apis/session.ts:36-38，main.tsx:15 接线）用 client.removeQueries 清除 actor 查询，而 React Query v5 的 removeQueries 不通知活跃 observer（observer 订阅 query 对象而非 cache），PortalHeader/AccountActions（及 AuthGuard）冻结在删除前的最后渲染状态。真实浏览器验证（真实模式 dev server 5173 + 页面路由拦截模拟后端）：会话过期访问 /apps 时列表正常渲染（匿名重试成功），但头部账户区永久空白（既不显示用户名也不显示「登录」按钮），直到无关重渲染（导航/窗口焦点）才恢复；新增 jsdom 回归测试同样复现（ActorProbe 停留在 E1001，waitFor anonymous 超时）。契约「清登录态 → UI 自动降级匿名」未达成；handleUnauthorized 同型（写路径被弹窗+登录后导航掩盖，未暴露）。",
+          "requiredFix": "在 src/apis/session.ts 中把 handleSessionInvalid 的 removeQueries+prefetchQuery 替换为会通知 observer 的失效方式，例如 client.invalidateQueries({ queryKey: ACTOR_QUERY_KEY })（invalidate 通知 observer 并重取 → 401 → error → 未登录视图；actor 探测已 announceUnauthorized:false，重取 401 不弹窗不死循环，可移除手动 prefetch）；handleUnauthorized 一并改为同机制并保持弹窗+returnTo 不变。验收以新增回归测试「公开读 401 匿名重试后，订阅 actor 的 UI 自动降级为未登录视图」转绿为准。"
+        }
+      ],
+      "acceptanceResults": [
+        {
+          "criterion": "任务提示词 §四验收清单 7 项逐项有自动化证据（覆盖：公开读 401 匿名重试一次、连续 401 仅一次重试、写端点 401 弹窗、actor 探测启动/401 恢复调用、未登录入口引导登录）。",
+          "status": "failed",
+          "evidence": "公开读 401 匿名重试一次且仅一次：tests/portal.test.tsx:613（calls=2、派发 session-invalid、不派发 unauthorized）+ 浏览器 verify-anon B2（appsCalls=2）；连续 401 仅一次:636（calls=2 后抛错）；写端点 401 弹窗:653/:587/:604 + 浏览器 A3-A5（收藏/评论/投票点击均打开登录弹窗）；actor 探测启动:676（actorCalls=1）与 401 恢复:665/:676（actorCalls 1→2）+ 浏览器 B3；未登录入口引导:705/:736/:749 + 浏览器 A6/A7。但「会话过期→UI 自动降级匿名」在订阅 actor 的组件上失败（新增回归测试 + 浏览器 B5 复现冻结），故本项不成立。"
+        },
+        {
+          "criterion": "npm run typecheck、npm run lint、npm test、npm run build 全绿；npm run test:sites 通过；npm run test:e2e 全绿（环境允许时）。",
+          "status": "failed",
+          "evidence": "npm run typecheck 通过（exit 0）；npm run lint 通过（exit 0，0 errors，5 个既有 react-refresh warning，lint:styles 通过）；npm run build 通过（exit 0，dist/client/index.html + dist/server/index.js + dist/.openai/hosting.json 齐备）；npm run test:sites 通过（4/4）；npm run test:e2e 通过（20/20，desktop+mobile，fixtures dev server 自动启动）。npm test 失败：40 passed + 1 failed——失败项为本次新增的回归测试「公开读 401 匿名重试后，订阅 actor 的 UI 自动降级为未登录视图」（tests/portal.test.tsx:702-739），正是 F1 缺陷的自动化证据，修复后应转绿。"
+        },
+        {
+          "criterion": "无 Cookie / 有会话 / 会话过期三态均有覆盖：匿名渲染 published 资源且 isFavorited=false、登录后个人化、过期自动降级匿名且无白屏/死循环。",
+          "status": "failed",
+          "evidence": "无 Cookie 态：浏览器 verify-anon 场景 A 全过（首页/列表/详情匿名渲染、无「已收藏」态、收藏/评论/投票弹窗引导、/dashboard 守卫面板、/login 重定向、全程无未捕获页面错误）+ 单元测试:423/:783（published/isFavorited=false 映射）。有会话态：:201/:749 + fixture e2e（20/20）。会话过期态：数据路径通过（匿名重试恰好一次、无死循环 calls=2、无白屏、读端点 401 不弹窗、actor 重探测调用），但 UI 自动降级失败（头部冻结，浏览器 B5 + 回归测试复现）——本项不成立。"
+        },
+        {
+          "criterion": "验证结论以结构化证据记录（命令输出、测试名）。",
+          "status": "passed",
+          "evidence": "本任务 output 与 commandsRun 记录全部 6 项门禁命令的退出码与输出要点；浏览器验收脚本 .scratch/portal-anon-access/verify-anon.mjs 输出 14 项断言明细（A 场景 13 项全过、B 场景 1 项失败 B5）；vitest 失败输出完整记录（waitFor anonymous 超时、Received: E1001）。"
+        }
+      ],
+      "commandsRun": [
+        {
+          "command": "npm run typecheck",
+          "status": "passed",
+          "exitCode": 0,
+          "evidence": "tsc --noEmit 无错误"
+        },
+        {
+          "command": "npm run lint",
+          "status": "passed",
+          "exitCode": 0,
+          "evidence": "eslint src tests 0 errors（5 个既有 ui primitives react-refresh warning）；npm run lint:styles 样式架构检查通过"
+        },
+        {
+          "command": "npm test",
+          "status": "failed",
+          "exitCode": 1,
+          "evidence": "40 passed / 1 failed（tests/portal.test.tsx 新增回归测试「公开读 401 匿名重试后，订阅 actor 的 UI 自动降级为未登录视图」失败：ActorProbe 停留在 E1001，期望 anonymous——即 F1 缺陷证据）"
+        },
+        {
+          "command": "npm run build",
+          "status": "passed",
+          "exitCode": 0,
+          "evidence": "tsc + vite build 成功（3459 modules），产出 dist/client/index.html、dist/server/index.js、dist/.openai/hosting.json（Sites 打包就绪）"
+        },
+        {
+          "command": "npm run test:sites",
+          "status": "passed",
+          "exitCode": 0,
+          "evidence": "4/4 通过（静态资源回退、index.html 回退、不吞 API/写请求、Sites 打包产物）"
+        },
+        {
+          "command": "npm run test:e2e",
+          "status": "passed",
+          "exitCode": 0,
+          "evidence": "20/20 通过（desktop + mobile，fixtures dev server 自动启动；需先清理占用 4173 的陈旧 dev server 后重跑）"
+        },
+        {
+          "command": "node .scratch/portal-anon-access/verify-anon.mjs",
+          "status": "failed",
+          "exitCode": 1,
+          "evidence": "真实浏览器（playwright-core + 真实模式 dev server 5173 + 页面路由拦截模拟后端）：A 场景 13/13 通过（无 Cookie 匿名浏览全流程）；B 场景 5/6 通过（匿名重试恰好一次 appsCalls=2、401 不弹窗、actor 重探测 actorCalls=2、无页面错误），B5 失败：头部账户区冻结空白（与 F1 一致）；诊断输出 headerCount=2、actorCalls=2、dialogs=0、body 无用户名无登录按钮"
+        }
+      ]
+    },
+    {
+      "id": "t7",
+      "subject": "按契约与验收清单评审最终改动（替代 t4）",
+      "description": "替代被 t2 声明缺陷波及的 t4（t4 依赖已失败的 t2，无法解锁）。评审 t5 的实现改动与 t6 的验证证据，对照后端契约 v1.3（端点分级/匿名语义/可选认证 401/缓存头/限流）与 AGENTS.md 产品决策（登录统一走全局弹窗）给出 pass 或 needs_revision 及结构化 findings。",
+      "status": "pending",
+      "dependencies": [
+        "t5",
+        "t6"
+      ],
+      "attempt": 0,
+      "createdAt": 1787977069063,
+      "updatedAt": 1787982618688,
+      "kind": "review",
+      "objective": "确认 t5 最终改动满足任务契约与验收清单，无 blocker/high 级别问题，可交付。",
+      "acceptance": [
+        "评审基于 t5 的最新实现与 t6 的验证证据。",
+        "特别检查：公开读 401 只重试一次且不弹窗不死循环（SESSION_INVALID_EVENT 路径）；写端点 401 仍弹窗并 returnTo；无 localStorage/无强制缓存头/无 URL 与字段语义改动；actor 探测时机（启动 + 401 恢复）；公开读查询 retry:false 与匿名重试不叠加请求。"
+      ],
+      "reviewedTaskId": "t5",
+      "handoffId": "0c61a383-79ac-4ae8-8ae1-021b0202f8ee",
+      "reassigning": false
+    },
+    {
+      "id": "t8",
+      "subject": "修复 F1：actor 查询清态改为 observer 可感知（UI 自动降级匿名）",
+      "description": "修复 t6 验证发现的 P1 缺陷 F1：React Query v5 的 removeQueries 不通知已订阅查询的活跃 observer，handleSessionInvalid（src/apis/session.ts:36-38）清除 actor 查询后，PortalHeader/AccountActions/AuthGuard 冻结在删除前状态（浏览器实测头部账户区永久空白；jsdom 回归测试复现停留在 E1001）。同型的 handleUnauthorized 一并修复。验证方向（verifier 给出）：改用 invalidateQueries({queryKey:[\\\"portal\\\",\\\"common\\\",\\\"actor\\\"]})——通知 observer 并重取 → 401（actor 探测已 announceUnauthorized:false，不弹窗不死循环）→ error → 未登录视图；可移除手动 prefetchQuery。验收以回归测试转绿 + 浏览器实测头部账户区恢复「登录」按钮为准。",
+      "status": "completed",
+      "assignee": "engineer",
+      "dependencies": [
+        "t5"
+      ],
+      "attempt": 1,
+      "createdAt": 1787977913033,
+      "updatedAt": 1787981864702,
+      "kind": "repair",
+      "objective": "修复 F1：公开读端点 401 匿名重试后，订阅 actor 的 UI 自动降级为未登录视图（头部账户区显示登录入口），不弹窗不跳转不死循环，同时保持写端点 401 弹窗路径不变。",
+      "inScope": [
+        "src/",
+        "tests/"
+      ],
+      "outOfScope": [
+        ".openai/",
+        "worker/",
+        "scripts/",
+        "tests/sites-worker.test.mjs",
+        "dist/",
+        "docs/design-references/"
+      ],
+      "acceptance": [
+        "handleSessionInvalid（src/apis/session.ts）与同型的 handleUnauthorized 不再使用 removeQueries 清除 actor 查询，改用会通知活跃 observer 的方式（如 client.invalidateQueries({queryKey:[\"portal\",\"common\",\"actor\"]}) 或等价实现），使 PortalHeader/AccountActions/AuthGuard 等订阅 actor 的 UI 在清态后自动降级为未登录视图。",
+        "公开读端点 401 匿名重试后：actor 重取为 401 → UI 显示未登录（头部出现「登录」按钮），不弹窗、不跳转、不死循环、无多余请求（actor 重取仅一次；可移除不再需要的手动 prefetchQuery）。",
+        "回归测试 tests/portal.test.tsx「公开读 401 匿名重试后，订阅 actor 的 UI 自动降级为未登录视图」转绿。",
+        "写端点/dashboard 401 弹窗+returnTo+onSuccess 路径与行为不变；公开读匿名重试仍恰好一次；其余约束（无 localStorage/不改 URL 与字段/不覆盖缓存头/same-origin+CSRF/无轮询）不变。"
+      ],
+      "verify": [
+        "npm run typecheck",
+        "npm run lint",
+        "npm test",
+        "npm run build"
+      ],
+      "sourceTaskId": "t5",
+      "sourceFindingIds": [
+        "F1"
+      ],
+      "attemptId": "5169add1-f3e4-4b1b-a535-7968cb30c160",
+      "reassigning": false,
+      "output": "F1 修复完成：handleSessionInvalid 与 handleUnauthorized（src/apis/session.ts）的 actor 清态由 removeQueries+prefetchQuery 改为 client.invalidateQueries({queryKey:[\"portal\",\"common\",\"actor\"]})——invalidateQueries 通知活跃 observer（PortalHeader/AuthGuard 常驻）并触发恰好一次重取，actor 探测 401（announceUnauthorized:false 不弹窗、retry:false 不死循环）→ UI 自动降级未登录；手动 prefetchQuery 已移除（不再需要）。main.tsx 监听同步简化（不再传 getCurrentActor）。测试：verifier 的回归用例「公开读 401 匿名重试后，订阅 actor 的 UI 自动降级为未登录视图」由失败转绿（E1001→anonymous，homeCalls==2）；同步更新 3 处旧签名用例（handleUnauthorized/handleSessionInvalid 断言 invalidateQueries 调用 + 两处监听接线）。验证全绿：typecheck / lint(0 errors) / test(41 passed) / build。写端点弹窗+returnTo+onSuccess 路径未动；约束（无 localStorage/URL 与字段未改/不覆盖缓存头/same-origin+CSRF/无轮询）不变。",
+      "changedPaths": [
+        "src/apis/session.ts",
+        "src/main.tsx",
+        "tests/portal.test.tsx"
+      ],
+      "acceptanceResults": [
+        {
+          "criterion": "handleSessionInvalid（src/apis/session.ts）与同型的 handleUnauthorized 不再使用 removeQueries 清除 actor 查询，改用会通知活跃 observer 的方式（如 client.invalidateQueries({queryKey:[\"portal\",\"common\",\"actor\"]}) 或等价实现），使 PortalHeader/AccountActions/AuthGuard 等订阅 actor 的 UI 在清态后自动降级为未登录视图。",
+          "status": "passed",
+          "evidence": "src/apis/session.ts 两个处理器均改为 void client.invalidateQueries({ queryKey: [\"portal\",\"common\",\"actor\"] })（handleSessionInvalid 与 handleUnauthorized 各一处），移除全部 removeQueries/prefetchQuery 用法；main.tsx 监听同步简化。invalidateQueries 通知活跃 observer 并触发重取：actor 探测自带 announceUnauthorized:false（不弹窗），retry:false（不死循环），UI 自动降级。"
+        },
+        {
+          "criterion": "公开读端点 401 匿名重试后：actor 重取为 401 → UI 显示未登录（头部出现「登录」按钮），不弹窗、不跳转、不死循环、无多余请求（actor 重取仅一次；可移除不再需要的手动 prefetchQuery）。",
+          "status": "passed",
+          "evidence": "handleSessionInvalid 不再手动 prefetchQuery；失效后由活跃 observer（PortalHeader/AuthGuard 常驻）重取恰好一次。verifier 的回归测试「公开读 401 匿名重试后，订阅 actor 的 UI 自动降级为未登录视图」由失败转绿：ActorProbe 从 E1001 → anonymous，homeCalls 恰好 2（匿名重试一次）。既有测试「公开读 401 匿名重试后重新探测登录态（actor 被再次调用）」仍通过：actorCalls 1→2、readCalls 2。"
+        },
+        {
+          "criterion": "回归测试 tests/portal.test.tsx「公开读 401 匿名重试后，订阅 actor 的 UI 自动降级为未登录视图」转绿。",
+          "status": "passed",
+          "evidence": "npm test 全量 41 passed（含该回归用例；t6 失败时该用例为失败状态），测试接线随新签名更新（handleSessionInvalid(client)），断言不变：E1001 → anonymous + homeCalls==2。"
+        },
+        {
+          "criterion": "写端点/dashboard 401 弹窗+returnTo+onSuccess 路径与行为不变；公开读匿名重试仍恰好一次；其余约束（无 localStorage/不改 URL 与字段/不覆盖缓存头/same-origin+CSRF/无轮询）不变。",
+          "status": "passed",
+          "evidence": "handleUnauthorized 仍同步打开登录弹窗（returnTo=currentReturnTo），仅清态方式改为 invalidateQueries（登录成功 setQueryData 覆盖 actor，行为不变）；测试「handleUnauthorized 使 actor 查询失效并打开登录弹窗」「写端点 401 仍派发 portal:unauthorized 事件」均通过。apiFetch 匿名重试逻辑未触碰（homeCalls==2 断言通过）；无 localStorage/URL/字段/缓存头/轮询改动，same-origin+CSRF 保留。"
+        }
+      ],
+      "commandsRun": [
+        {
+          "command": "npm run typecheck",
+          "status": "passed",
+          "exitCode": 0,
+          "evidence": "tsc --noEmit 通过，0 错误"
+        },
+        {
+          "command": "npm run lint",
+          "status": "passed",
+          "exitCode": 0,
+          "evidence": "eslint src tests 0 errors（5 条既有 react-refresh warning 位于未触碰的 src/components/ui/*）；lint:styles 样式架构检查通过"
+        },
+        {
+          "command": "npm test",
+          "status": "passed",
+          "exitCode": 0,
+          "evidence": "vitest run：41 tests passed（含 t6 新增的 F1 回归用例「公开读 401 匿名重试后，订阅 actor 的 UI 自动降级为未登录视图」，由失败转绿）"
+        },
+        {
+          "command": "npm run build",
+          "status": "passed",
+          "exitCode": 0,
+          "evidence": "tsc --noEmit && vite build 成功（3459 modules），prepare-sites-build 产出 dist/client/index.html、dist/server/index.js、dist/.openai/hosting.json"
+        }
+      ]
+    },
+    {
+      "id": "t9",
+      "subject": "F1 修复后复验与全量门禁（t6 复验）",
+      "description": "对 t8 修复后的实现复验：重点验证 F1 已修复（actor 查询清态改为 observer 可感知，订阅 actor 的 UI 自动降级为未登录视图；回归测试转绿；浏览器实测头部账户区恢复「登录」按钮），并复跑任务提示词 §四验收清单全部 7 项与全量质量门禁（typecheck/lint/test/build/test:sites/e2e）。可复用/更新 .scratch/portal-anon-access/verify-anon.mjs 浏览器验证脚本。",
+      "status": "completed",
+      "assignee": "verifier",
+      "dependencies": [
+        "t8"
+      ],
+      "attempt": 1,
+      "createdAt": 1787977923768,
+      "updatedAt": 1787982160530,
+      "kind": "verification",
+      "objective": "确认 F1 修复有效且无回归：验收清单 7 项全部通过自动化证据支撑，全量质量门禁全绿。",
+      "acceptance": [
+        "F1 回归测试 tests/portal.test.tsx「公开读 401 匿名重试后，订阅 actor 的 UI 自动降级为未登录视图」转绿；新增/更新的相关用例全绿（npm test 全量通过）。",
+        "浏览器实测（真实模式 dev server + 路由拦截，脚本 .scratch/portal-anon-access/verify-anon.mjs 更新版）：会话过期访问公开读页 → 列表渲染 + 匿名重试恰好一次 + 不弹窗 + 头部账户区出现「登录」按钮（UI 自动降级）。",
+        "写端点/dashboard 401 弹窗+returnTo+onSuccess 路径不变（自动化证据）。",
+        "npm run typecheck / lint / test / build / test:sites 全绿；test:e2e 全绿（环境允许时）。",
+        "任务提示词 §四验收清单 7 项全部有证据，验证结论结构化记录。"
+      ],
+      "attemptId": "67c10cec-5322-4449-ae00-938c097d1c16",
+      "reassigning": false,
+      "output": "t9 复验完成：F1 修复有效且全量门禁全绿，验收清单 7 项全部通过。关键证据：①F1 回归测试（tests/portal.test.tsx:702）由失败转绿（npm test 41/41）；②真实浏览器实测（verify-anon.mjs，真实模式 dev server 5173 + 路由拦截）19/19 通过，其中 B5「会话失效后头部账户区自动出现登录按钮」由上一轮失败转绿——handleSessionInvalid 改用 invalidateQueries 后 observer 被通知并重取（401→error→未登录视图），不再冻结；③写端点 401 弹窗+returnTo+onSuccess 路径不变（:653/:604/:736/:738 + 浏览器 A3-A5）；④门禁：typecheck/lint(0 errors)/test(41)/build/test:sites(4/4)/test:e2e(20/20) 全绿；⑤约束合规保持（无 localStorage、无缓存头覆盖、无轮询、same-origin+CSRF、16 个公开读端点 allowAnonymousRetry、公开读 retry:false）。验收清单 7 项（匿名浏览/字段降级与入口引导/写端点弹窗/登录后个性化/公开读 401 匿名重试/actor 探测/约束合规）均有自动化证据，见 acceptanceResults 与 commandsRun。",
+      "acceptanceResults": [
+        {
+          "criterion": "F1 回归测试 tests/portal.test.tsx「公开读 401 匿名重试后，订阅 actor 的 UI 自动降级为未登录视图」转绿；新增/更新的相关用例全绿（npm test 全量通过）。",
+          "status": "passed",
+          "evidence": "npm test 41/41 通过（exit 0）。F1 回归测试（tests/portal.test.tsx:702「公开读 401 匿名重试后，订阅 actor 的 UI 自动降级为未登录视图」）由上一轮失败转绿：ActorProbe 从 E1001 自动降级为 anonymous，homeCalls==2；t8 同步更新的 3 处用例（:604 handleUnauthorized 断言 invalidateQueries+弹窗、:665 handleSessionInvalid 断言 invalidateQueries 且不弹窗、:673 401 恢复后 actor 被再次调用 actorCalls 1→2）全绿。"
+        },
+        {
+          "criterion": "浏览器实测（真实模式 dev server + 路由拦截，脚本 .scratch/portal-anon-access/verify-anon.mjs 更新版）：会话过期访问公开读页 → 列表渲染 + 匿名重试恰好一次 + 不弹窗 + 头部账户区出现「登录」按钮（UI 自动降级）。",
+          "status": "passed",
+          "evidence": "verify-anon.mjs 全部 19 项断言通过（exit 0）：B1 列表正常渲染不白屏；B2 匿名重试恰好一次 appsCalls=2（无死循环）；B3 401 恢复时 actor 重探测 actorCalls=2；B4 读端点 401 不弹登录弹窗（dialogs=0）；B5 会话失效后头部账户区自动出现「登录」按钮（上一轮失败项，现转绿）；B6 全程无未捕获页面错误。诊断输出不再出现冻结空白头部。"
+        },
+        {
+          "criterion": "写端点/dashboard 401 弹窗+returnTo+onSuccess 路径不变（自动化证据）。",
+          "status": "passed",
+          "evidence": "tests/portal.test.tsx:653「写端点 401 仍派发 portal:unauthorized 事件」、:604「handleUnauthorized 使 actor 查询失效并打开登录弹窗（returnTo:/）」（invalidateQueries+openLoginDialog 双动作保留）、:736/:749 useRequireLogin 未登录弹窗暂缓动作/已登录直接执行、:738 AuthGuard 自动弹窗全绿；浏览器 A3（收藏）/A4（评论）/A5（投票）匿名点击均打开登录弹窗不报错。auth.ts/LoginDialog.tsx（onSuccess 先执行再 navigate(returnTo)）与 store/auth.ts 本轮未改动。"
+        },
+        {
+          "criterion": "npm run typecheck / lint / test / build / test:sites 全绿；test:e2e 全绿（环境允许时）。",
+          "status": "passed",
+          "evidence": "typecheck exit 0；lint exit 0（0 errors，5 个既有 ui primitives react-refresh warning，lint:styles 通过）；test 41/41 exit 0；build exit 0（dist/client/index.html、dist/server/index.js、dist/.openai/hosting.json 齐备）；test:sites 4/4 exit 0；test:e2e 20/20 exit 0（desktop+mobile，fixtures dev server 自动启动）。"
+        },
+        {
+          "criterion": "任务提示词 §四验收清单 7 项全部有证据，验证结论结构化记录。",
+          "status": "passed",
+          "evidence": "1.1 无 Cookie 匿名浏览：浏览器 A 场景 13/13 + e2e 20/20 全路由可达；1.2 isFavorited/hasVoted 匿名降级与收藏/评论/投票入口引导：A2/A3/A4/A5 + :423/:783 映射测试；1.3 写端点 401 弹窗+returnTo+继续原动作：:653/:604/:736/:738 + 浏览器 A3-A5；1.4 登录后个性化：:201/:749 + fixture e2e（登录态渲染）；1.5 会话过期公开读 401 → 清登录态+匿名重试一次：:613/:636/:702 + 浏览器 B1-B6（F1 已修复）；1.6 actor 探测启动/401 恢复：:665/:673 + 浏览器 A1/B3；1.7 约束合规：grep 证据（无 localStorage/Cache-Control 覆盖/轮询，16 个公开读端点 allowAnonymousRetry，公开读查询 retry:false，credentials same-origin+CSRF 头保留）。全部证据见 commandsRun 与本任务 output。"
+        }
+      ],
+      "commandsRun": [
+        {
+          "command": "npm run typecheck",
+          "status": "passed",
+          "exitCode": 0,
+          "evidence": "tsc --noEmit 无错误"
+        },
+        {
+          "command": "npm run lint",
+          "status": "passed",
+          "exitCode": 0,
+          "evidence": "eslint src tests 0 errors（5 个既有 react-refresh warning）；lint:styles 样式架构检查通过"
+        },
+        {
+          "command": "npm test",
+          "status": "passed",
+          "exitCode": 0,
+          "evidence": "41/41 通过，含 F1 回归测试「公开读 401 匿名重试后，订阅 actor 的 UI 自动降级为未登录视图」（上一轮 failed → 本轮转绿，ActorProbe E1001→anonymous，homeCalls==2）及 t8 更新的 :604/:665/:673 用例"
+        },
+        {
+          "command": "npm run build",
+          "status": "passed",
+          "exitCode": 0,
+          "evidence": "tsc + vite build 成功，产出 dist/client/index.html、dist/server/index.js、dist/.openai/hosting.json（Sites 打包就绪）"
+        },
+        {
+          "command": "npm run test:sites",
+          "status": "passed",
+          "exitCode": 0,
+          "evidence": "4/4 通过（静态资产回退、index.html 回退、不吞 API/写请求、Sites 打包产物）"
+        },
+        {
+          "command": "npm run test:e2e",
+          "status": "passed",
+          "exitCode": 0,
+          "evidence": "20/20 通过（desktop + mobile，fixtures dev server 自动启动；4173 无占用冲突）"
+        },
+        {
+          "command": "node .scratch/portal-anon-access/verify-anon.mjs",
+          "status": "passed",
+          "exitCode": 0,
+          "evidence": "真实浏览器 19/19 断言通过：A 场景 13 项（无 Cookie 匿名浏览：首页/列表/详情渲染、isFavorited=false、收藏/评论/投票弹窗引导、/dashboard 守卫、/login 重定向、无页面错误）；B 场景 6 项（会话过期：匿名重试恰好一次 appsCalls=2、不弹窗、actor 重探测 actorCalls=2、B5 头部自动降级为「登录」按钮转绿、无死循环无白屏）"
+        }
+      ]
+    },
+    {
+      "id": "t10",
+      "subject": "F1 修复后按契约与验收清单评审（最终评审）",
+      "description": "评审 t8 修复后的最终实现（含 F1 修复）与 t9 复验证据，对照后端契约 v1.3 与 AGENTS.md 产品决策给出 pass 或 needs_revision 及结构化 findings。",
+      "status": "completed",
+      "assignee": "reviewer",
+      "dependencies": [
+        "t8",
+        "t9"
+      ],
+      "attempt": 1,
+      "createdAt": 1787977923787,
+      "updatedAt": 1787982605100,
+      "kind": "review",
+      "objective": "确认修复后的最终改动满足任务契约与验收清单，无 blocker/high 级别问题，可交付。",
+      "acceptance": [
+        "评审基于 t8 修复后的最新实现与 t9 复验证据。",
+        "特别检查：公开读 401 匿名重试一次且不弹窗不死循环；清态后 UI 自动降级匿名（F1 修复有效性）；写端点 401 弹窗+returnTo；无 localStorage/无强制缓存头/无 URL 与字段语义改动；actor 探测时机；公开读查询 retry:false 与匿名重试不叠加请求。"
+      ],
+      "reviewedTaskId": "t8",
+      "attemptId": "b9ae5557-531a-4e52-8e84-84a70a698950",
+      "reassigning": false,
+      "output": "评审通过（verdict=pass）。基于 t8 修复后最新实现（含 F1 invalidateQueries 修复）与 t9 复验证据，并独立复核全部关键路径与门禁：①公开读 401 匿名重试一次：apiFetch allowAnonymousRetry（common.ts:101-111）401→派发 session-invalid→同请求匿名重试一次→成功返回；仍失败直接抛 ApiError 走 ErrorState，不派发 unauthorized、不弹窗、不跳转、不再次重试；16 个公开读端点（home/四类列表/详情/评论 GET/部门/技能包/apps-hunt/docs）全部标记。②F1 修复有效：handleSessionInvalid/handleUnauthorized 用 invalidateQueries 通知活跃 observer，actor 探测 announceUnauthorized:false + retry:false → UI 自动降级匿名，jsdom 回归用例（tests/portal.test.tsx:702）通过。③写端点/dashboard 401 保持弹窗+returnTo+onSuccess 继续原动作（handleUnauthorized 未动，auth.ts/login 端点 announceUnauthorized:false 防覆盖）。④约束全合规：无 localStorage/sessionStorage、无 Cache-Control 覆盖、API URL/方法/字段零改动（diff 仅加 options）、credentials same-origin + CSRF 头保留、无 refetchInterval/轮询、公开读查询全部 retry:false 与匿名重试不叠加（单查询最多 2 次请求）。⑤actor 探测：启动（PortalHeader/AuthGuard useCurrentActor）+ 401 恢复（invalidateQueries 触发重探测，测试断言 actor 被再次调用），不读 document.cookie 判登录态。⑥P2 打开应用按钮补 onSuccess（切安装 tab）、P3 登录端点标记、/login 重定向、DingTalk 回调入口 /?dingtalk=complete 均符合 AGENTS.md 决策。独立门禁复跑：typecheck 0 错误、lint 0 errors（5 条既有 ui 组件 warning）+ 样式架构通过、vitest 41/41、build 成功且 Sites 产物齐备、test:sites 4/4、test:e2e 复跑通过（初次全量跑 1 例超时为并行 build CPU 争抢导致的 flake，孤立重跑 2/2 通过，与匿名改动无涉——该用例为静态 Navigate 重定向，相关文件未改动）。验收清单 7 项全部满足。仅 2 条 low 级可选观察（logout 过期会话 401 弹窗边缘 UX；SESSION_INVALID_EVENT 先于重试派发与契约顺序一致）。",
+      "verdict": "pass",
+      "findings": [
+        {
+          "id": "F-L1",
+          "severity": "low",
+          "problem": "logout()（POST /internal/identity/logout）在会话已过期时若服务端返回 401，会派发 portal:unauthorized 打开登录弹窗（而非仅回到匿名态）。属边缘 UX，非契约范围，且为既有模式。",
+          "requiredFix": "可选优化：logout 调用传 announceUnauthorized:false 或忽略 401；不影响本任务验收，可记录为后续改进。"
+        },
+        {
+          "id": "F-L2",
+          "severity": "low",
+          "problem": "allowAnonymousRetry 路径在匿名重试前同步派发 SESSION_INVALID_EVENT，即使重试随后成功也先失效 actor 查询并触发重探测；重探测 401 时 UI 降级匿名。这与契约语义（检测到无效会话即清登录态）一致，但若服务端对同一 cookie 首请求 401 而后请求 200（罕见竞态），UI 会先降级再恢复。",
+          "requiredFix": "无需修改；与契约 P1-5「清除登录态缓存→匿名重试」顺序一致，重探测结果为准。"
+        }
+      ]
+    }
+  ],
+  "taskSeq": 10,
+  "phase": "running",
+  "approvedAt": 1787976137293
+}

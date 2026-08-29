@@ -1,6 +1,6 @@
 import { fallbacks } from "@/apis/static-data";
 import { fixtureComments, fixtureHome } from "@/apis/fixtures";
-import { UNAUTHORIZED_EVENT } from "@/apis/session";
+import { SESSION_INVALID_EVENT, UNAUTHORIZED_EVENT } from "@/apis/session";
 import type { ApiIssue, ApiProblem, ContentPageDto, DepartmentDto, EmployeeSummary, HomePayload, PortalCommentAuthorDto, PortalCommentItemDto, PortalResourceItemDto, ResourceComment, ResourceDetail, ResourceFileNode, ResourceSummary, ResourceType, SessionActor, SkillPackageDto } from "@/types";
 
 export const useFixtures = import.meta.env.DEV && import.meta.env.VITE_PORTAL_USE_FIXTURES === "true";
@@ -59,7 +59,31 @@ function normalizeApiIssues(issues: ApiProblem["issues"]): ApiIssue[] {
   });
 }
 
-export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
+export interface ApiFetchOptions {
+  /**
+   * 401 时不派发 portal:unauthorized（如 actor 探测：401=未登录是合法状态）。
+   * 仅写端点/dashboard 读端点保留默认弹窗引导行为。
+   */
+  announceUnauthorized?: boolean;
+  /**
+   * 公开读端点（可选认证，契约 P1-5）：收到 401（携带无效会话）时，
+   * 先派发 portal:session-invalid（main.tsx 清除本地登录态缓存），
+   * 再以匿名身份重试一次（同一 URL/方法/body，cookie 由浏览器按 same-origin 携带）；
+   * 重试成功即返回；仍失败（含再次 401）直接抛错走页面错误提示——
+   * 不弹登录弹窗、不跳转、不再次重试（匿名限流 60s/120 次，只允许一次重试）。
+   */
+  allowAnonymousRetry?: boolean;
+}
+
+function readProblem(response: Response): Promise<ApiProblem> {
+  return response.json().catch(() => ({})) as Promise<ApiProblem>;
+}
+
+function toApiError(response: Response, problem: ApiProblem): ApiError {
+  return new ApiError(response.status, problem.code ?? "PORTAL_REQUEST_FAILED", problem.detail ?? problem.message ?? fallbacks.requestFailed, problem.traceId, normalizeApiIssues(problem.issues));
+}
+
+export async function apiFetch<T>(path: string, init: RequestInit = {}, options: ApiFetchOptions = {}): Promise<T> {
   const method = (init.method ?? "GET").toUpperCase();
   const headers = new Headers(init.headers);
   if (init.body && !(init.body instanceof FormData) && !headers.has("content-type")) {
@@ -71,11 +95,25 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise
     headers.set("x-request-nonce", crypto.randomUUID());
     headers.set("x-request-timestamp", new Date().toISOString());
   }
-  const response = await fetch(path, { ...init, credentials: "same-origin", headers });
+  const send = () => fetch(path, { ...init, credentials: "same-origin", headers });
+
+  let response = await send();
+  if (response.status === 401 && options.allowAnonymousRetry) {
+    // 公开读端点携带无效会话：清除本地登录态缓存后以匿名身份重试一次。
+    window.dispatchEvent(new CustomEvent(SESSION_INVALID_EVENT));
+    response = await send();
+    if (!response.ok) {
+      // 仍失败（含再次 401）：走页面错误提示，不派发事件、不弹窗、不再次重试。
+      throw toApiError(response, await readProblem(response));
+    }
+    if (response.status === 204) return undefined as T;
+    return response.json() as Promise<T>;
+  }
   if (!response.ok) {
-    const problem = (await response.json().catch(() => ({}))) as ApiProblem;
-    if (response.status === 401) window.dispatchEvent(new CustomEvent(UNAUTHORIZED_EVENT));
-    throw new ApiError(response.status, problem.code ?? "PORTAL_REQUEST_FAILED", problem.detail ?? problem.message ?? fallbacks.requestFailed, problem.traceId, normalizeApiIssues(problem.issues));
+    const problem = await readProblem(response);
+    // 匿名浏览是合法状态（如 /internal/identity/actor），这类 401 不触发“会话失效”弹窗。
+    if (response.status === 401 && options.announceUnauthorized !== false) window.dispatchEvent(new CustomEvent(UNAUTHORIZED_EVENT));
+    throw toApiError(response, problem);
   }
   if (response.status === 204) return undefined as T;
   return response.json() as Promise<T>;
@@ -91,7 +129,8 @@ export async function getCurrentActor(): Promise<SessionActor> {
   if (useFixtures) {
     return { employeeId: "DEMO-EMPLOYEE", displayName: "林知行", roleCodes: ["employee"], permissions: ["portal.read", "portal.publish"], departmentIds: ["dept-1"], primaryDepartmentId: "dept-1", sessionId: "fixture-session" };
   }
-  return apiFetch<SessionActor>("/internal/identity/actor");
+  // 未登录浏览是合法状态：actor 返回 401 只表示当前为匿名访客，不应触发“会话失效”弹窗。
+  return apiFetch<SessionActor>("/internal/identity/actor", {}, { announceUnauthorized: false });
 }
 
 function metadataRecord(value: unknown): Record<string, unknown> {
@@ -167,7 +206,7 @@ export function queryString(values: Record<string, string | number | boolean | u
 
 export async function getHome(): Promise<HomePayload> {
   if (useFixtures) return fixtureHome();
-  const result = await apiFetch<Omit<HomePayload, "apps" | "skills" | "plugins" | "mcps" | "departments" | "skillPackages" | "updates"> & { apps: PortalResourceItemDto[]; skills: PortalResourceItemDto[]; plugins: PortalResourceItemDto[]; mcps: PortalResourceItemDto[]; departments: DepartmentDto[]; skillPackages: SkillPackageDto[]; updates: ContentPageDto | null }>("/internal/portal/home");
+  const result = await apiFetch<Omit<HomePayload, "apps" | "skills" | "plugins" | "mcps" | "departments" | "skillPackages" | "updates"> & { apps: PortalResourceItemDto[]; skills: PortalResourceItemDto[]; plugins: PortalResourceItemDto[]; mcps: PortalResourceItemDto[]; departments: DepartmentDto[]; skillPackages: SkillPackageDto[]; updates: ContentPageDto | null }>("/internal/portal/home", {}, { allowAnonymousRetry: true });
   return {
     ...result,
     apps: result.apps.map(mapPortalResource),
@@ -219,7 +258,7 @@ export function mapResourceCommentTree(items: PortalCommentItemDto[]): ResourceC
 
 export async function listResourceComments(resourceType: ResourceType, resourceId: string): Promise<ResourceComment[]> {
   if (useFixtures) return fixtureComments();
-  return mapResourceCommentTree(await apiFetch<PortalCommentItemDto[]>(`/internal/portal/${resourceType}/${resourceId}/comments`));
+  return mapResourceCommentTree(await apiFetch<PortalCommentItemDto[]>(`/internal/portal/${resourceType}/${resourceId}/comments`, {}, { allowAnonymousRetry: true }));
 }
 
 export async function createResourceComment(resourceType: ResourceType, resourceId: string, body: string, parentCommentId: string | null): Promise<ResourceComment> {

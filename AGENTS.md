@@ -8,6 +8,7 @@
 - `@/` 固定映射到 `src/`；禁止跨层使用深层 `../../../` 相对路径。
 - App、Skill、Plugin、MCP 是四个独立资源类型；AppHunt 只包含 App，SkillPackage 只包含 Skill。
 - Dashboard 导航包含个人中心、发布、设置、收藏、评论；不得恢复“我的关注”、实名认证或 API Key 页面。
+- 门户不强制登录：所有列表/详情/文档可匿名浏览；下载/打开应用、点赞（AppHunt 投票）、评论、收藏、个人中心（`/dashboard` 及子页）需要登录。登录不设独立页面，统一通过全局登录弹窗（`src/components/auth/LoginDialog.tsx` + `src/store/auth.ts`）完成；登录成功后自动继续被拦截的动作（收藏/评论等）。`/login` 旧链接重定向回首页，DingTalk OAuth 回调入口为 `/?dingtalk=complete&returnTo=…`。
 - 生产构建不得读取 SkillHub 运行时数据或热链 SkillHub 资产。
 - Portal 部署在 `/`，Console 部署在 `/console/`，API 部署在 `/internal/*`。
 

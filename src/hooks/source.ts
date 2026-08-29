@@ -9,7 +9,8 @@ export const sourceKeys = {
   mcp: (slug: string) => ["portal", "mcp", "detail", slug] as const,
 };
 
-export const usePluginsQuery = (query: ListQuery) => useQuery({ queryKey: sourceKeys.plugins(query), queryFn: () => listPlugins(query) });
-export const usePluginQuery = (userId: string, slug: string) => useQuery({ queryKey: sourceKeys.plugin(userId, slug), queryFn: () => getPlugin(userId, slug) });
-export const useMcpsQuery = (query: ListQuery) => useQuery({ queryKey: sourceKeys.mcps(query), queryFn: () => listMcps(query) });
-export const useMcpQuery = (slug: string) => useQuery({ queryKey: sourceKeys.mcp(slug), queryFn: () => getMcp(slug) });
+// 公开读端点：401 匿名重试已由 apiFetch 完成，retry:false 避免 React Query 重试叠加（匿名限流敏感）。
+export const usePluginsQuery = (query: ListQuery) => useQuery({ queryKey: sourceKeys.plugins(query), queryFn: () => listPlugins(query), retry: false });
+export const usePluginQuery = (userId: string, slug: string) => useQuery({ queryKey: sourceKeys.plugin(userId, slug), queryFn: () => getPlugin(userId, slug), retry: false });
+export const useMcpsQuery = (query: ListQuery) => useQuery({ queryKey: sourceKeys.mcps(query), queryFn: () => listMcps(query), retry: false });
+export const useMcpQuery = (slug: string) => useQuery({ queryKey: sourceKeys.mcp(slug), queryFn: () => getMcp(slug), retry: false });

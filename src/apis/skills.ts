@@ -25,25 +25,25 @@ function mapSkillPackage(item: SkillPackageDto): SkillPackageSummary {
 
 export async function listSkills(query: ListQuery): Promise<SkillPage> {
   if (useFixtures) return fixtureSkillPage(query);
-  const result = await apiFetch<PageResult<PortalResourceItemDto>>(`/internal/portal/skills${queryString({ query: query.q, sortBy: query.sortBy === "updatedAt" ? "latest" : query.sortBy === "downloads" ? "score" : query.sortBy, page: query.page, pageSize: query.pageSize })}`);
+  const result = await apiFetch<PageResult<PortalResourceItemDto>>(`/internal/portal/skills${queryString({ query: query.q, sortBy: query.sortBy === "updatedAt" ? "latest" : query.sortBy === "downloads" ? "score" : query.sortBy, page: query.page, pageSize: query.pageSize })}`, {}, { allowAnonymousRetry: true });
   return { ...result, items: result.items.map(mapSkillSummary) };
 }
 
 export async function getSkill(userId: string, slug: string): Promise<SkillDetail> {
   if (useFixtures) return fixtureDetail("skill", slug) as SkillDetail;
-  const item = await apiFetch<PortalResourceItemDto>(`/internal/portal/skills/${encodeURIComponent(userId)}/${encodeURIComponent(slug)}`);
+  const item = await apiFetch<PortalResourceItemDto>(`/internal/portal/skills/${encodeURIComponent(userId)}/${encodeURIComponent(slug)}`, {}, { allowAnonymousRetry: true });
   const metadata = portalMetadata(item.metadata);
   return { ...mapPortalResourceDetail(item), ...mapSkillSummary(item), type: "skill", installCommand: typeof metadata.installCommand === "string" ? metadata.installCommand : "" };
 }
 
 export async function listSkillPackages(): Promise<SkillPackageSummary[]> {
   if (useFixtures) return fixturePackages;
-  return (await apiFetch<SkillPackageDto[]>("/internal/portal/skill-packages")).map(mapSkillPackage);
+  return (await apiFetch<SkillPackageDto[]>("/internal/portal/skill-packages", {}, { allowAnonymousRetry: true })).map(mapSkillPackage);
 }
 
 export async function getSkillPackage(packageSlug: string): Promise<SkillPackageDetail> {
   if (useFixtures) return (fixturePackages.find((item) => item.slug === packageSlug) ?? fixturePackages[0]) as SkillPackageDetail;
-  const item = await apiFetch<SkillPackageDetailDto>(`/internal/portal/skill-packages/${encodeURIComponent(packageSlug)}`);
+  const item = await apiFetch<SkillPackageDetailDto>(`/internal/portal/skill-packages/${encodeURIComponent(packageSlug)}`, {}, { allowAnonymousRetry: true });
   return {
     ...mapSkillPackage({ ...item, skillCount: item.skills.length }),
     skills: item.skills.map((skill) => ({

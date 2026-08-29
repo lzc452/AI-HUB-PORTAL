@@ -22,13 +22,17 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { portalMobileNavItems, portalNavItems } from "@/apis/static-data";
-import { useCurrentActor, useLogoutMutation } from "@/hooks";
+import { useCurrentActor, useLogout, useRequireLogin } from "@/hooks";
+import { useLoginDialogStore } from "@/store";
+import { currentReturnTo } from "@/utils";
 
 export function PortalHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const viewportRef = useRef<HTMLDivElement>(null);
   const hoverOriginX = useRef(0);
   const hoveredLabelRef = useRef<string | null>(null);
+  const requireLogin = useRequireLogin();
+  const navigate = useNavigate();
 
   // 面板从当前划过的主菜单元素正下方展开：把缩放原点对齐到触发项中心。
   // radix 的 viewport 在悬停意图延迟后才挂载，因此通过 ref 回调在挂载瞬间写入原点。
@@ -40,14 +44,21 @@ export function PortalHeader() {
 
   const attachViewport = (node: HTMLDivElement | null) => {
     viewportRef.current = node;
-    if (node && hoveredLabelRef.current) node.style.transformOrigin = `${hoverOriginX.current}px top`;
+    if (node && hoveredLabelRef.current)
+      node.style.transformOrigin = `${hoverOriginX.current}px top`;
   };
 
   return (
     <header className="sticky top-0 z-50 h-[61px] border-b border-black/5 bg-white/85 backdrop-blur-xl">
       <div className="mx-auto flex h-full w-[min(1280px,calc(100%-48px))] items-center justify-between max-[767px]:w-[calc(100%-28px)]">
-        <Link className="inline-flex items-center gap-2.5 text-[17px] font-extrabold tracking-[-0.03em]" to="/" aria-label="AI Hub Portal 首页">
-          <span className="size-7 overflow-hidden rounded-lg bg-white"><img className="size-full object-cover" src={logoUrl} alt="" /></span>
+        <Link
+          className="inline-flex items-center gap-2.5 text-[17px] font-extrabold tracking-[-0.03em]"
+          to="/"
+          aria-label="AI Hub Portal 首页"
+        >
+          <span className="size-7 overflow-hidden rounded-lg bg-white">
+            <img className="size-full object-cover" src={logoUrl} alt="" />
+          </span>
           <span>AI Hub</span>
         </Link>
 
@@ -75,7 +86,10 @@ export function PortalHeader() {
                         <div className="grid grid-cols-2 gap-x-10 gap-y-4 max-[1100px]:gap-x-7">
                           {item.children.map((child) => (
                             <NavigationMenuLink key={child.href} asChild>
-                              <NavLink to={child.href} className="group rounded-xl px-4 py-3 transition-colors duration-200 hover:bg-zinc-50/80">
+                              <NavLink
+                                to={child.href}
+                                className="group rounded-xl px-4 py-3 transition-colors duration-200 hover:bg-zinc-50/80"
+                              >
                                 <span className="block text-[15px] font-bold tracking-[-0.01em] text-zinc-950 transition-all duration-200 group-hover:translate-x-0.5 group-hover:text-blue-600">
                                   {child.label}
                                 </span>
@@ -91,7 +105,13 @@ export function PortalHeader() {
                   </>
                 ) : (
                   <NavigationMenuLink asChild>
-                    <NavLink to={item.href} className={cn(navigationMenuTriggerStyle(), "h-[38px] px-3 text-sm font-normal text-muted-foreground hover:bg-transparent hover:text-foreground")}>
+                    <NavLink
+                      to={item.href}
+                      className={cn(
+                        navigationMenuTriggerStyle(),
+                        "h-[38px] px-3 text-sm font-normal text-muted-foreground hover:bg-transparent hover:text-foreground",
+                      )}
+                    >
                       {item.label}
                     </NavLink>
                   </NavigationMenuLink>
@@ -102,25 +122,76 @@ export function PortalHeader() {
         </NavigationMenu>
 
         <div className="flex items-center gap-3 max-[767px]:gap-0.5">
-          <Button asChild className="h-[38px] rounded-full px-4 text-sm font-semibold max-[900px]:hidden"><Link to="/dashboard/publish"><Plus size={15} />发布</Link></Button>
-          <Button variant="ghost" size="icon" className="size-9 rounded-full text-muted-foreground hover:text-foreground" aria-label="通知"><Bell size={18} /></Button>
-          <Button asChild variant="ghost" size="icon" className="size-9 rounded-full text-muted-foreground hover:text-foreground" aria-label="个人中心"><Link to="/dashboard"><UserRound size={18} /></Link></Button>
+          <Button
+            type="button"
+            className="h-[38px] rounded-full px-4 text-sm font-semibold max-[900px]:hidden"
+            onClick={() => requireLogin(() => navigate("/dashboard/publish"))}
+          >
+            <Plus size={15} />
+            发布
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-9 rounded-full text-muted-foreground hover:text-foreground"
+            aria-label="通知"
+          >
+            <Bell size={18} />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-9 rounded-full text-muted-foreground hover:text-foreground"
+            aria-label="个人中心"
+            onClick={() => requireLogin(() => navigate("/dashboard"))}
+          >
+            <UserRound size={18} />
+          </Button>
           <AccountActions />
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="hidden size-9 rounded-full text-muted-foreground hover:text-foreground max-[900px]:inline-flex" aria-label={mobileMenuOpen ? "关闭菜单" : "打开菜单"}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="hidden size-9 rounded-full text-muted-foreground hover:text-foreground max-[900px]:inline-flex"
+                aria-label={mobileMenuOpen ? "关闭菜单" : "打开菜单"}
+              >
                 {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-full max-w-sm p-6">
               <SheetHeader className="text-left">
                 <SheetTitle>AI Hub</SheetTitle>
-                <SheetDescription className="sr-only">移动端主导航</SheetDescription>
+                <SheetDescription className="sr-only">
+                  移动端主导航
+                </SheetDescription>
               </SheetHeader>
               <nav className="mt-8 flex flex-col gap-1" aria-label="移动端导航">
-                {portalMobileNavItems.map((item) => <Link className="flex min-h-12 items-center border-b border-border text-base font-semibold" key={item.href} to={item.href} onClick={() => setMobileMenuOpen(false)}>{item.label}</Link>)}
-                <Link className="mt-3 inline-flex min-h-11 items-center justify-center rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground" to="/dashboard/publish" onClick={() => setMobileMenuOpen(false)}><Plus size={15} />发布资源</Link>
-                <AccountActions mobile onSignedOut={() => setMobileMenuOpen(false)} />
+                {portalMobileNavItems.map((item) => (
+                  <Link
+                    className="flex min-h-12 items-center border-b border-border text-base font-semibold"
+                    key={item.href}
+                    to={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+                <Button
+                  type="button"
+                  className="mt-3 min-h-11 rounded-md px-4 text-sm font-semibold"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    requireLogin(() => navigate("/dashboard/publish"));
+                  }}
+                >
+                  <Plus size={15} />
+                  发布资源
+                </Button>
+                <AccountActions
+                  mobile
+                  onSignedOut={() => setMobileMenuOpen(false)}
+                />
               </nav>
             </SheetContent>
           </Sheet>
@@ -130,10 +201,61 @@ export function PortalHeader() {
   );
 }
 
-function AccountActions({ mobile = false, onSignedOut }: { mobile?: boolean; onSignedOut?: () => void }) {
+function AccountActions({
+  mobile = false,
+  onSignedOut,
+}: {
+  mobile?: boolean;
+  onSignedOut?: () => void;
+}) {
   const actor = useCurrentActor();
-  const logoutMutation = useLogoutMutation();
-  const navigate = useNavigate();
-  const signOut = () => logoutMutation.mutate(undefined, { onSuccess: () => { onSignedOut?.(); navigate("/login", { replace: true }); } });
-  return <div className={cn("items-center gap-2", mobile ? "mt-5 flex border-t border-border pt-4" : "hidden min-[901px]:flex")}><span className={cn("truncate text-xs text-muted-foreground", mobile ? "flex-1 text-sm" : "max-w-28")} title={actor.data?.displayName}>{actor.data?.displayName ?? "当前账号"}</span><Button type="button" variant="ghost" size={mobile ? "default" : "icon"} className={cn("rounded-full text-muted-foreground hover:text-foreground", mobile ? "gap-2" : "size-9")} aria-label="退出登录" disabled={logoutMutation.isPending} onClick={signOut}><LogOut size={16} />{mobile && "退出登录"}</Button></div>;
+  const logoutMutation = useLogout();
+  const openLoginDialog = useLoginDialogStore((s) => s.openLoginDialog);
+  const signOut = () =>
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => {
+        onSignedOut?.();
+      },
+    });
+  return (
+    <div
+      className={cn(
+        "items-center gap-2",
+        mobile
+          ? "mt-5 flex border-t border-border pt-4"
+          : "hidden min-[901px]:flex",
+      )}
+    >
+      {actor.isPending ? null : actor.isError ? (
+        <Button
+          type="button"
+          variant="outline"
+          className={cn(
+            "rounded-full text-sm font-semibold",
+            mobile ? "w-full gap-2" : "h-[38px] px-4",
+          )}
+          onClick={() => openLoginDialog({ returnTo: currentReturnTo() })}
+        >
+          <UserRound size={15} />
+          登录
+        </Button>
+      ) : (
+        <Button
+          type="button"
+          variant="ghost"
+          size={mobile ? "default" : "icon"}
+          className={cn(
+            "rounded-full text-muted-foreground hover:text-foreground",
+            mobile ? "gap-2" : "size-9",
+          )}
+          aria-label="退出登录"
+          disabled={logoutMutation.isPending}
+          onClick={signOut}
+        >
+          <LogOut size={16} />
+          {mobile && "退出登录"}
+        </Button>
+      )}
+    </div>
+  );
 }

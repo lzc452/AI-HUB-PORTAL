@@ -10,7 +10,8 @@ export const skillKeys = {
   package: (slug: string) => ["portal", "skill", "package", slug] as const,
 };
 
-export const useSkillsQuery = (query: ListQuery) => useQuery({ queryKey: skillKeys.list(query), queryFn: () => listSkills(query) });
-export const useSkillQuery = (userId: string, slug: string) => useQuery({ queryKey: skillKeys.detail(userId, slug), queryFn: () => getSkill(userId, slug) });
-export const useSkillPackagesQuery = () => useQuery({ queryKey: skillKeys.packages, queryFn: listSkillPackages });
-export const useSkillPackageQuery = (slug: string) => useQuery({ queryKey: skillKeys.package(slug), queryFn: () => getSkillPackage(slug), enabled: Boolean(slug) });
+// 公开读端点：401 匿名重试已由 apiFetch 完成，retry:false 避免 React Query 重试叠加（匿名限流敏感）。
+export const useSkillsQuery = (query: ListQuery) => useQuery({ queryKey: skillKeys.list(query), queryFn: () => listSkills(query), retry: false });
+export const useSkillQuery = (userId: string, slug: string) => useQuery({ queryKey: skillKeys.detail(userId, slug), queryFn: () => getSkill(userId, slug), retry: false });
+export const useSkillPackagesQuery = () => useQuery({ queryKey: skillKeys.packages, queryFn: listSkillPackages, retry: false });
+export const useSkillPackageQuery = (slug: string) => useQuery({ queryKey: skillKeys.package(slug), queryFn: () => getSkillPackage(slug), enabled: Boolean(slug), retry: false });
