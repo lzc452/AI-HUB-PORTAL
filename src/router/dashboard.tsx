@@ -7,6 +7,9 @@ const PublishPage = lazy(() => import("@/pages/dashboard/PublishPage"));
 const SettingPage = lazy(() => import("@/pages/dashboard/SettingPage"));
 const StarsPage = lazy(() => import("@/pages/dashboard/StarsPage"));
 const CommentsPage = lazy(() => import("@/pages/dashboard/CommentsPage"));
+const NotificationsPage = lazy(
+  () => import("@/pages/dashboard/NotificationsPage"),
+);
 
 export const dashboardRoutes: RouteObject[] = [{
   path: "dashboard",
@@ -17,5 +20,6 @@ export const dashboardRoutes: RouteObject[] = [{
     { path: "setting", element: <SettingPage /> },
     { path: "stars", element: <StarsPage /> },
     { path: "comments", element: <CommentsPage /> },
+    { path: "notifications", element: <NotificationsPage /> },
   ],
 }];

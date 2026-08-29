@@ -7,3 +7,4 @@ export * from "@/apis/skills";
 export * from "@/apis/source";
 export * from "@/apis/docs";
 export * from "@/apis/dashboard";
+export * from "@/apis/notifications";

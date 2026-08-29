@@ -1,8 +1,9 @@
 import { Bell, LogOut, Menu, Plus, UserRound, X } from "lucide-react";
-import { useRef, useState, type PointerEvent } from "react";
+import { useEffect, useRef, useState, type PointerEvent } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import logoUrl from "@/assets/ai-hub-logo.png";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -22,9 +23,123 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { portalMobileNavItems, portalNavItems } from "@/apis/static-data";
-import { useCurrentActor, useLogout, useRequireLogin } from "@/hooks";
+import {
+  useCurrentActor,
+  useLogout,
+  useMarkPortalNotificationRead,
+  usePortalNotificationsList,
+  usePortalUnreadCount,
+  useRequireLogin,
+} from "@/hooks";
 import { useLoginDialogStore } from "@/store";
 import { currentReturnTo } from "@/utils";
+
+/** 头部铃铛下拉：最近 5 条未读 + 查看全部；点击条目标记已读。 */
+function NotificationBell({ requireLogin }: { requireLogin: (onSuccess?: () => void) => boolean }) {
+  const actor = useCurrentActor();
+  const navigate = useNavigate();
+  const unreadQuery = usePortalUnreadCount();
+  const listQuery = usePortalNotificationsList();
+  const markRead = useMarkPortalNotificationRead();
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onPointerDown = (event: globalThis.PointerEvent) => {
+      if (containerRef.current?.contains(event.target as Node)) return;
+      setOpen(false);
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [open]);
+
+  const unreadCount = unreadQuery.data?.unreadCount ?? 0;
+  const recentUnread = (listQuery.data ?? []).filter((item) => item.readAt === null).slice(0, 5);
+
+  const openBell = () => {
+    if (!actor.data) {
+      requireLogin(() => navigate("/dashboard/notifications"));
+      return;
+    }
+    setOpen((current) => !current);
+  };
+
+  const openRecord = (notificationId: string) => {
+    if (recentUnread.some((item) => item.notificationId === notificationId)) {
+      markRead.mutate(notificationId);
+    }
+    setOpen(false);
+  };
+
+  return (
+    <div ref={containerRef} className="relative">
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        className="relative size-9 rounded-full text-muted-foreground hover:text-foreground"
+        aria-label="通知"
+        aria-expanded={open}
+        onClick={openBell}
+      >
+        <Bell size={18} />
+        {actor.data && unreadCount > 0 ? (
+          <Badge className="absolute -right-0.5 -top-0.5 h-4 min-w-4 rounded-full px-1 text-[10px] font-semibold leading-4">
+            {unreadCount > 99 ? "99+" : unreadCount}
+          </Badge>
+        ) : null}
+      </Button>
+      {open ? (
+        <div className="absolute right-0 top-11 z-50 w-80 overflow-hidden rounded-2xl border border-border bg-white shadow-[0_24px_60px_-30px_rgba(28,28,30,0.35)]">
+          <div className="flex items-center justify-between border-b border-border px-4 py-3">
+            <span className="text-sm font-semibold">消息通知</span>
+            <button
+              type="button"
+              className="text-xs text-muted-foreground hover:text-foreground"
+              onClick={() => navigate("/dashboard/notifications")}
+            >
+              查看全部
+            </button>
+          </div>
+          {recentUnread.length === 0 ? (
+            <p className="px-4 py-6 text-center text-sm text-muted-foreground">暂无新通知</p>
+          ) : (
+            <ul className="m-0 list-none p-0">
+              {recentUnread.map((item) => (
+                <li key={item.notificationId} className="border-b border-border last:border-b-0">
+                  <button
+                    type="button"
+                    className="w-full px-4 py-2.5 text-left transition-colors hover:bg-zinc-50"
+                    onClick={() => openRecord(item.notificationId)}
+                  >
+                    <span className="block truncate text-sm font-medium text-zinc-950">
+                      {item.payload?.title ?? item.message}
+                    </span>
+                    <span className="mt-0.5 block truncate text-xs text-muted-foreground">
+                      {item.payload?.body ?? item.message}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="border-t border-border p-2">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="w-full text-sm"
+              onClick={() => navigate("/dashboard/notifications")}
+            >
+              查看全部通知
+            </Button>
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
 
 export function PortalHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -130,14 +245,7 @@ export function PortalHeader() {
             <Plus size={15} />
             发布
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-9 rounded-full text-muted-foreground hover:text-foreground"
-            aria-label="通知"
-          >
-            <Bell size={18} />
-          </Button>
+          <NotificationBell requireLogin={requireLogin} />
           <Button
             variant="ghost"
             size="icon"
