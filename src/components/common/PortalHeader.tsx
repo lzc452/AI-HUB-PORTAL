@@ -2,6 +2,7 @@ import { Bell, LogOut, Menu, Plus, UserRound, X } from "lucide-react";
 import { useEffect, useRef, useState, type PointerEvent } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import logoUrl from "@/assets/ai-hub-logo.png";
+import wordmarkUrl from "@/assets/ai-hub-wordmark.png";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -174,7 +175,11 @@ export function PortalHeader() {
           <span className="size-7 overflow-hidden rounded-lg bg-white">
             <img className="size-full object-cover" src={logoUrl} alt="" />
           </span>
-          <span>AI Hub</span>
+          <img
+            className="h-6 w-auto object-contain"
+            src={wordmarkUrl}
+            alt="AI Hub"
+          />
         </Link>
 
         <NavigationMenu
